@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>室內導航圖資除錯器</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 100%; overflow: auto; background: white; border: 1px solid #ccc; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        canvas { display: block; background-color: #ffffff; cursor: grab; }
+        #info { margin-bottom: 15px; font-size: 16px; font-weight: bold; color: #333; }
+        .panel { margin-bottom: 15px; padding: 15px; background: #fff; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body>
+    <div id="info">正在載入圖資...</div>
+
+    <div class="panel" id="search-panel">
+        <strong style="font-size: 16px;">🔍 路線搜尋：</strong>
+        <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 15px;">
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <label>起點大樓：
+                    <select id="start-building" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
+                        <option value="">請選擇大樓...</option>
+                    </select>
+                </label>
+                <label>👉 起點空間：
+                    <select id="start-select" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;" disabled>
+                        <option value="">請先選擇大樓...</option>
+                    </select>
+                </label>
+            </div>
+
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <label>終點大樓：
+                    <select id="end-building" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;">
+                        <option value="">請選擇大樓...</option>
+                    </select>
+                </label>
+                <label>👉 終點空間：
+                    <select id="end-select" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc;" disabled>
+                        <option value="">請先選擇大樓...</option>
+                    </select>
+                </label>
+            </div>
+
+            <button id="nav-btn" style="padding: 6px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; width: 200px;">
+                🚀 開始導航
+            </button>
+        </div>
+    </div>
+
+    <div class="panel" id="controls">
+        <strong style="font-size: 16px;">🏢 樓層與建築顯示切換：</strong>
+        <div id="filter-container" style="margin-top: 10px; display: flex; gap: 15px; flex-wrap: wrap;">
+            </div>
+    </div>
+
+    <div class="container">
+        <canvas id="mapCanvas" width="3000" height="2000"></canvas>
+    </div>
+
+    <script>
+        // 全域變數
+        let nodesData = [];
+        let edgesData = [];
+        let nodeMap = {};
+        let startNode = null;
+        let endNode = null;
+        let currentPath = [];
+        let activeFilters = new Set(); 
+
+        const canvas = document.getElementById('mapCanvas');
+        const ctx = canvas.getContext('2d');
+        const infoDiv = document.getElementById('info');
+
+        // 1. 初始化載入圖資
+        fetch('/api/data')
+            .then(res => res.json())
+            .then(data => {
+                nodesData = data.nodes;
+                edgesData = data.edges;
+                nodesData.forEach(n => nodeMap[n.id] = n);
+                
+                generateFloorFilters();
+                generateSearchOptions();
+                
+                drawMap();
+                infoDiv.innerHTML = '✅ 圖資載入成功！請在下拉選單選擇起點與終點，或在畫布上「點擊」來測試導航。';
+            })
+            .catch(err => {
+                infoDiv.innerHTML = '❌ 載入失敗：' + err;
+            });
+
+        // 2. 動態生成樓層過濾按鈕
+        function generateFloorFilters() {
+            const container = document.getElementById('filter-container');
+            const uniqueGroups = new Set();
+            
+            nodesData.forEach(node => {
+                if (node.building && node.floor) {
+                    uniqueGroups.add(`${node.building}-${node.floor}`);
+                }
+            });
+
+            Array.from(uniqueGroups).sort().forEach(group => {
+                activeFilters.add(group);
+
+                const label = document.createElement('label');
+                label.style.cursor = 'pointer';
+                label.style.display = 'flex';
+                label.style.alignItems = 'center';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = group;
+                checkbox.checked = true;
+                checkbox.style.marginRight = '5px';
+                
+                checkbox.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        activeFilters.add(e.target.value);
+                    } else {
+                        activeFilters.delete(e.target.value);
+                    }
+                    drawMap();
+                });
+
+                const [b, f] = group.split('-');
+                const text = document.createTextNode(`${b}大樓 ${f}F`);
+
+                label.appendChild(checkbox);
+                label.appendChild(text);
+                container.appendChild(label);
+            });
+        }
+
+        // 3. 動態生成搜尋下拉選單 (兩層式：先選大樓，再選空間)
+        function generateSearchOptions() {
+            const startBuildingSelect = document.getElementById('start-building');
+            const endBuildingSelect = document.getElementById('end-building');
+            const startNodeSelect = document.getElementById('start-select');
+            const endNodeSelect = document.getElementById('end-select');
+            
+            // 找出所有不重複的大樓
+            const buildings = new Set();
+            nodesData.forEach(node => {
+                if(node.building) buildings.add(node.building);
+            });
+
+            // 將大樓選項加入
+            Array.from(buildings).sort().forEach(building => {
+                const opt1 = document.createElement('option');
+                opt1.value = building;
+                opt1.textContent = `${building} 大樓`;
+                startBuildingSelect.appendChild(opt1);
+
+                const opt2 = document.createElement('option');
+                opt2.value = building;
+                opt2.textContent = `${building} 大樓`;
+                endBuildingSelect.appendChild(opt2);
+            });
+
+            // 輔助函式：根據選擇的大樓更新節點選單
+            const updateNodeSelect = (buildingSelect, nodeSelect) => {
+                const selectedBuilding = buildingSelect.value;
+                nodeSelect.innerHTML = '<option value="">請選擇空間...</option>'; // 清空並重置
+                
+                if (!selectedBuilding) {
+                    nodeSelect.disabled = true;
+                    nodeSelect.innerHTML = '<option value="">請先選擇大樓...</option>';
+                    return;
+                }
+
+                nodeSelect.disabled = false;
+
+                // 篩選出該大樓的節點並排序
+                const filteredNodes = nodesData
+                    .filter(node => node.building === selectedBuilding)
+                    .sort((a, b) => {
+                        if (a.floor !== b.floor) return a.floor - b.floor;
+                        return a.id.localeCompare(b.id);
+                    });
+
+                filteredNodes.forEach(node => {
+                    const opt = document.createElement('option');
+                    opt.value = node.id;
+                    opt.textContent = `${node.floor}F - ${node.id}`;
+                    nodeSelect.appendChild(opt);
+                });
+            };
+
+            // 綁定事件監聽器：當大樓改變時，更新對應的節點選單
+            startBuildingSelect.addEventListener('change', () => updateNodeSelect(startBuildingSelect, startNodeSelect));
+            endBuildingSelect.addEventListener('change', () => updateNodeSelect(endBuildingSelect, endNodeSelect));
+        }
+
+        // 4. 繪圖主函式
+        function drawMap() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const isNodeVisible = (nodeId) => {
+                const node = nodeMap[nodeId];
+                if (!node) return false;
+                if (currentPath.includes(nodeId)) return true;
+                return activeFilters.has(`${node.building}-${node.floor}`);
+            };
+
+            // ==========================================
+            // 畫出大樓背景色塊 (你的精準座標)
+            // ==========================================
+            // RB 大樓背景 (淺藍色)
+            ctx.fillStyle = 'rgba(173, 216, 230, 0.2)'; 
+            ctx.fillRect(230, 600, 680, 300);
+            ctx.fillStyle = '#666';
+            ctx.font = 'bold 24px Arial';
+            ctx.fillText(" RB 大樓 (3F)", 500, 630);
+
+            // T1 大樓背景 (淺黃色)
+            ctx.fillStyle = 'rgba(255, 235, 153, 0.2)';
+            ctx.fillRect(120, 290, 110, 610);
+            ctx.fillStyle = '#666';
+            ctx.fillText(" T1 大樓 (4F)", 230, 500);
+
+            // T4 大樓背景 (淺綠色)
+            ctx.fillStyle = 'rgba(144, 238, 144, 0.2)';
+            ctx.fillRect(120, 140, 830, 150);
+            ctx.fillStyle = '#666';
+            ctx.fillText(" T4 大樓 (4F)", 490, 180);
+
+            // 虛擬 1F 區塊 (畫中畫)
+            ctx.fillStyle = 'rgba(200, 200, 200, 0.3)';
+            ctx.fillRect(400, 600, 200, 200);
+            ctx.fillStyle = '#333';
+            ctx.fillText(" RB 1F 大廳", 500, 600);
+            // ==========================================
+
+            // 畫出連線 (Edges)
+            edgesData.forEach(edge => {
+                const n1Visible = isNodeVisible(edge.from);
+                const n2Visible = isNodeVisible(edge.to);
+                const isVerticalOrBridge = ['elevator', 'stair', 'bridge'].includes(edge.type);
+                const shouldDrawEdge = (n1Visible && n2Visible) || (isVerticalOrBridge && (n1Visible || n2Visible));
+
+                if (shouldDrawEdge) {
+                    const n1 = nodeMap[edge.from];
+                    const n2 = nodeMap[edge.to];
+                    ctx.beginPath();
+                    ctx.moveTo(n1.x, n1.y);
+                    ctx.lineTo(n2.x, n2.y);
+                    
+                    if (edge.type === 'elevator' || edge.type === 'stair') {
+                        ctx.setLineDash([10, 10]); 
+                        ctx.strokeStyle = '#9b59b6'; 
+                        ctx.lineWidth = 3;
+                    } else if (edge.type === 'bridge') {
+                        ctx.setLineDash([]); 
+                        ctx.strokeStyle = '#28a745'; 
+                        ctx.lineWidth = 4;
+                    } else if (edge.type === 'corridor' || edge.type === 'backbone') { 
+                        ctx.setLineDash([]); 
+                        ctx.strokeStyle = '#dc3545'; 
+                        ctx.lineWidth = 3; 
+                    } else {
+                        ctx.setLineDash([]); 
+                        ctx.strokeStyle = '#e0e0e0'; 
+                        ctx.lineWidth = 2;
+                    }
+                    ctx.stroke();
+                }
+            });
+
+            ctx.setLineDash([]);
+
+            // 畫出導航路徑
+            if (currentPath.length > 0) {
+                ctx.beginPath();
+                ctx.moveTo(nodeMap[currentPath[0]].x, nodeMap[currentPath[0]].y);
+                for (let i = 1; i < currentPath.length; i++) {
+                    ctx.lineTo(nodeMap[currentPath[i]].x, nodeMap[currentPath[i]].y);
+                }
+                ctx.strokeStyle = '#007bff';
+                ctx.lineWidth = 6;
+                ctx.lineJoin = 'round';
+                ctx.stroke();
+            }
+
+            // 畫出所有節點
+            nodesData.forEach(node => {
+                if (!isNodeVisible(node.id)) return; 
+
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, 6, 0, 2 * Math.PI);
+                
+                if (node.id === startNode) {
+                    ctx.fillStyle = '#28a745'; ctx.arc(node.x, node.y, 10, 0, 2 * Math.PI); 
+                } else if (node.id === endNode) {
+                    ctx.fillStyle = '#dc3545'; ctx.arc(node.x, node.y, 10, 0, 2 * Math.PI); 
+                } else if (currentPath.includes(node.id)) {
+                    ctx.fillStyle = '#ffc107'; 
+                } else {
+                    ctx.fillStyle = node.color || '#999';
+                }
+                
+                ctx.fill();
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                
+                if (node.id === startNode || node.id === endNode || currentPath.includes(node.id)) {
+                    ctx.fillStyle = '#000';
+                    ctx.font = 'bold 14px Arial';
+                    ctx.fillText(node.id, node.x + 12, node.y - 12);
+                }
+            });
+        }
+
+        // 5. 搜尋面板按鈕事件
+        document.getElementById('nav-btn').addEventListener('click', () => {
+            const sId = document.getElementById('start-select').value;
+            const eId = document.getElementById('end-select').value;
+
+            if (!sId || !eId) {
+                alert("請先選擇起點與終點！");
+                return;
+            }
+
+            startNode = sId;
+            endNode = eId;
+            infoDiv.innerHTML = `🔄 正在計算 ${startNode} 到 ${endNode} 的最佳路徑...`;
+            
+            fetch(`/api/route?start=${startNode}&end=${endNode}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.detail) {
+                        infoDiv.innerHTML = `❌ 錯誤：${data.detail}`;
+                    } else {
+                        currentPath = data.path;
+                        let routeText = data.directions 
+                            ? data.directions.map(d => `• ${d}`).join('<br>') 
+                            : `路徑：${data.path.join(' ➔ ')}`;
+                        
+                        infoDiv.innerHTML = `🎉 <b>導航成功！總距離約 ${data.total_distance} 單位</b><br><br>${routeText}`;
+                        
+                        const startData = nodeMap[startNode];
+                        const endData = nodeMap[endNode];
+                        if (startData) activeFilters.add(`${startData.building}-${startData.floor}`);
+                        if (endData) activeFilters.add(`${endData.building}-${endData.floor}`);
+                        
+                        document.querySelectorAll('#filter-container input[type="checkbox"]').forEach(cb => {
+                            if (activeFilters.has(cb.value)) cb.checked = true;
+                        });
+                    }
+                    drawMap(); 
+                });
+        });
+
+        // 6. 滑鼠點擊事件 (畫布上直接點擊)
+        canvas.addEventListener('mousedown', function(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+            
+            let clickedNode = null;
+            let minDistance = 20; 
+            
+            nodesData.forEach(node => {
+                const isVisible = activeFilters.has(`${node.building}-${node.floor}`) || currentPath.includes(node.id);
+                if (!isVisible) return; 
+
+                const dist = Math.sqrt(Math.pow(node.x - clickX, 2) + Math.pow(node.y - clickY, 2));
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    clickedNode = node.id;
+                }
+            });
+
+
+            if (clickedNode) {
+                if (!startNode || (startNode && endNode)) {
+                    // === 設定新起點 ===
+                    startNode = clickedNode;
+                    endNode = null;
+                    currentPath = [];
+                    
+                    // 🌟 讓選單跟著地圖點擊同步變動！
+                    const sNodeData = nodeMap[startNode];
+                    document.getElementById('start-building').value = sNodeData.building;
+                    // 用程式模擬觸發 'change' 事件，讓第二層選單自動長出選項
+                    document.getElementById('start-building').dispatchEvent(new Event('change'));
+                    document.getElementById('start-select').value = startNode;
+                    
+                    // 清空終點選單
+                    document.getElementById('end-building').value = "";
+                    document.getElementById('end-building').dispatchEvent(new Event('change'));
+                    
+                    infoDiv.innerHTML = `📍 已選擇起點：<b>${startNode}</b>，請點擊另一個節點作為終點。`;
+                } else {
+                    // === 設定終點並導航 ===
+                    endNode = clickedNode;
+                    
+                    // 🌟 同步終點選單
+                    const eNodeData = nodeMap[endNode];
+                    document.getElementById('end-building').value = eNodeData.building;
+                    document.getElementById('end-building').dispatchEvent(new Event('change'));
+                    document.getElementById('end-select').value = endNode;
+                    
+                    document.getElementById('nav-btn').click(); // 自動觸發搜尋導航
+                }
+                drawMap();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+# Python 暫存檔
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 虛擬環境 (假設你的環境資料夾叫 env, venv 或 indoor)
+# indoor/
+
+# Mac 系統隱藏檔
+.DS_Store
+
+# 如果你有不想公開的圖資原始檔或機密，也可以加在這裡
+raw_pdf_files/

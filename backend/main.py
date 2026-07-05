@@ -6,7 +6,7 @@ import heapq
 app = FastAPI(title="北車/台科大室內導航 API")
 
 # 1. 啟動時載入資料並建立 Graph
-with open('map_data.json', 'r', encoding='utf-8') as f:
+with open('data/map_data.json', 'r', encoding='utf-8') as f:
     map_data = json.load(f)
 
 # 建立字典格式的 Graph，方便演算法快速讀取
@@ -107,5 +107,5 @@ def get_shortest_path(start: str, end: str):
 
 @app.get("/")
 def get_dashboard():
-    with open('index.html', 'r', encoding='utf-8') as f:
+    with open('frontend/index.html', 'r', encoding='utf-8') as f:
         return HTMLResponse(content=f.read())

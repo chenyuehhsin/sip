@@ -82,7 +82,7 @@ if __name__ == "__main__":
 # ==========================================
 nodes = []
 try:
-    with open('A03_map.svg', 'r', encoding='utf-8') as file:
+    with open('data/A03_map.svg', 'r', encoding='utf-8') as file:
         soup = BeautifulSoup(file, 'xml')
         
     for circle in soup.find_all('circle'):
@@ -129,7 +129,7 @@ def calculate_distance(node1, node2):
 # ==========================================
 edges = []
 try:
-    with open('raw_edges.json', 'r', encoding='utf-8') as f:
+    with open('data/raw_edges.json', 'r', encoding='utf-8') as f:
         grouped_edges = json.load(f)
         
     raw_edges = []
@@ -174,7 +174,7 @@ json_output = {
     "edges": edges
 }
 
-with open('map_data.json', 'w', encoding='utf-8') as f:
+with open('data/map_data.json', 'w', encoding='utf-8') as f:
     json.dump(json_output, f, indent=2, ensure_ascii=False)
 
 print("🎉 大功告成！完整圖資已儲存至 map_data.json")

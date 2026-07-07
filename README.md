@@ -41,10 +41,14 @@ uvicorn backend.main:app --reload
 ```text
 sip/ (專案根目錄)
 │
-├── data/                    # 集中管理所有圖資與原始數據
-│   ├── raw_edges.json       # 分棟模組化管理的原始連線數據
-│   ├── map_data.json        # 經過 Python 腳本清洗、解析、吸附後的結構化核心圖資
-│   └── A03_map.svg          # 你的多建築錯層拼接原始 SVG 向量圖資
+├── data/                          # 集中管理所有圖資與原始數據
+│   ├── A03_map.svg                # 視覺底圖與原始座標
+│   ├── raw_edges.json             # 手動設定的主幹道連線
+│   ├── routing_nodes.json         # (自動生成) 乾淨的主幹節點
+│   ├── pois.json                  # (自動生成) 乾淨的設施節點
+│   ├── draft_connection.json      # (自動生成) KNN 推薦的連線草稿
+│   ├── connection_overrides.json  # 人類意志補丁檔
+│   └── final_connections.json     # 最終版 POI 連線
 │
 ├── backend/                 # 後端引擎模組 (高內聚設計)
 │   ├── main.py              # FastAPI 路由、Dijkstra 尋路引擎與語意導航指引生成
@@ -55,10 +59,12 @@ sip/ (專案根目錄)
 │   ├── index.html           # HTML5 Canvas 輕量化渲染、Floor Filter 與連動下拉選單
 │   └── assets/              # 前端網頁專用的靜態資源 (如 CSS、小圖示)
 │
-├── scripts/                 # 自動化工具/腳本資料夾
-│   └── tool_svg2json.py     # 你的資料清洗與 Regex 自動化 Parsing 數據管線
+├── scripts/                       # 自動化工具/腳本資料夾
+│   ├── 1_svg_parser.py            # 解析器
+│   ├── 2_knn_recommender.py       # 推薦器
+│   └── 3_merge_connections.py     # 融合器
 │
 ├── .gitignore               # Git 忽略清單 (防止暫存檔與 Mac 隱藏檔污染遠端倉庫)
-├── environment.yml          # Anaconda 虛擬環境設定檔 (供開源與面試官一鍵復原環境)
-└── README.md                # 你的頂級專案技術架構與戰略定位文件
+├── environment.yml          # Anaconda 虛擬環境設定檔 
+└── README.md                
 

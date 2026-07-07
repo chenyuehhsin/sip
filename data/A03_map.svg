@@ -24,13 +24,13 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="5.5291054"
-     inkscape:cx="508.21965"
-     inkscape:cy="755.99933"
+     inkscape:zoom="1.4018937"
+     inkscape:cx="291.39157"
+     inkscape:cy="307.08462"
      inkscape:window-width="1440"
-     inkscape:window-height="899"
+     inkscape:window-height="808"
      inkscape:window-x="0"
-     inkscape:window-y="33"
+     inkscape:window-y="34"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg11283" />
   <g
@@ -89266,14 +89266,14 @@
      cx="456.08618"
      cy="827.11884"
      r="3"
-     inkscape:label="RB-WCF3" />
+     inkscape:label="RB-WCF-3F" />
   <circle
      style="fill:#ff9955"
      id="circle11283-7-3-1-8-3"
      cx="533.83185"
      cy="826.63031"
      r="3"
-     inkscape:label="RB-WCM3" />
+     inkscape:label="RB-WCM-3F" />
   <circle
      style="fill:#ff9955"
      id="circle11283-7-3-1-8-8"
@@ -89476,14 +89476,14 @@
      cx="207.91104"
      cy="274.8587"
      r="3"
-     inkscape:label="C3-T4-T1" />
+     inkscape:label="C3-T4-T1-4F" />
   <circle
      style="fill:#87de87"
      id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1"
      cx="207.33197"
      cy="310.74127"
      r="3"
-     inkscape:label="C3-T1-T4" />
+     inkscape:label="C3-T1-T4-4F" />
   <circle
      style="fill:#5599ff"
      id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1"
@@ -89686,14 +89686,14 @@
      cx="308.07339"
      cy="225.22093"
      r="3"
-     inkscape:label="T4-WCM4" />
+     inkscape:label="T4-WCM-4F" />
   <circle
      style="fill:#ff9955"
      id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-8-7-4"
      cx="333.55402"
      cy="224.74031"
      r="3"
-     inkscape:label="T4-WCF4" />
+     inkscape:label="T4-WCF-4F" />
   <circle
      style="fill:#ff9955"
      id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-8-7-4-1"
@@ -89777,14 +89777,14 @@
      cx="221"
      cy="754"
      r="3"
-     inkscape:label="C3-T1-RB" />
+     inkscape:label="C3-T1-RB-4F" />
   <circle
      style="fill:#5599ff"
      id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-6"
      cx="263"
      cy="721"
      r="3"
-     inkscape:label="RB-SC" />
+     inkscape:label="RB-SC-3F" />
   <circle
      style="fill:#5599ff"
      id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-6-48"
@@ -89861,5 +89861,5 @@
      cx="238"
      cy="754"
      r="3"
-     inkscape:label="C3-RB-T1" />
+     inkscape:label="C3-RB-T1-3F" />
 </svg>

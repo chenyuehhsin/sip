@@ -1,0 +1,461 @@
+[
+  {
+    "id": "RB-308-1",
+    "building": "RB",
+    "floor": 3,
+    "x": 426,
+    "y": 682,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-308-2",
+    "building": "RB",
+    "floor": 3,
+    "x": 426,
+    "y": 671,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-309-2",
+    "building": "RB",
+    "floor": 3,
+    "x": 453,
+    "y": 694,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-309-1",
+    "building": "RB",
+    "floor": 3,
+    "x": 535,
+    "y": 712,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-304-1",
+    "building": "RB",
+    "floor": 3,
+    "x": 426,
+    "y": 799,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-305",
+    "building": "RB",
+    "floor": 3,
+    "x": 365,
+    "y": 750,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-303",
+    "building": "RB",
+    "floor": 3,
+    "x": 571,
+    "y": 773,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-303-1",
+    "building": "RB",
+    "floor": 3,
+    "x": 551,
+    "y": 840,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-WCF-3F",
+    "building": "RB",
+    "floor": 3,
+    "x": 456,
+    "y": 827,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-WCM-3F",
+    "building": "RB",
+    "floor": 3,
+    "x": 534,
+    "y": 827,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-310",
+    "building": "RB",
+    "floor": 3,
+    "x": 583,
+    "y": 737,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-310-1",
+    "building": "RB",
+    "floor": 3,
+    "x": 638,
+    "y": 742,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-310-2",
+    "building": "RB",
+    "floor": 3,
+    "x": 640,
+    "y": 681,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-304-2",
+    "building": "RB",
+    "floor": 3,
+    "x": 425,
+    "y": 810,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-304-3",
+    "building": "RB",
+    "floor": 3,
+    "x": 437,
+    "y": 852,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-304-3-1",
+    "building": "RB",
+    "floor": 3,
+    "x": 429,
+    "y": 888,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-308-3",
+    "building": "RB",
+    "floor": 3,
+    "x": 437,
+    "y": 631,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-307-3",
+    "building": "RB",
+    "floor": 3,
+    "x": 275,
+    "y": 630,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-307-1",
+    "building": "RB",
+    "floor": 3,
+    "x": 287,
+    "y": 688,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-307-2",
+    "building": "RB",
+    "floor": 3,
+    "x": 287,
+    "y": 665,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-306-1",
+    "building": "RB",
+    "floor": 3,
+    "x": 285,
+    "y": 799,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-306-2",
+    "building": "RB",
+    "floor": 3,
+    "x": 285,
+    "y": 810,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T1-410-2",
+    "building": "T1",
+    "floor": 4,
+    "x": 169,
+    "y": 801,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T1-410-3",
+    "building": "T1",
+    "floor": 4,
+    "x": 171,
+    "y": 850,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T1-410-4",
+    "building": "T1",
+    "floor": 4,
+    "x": 151,
+    "y": 861,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T1-410-5",
+    "building": "T1",
+    "floor": 4,
+    "x": 177,
+    "y": 859,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T1-410-1",
+    "building": "T1",
+    "floor": 4,
+    "x": 170,
+    "y": 771,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T1-409",
+    "building": "T1",
+    "floor": 4,
+    "x": 177,
+    "y": 759,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T1-408",
+    "building": "T1",
+    "floor": 4,
+    "x": 177,
+    "y": 713,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T1-407",
+    "building": "T1",
+    "floor": 4,
+    "x": 176,
+    "y": 668,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T1-406",
+    "building": "T1",
+    "floor": 4,
+    "x": 178,
+    "y": 590,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T1-405",
+    "building": "T1",
+    "floor": 4,
+    "x": 178,
+    "y": 578,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T1-404",
+    "building": "T1",
+    "floor": 4,
+    "x": 178,
+    "y": 499,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T1-403",
+    "building": "T1",
+    "floor": 4,
+    "x": 177,
+    "y": 487,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T1-402",
+    "building": "T1",
+    "floor": 4,
+    "x": 178,
+    "y": 408,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T1-401",
+    "building": "T1",
+    "floor": 4,
+    "x": 193,
+    "y": 393,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T4-407",
+    "building": "T4",
+    "floor": 4,
+    "x": 197,
+    "y": 235,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T4-406",
+    "building": "T4",
+    "floor": 4,
+    "x": 286,
+    "y": 227,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T4-WCM-4F",
+    "building": "T4",
+    "floor": 4,
+    "x": 308,
+    "y": 225,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T4-WCF-4F",
+    "building": "T4",
+    "floor": 4,
+    "x": 334,
+    "y": 225,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T4-405-2",
+    "building": "T4",
+    "floor": 4,
+    "x": 457,
+    "y": 231,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T4-405-1",
+    "building": "T4",
+    "floor": 4,
+    "x": 535,
+    "y": 232,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T4-404-2",
+    "building": "T4",
+    "floor": 4,
+    "x": 547,
+    "y": 231,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T4-404-1",
+    "building": "T4",
+    "floor": 4,
+    "x": 624,
+    "y": 231,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T4-403-2",
+    "building": "T4",
+    "floor": 4,
+    "x": 636,
+    "y": 231,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T4-403-1",
+    "building": "T4",
+    "floor": 4,
+    "x": 713,
+    "y": 231,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T4-402-2",
+    "building": "T4",
+    "floor": 4,
+    "x": 725,
+    "y": 230,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T4-402-1",
+    "building": "T4",
+    "floor": 4,
+    "x": 802,
+    "y": 230,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T4-401-1",
+    "building": "T4",
+    "floor": 4,
+    "x": 815,
+    "y": 230,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "T4-401",
+    "building": "T4",
+    "floor": 4,
+    "x": 894,
+    "y": 230,
+    "color": "#ff9955",
+    "type": "poi"
+  },
+  {
+    "id": "RB-306-3",
+    "building": "RB",
+    "floor": 3,
+    "x": 272,
+    "y": 852,
+    "color": "#ff9955",
+    "type": "poi"
+  }
+]

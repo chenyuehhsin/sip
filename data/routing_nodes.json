@@ -1,0 +1,664 @@
+{
+  "nodes": [
+    {
+      "id": "RB-SE-3F",
+      "building": "RB",
+      "floor": 3,
+      "x": 552,
+      "y": 724,
+      "color": "#5599ff"
+    },
+    {
+      "id": "RB-311",
+      "building": "RB",
+      "floor": 3,
+      "x": 785,
+      "y": 778,
+      "color": "#ff5555"
+    },
+    {
+      "id": "C3-T4-T1-4F",
+      "building": "T4",
+      "floor": 4,
+      "x": 208,
+      "y": 275,
+      "color": "#87de87"
+    },
+    {
+      "id": "C3-T1-T4-4F",
+      "building": "T1",
+      "floor": 4,
+      "x": 207,
+      "y": 311,
+      "color": "#87de87"
+    },
+    {
+      "id": "T1-S1-4F",
+      "building": "T1",
+      "floor": 4,
+      "x": 196,
+      "y": 322,
+      "color": "#5599ff"
+    },
+    {
+      "id": "T1-402-1",
+      "building": "T1",
+      "floor": 4,
+      "x": 194,
+      "y": 411,
+      "color": "#ff5555"
+    },
+    {
+      "id": "T1-400-1",
+      "building": "T1",
+      "floor": 4,
+      "x": 207,
+      "y": 360,
+      "color": "#ff5555"
+    },
+    {
+      "id": "T4-400-2",
+      "building": "T4",
+      "floor": 4,
+      "x": 433,
+      "y": 243,
+      "color": "#ff5555"
+    },
+    {
+      "id": "T4-400-3",
+      "building": "T4",
+      "floor": 4,
+      "x": 214,
+      "y": 249,
+      "color": "#ff5555"
+    },
+    {
+      "id": "T4-400-1",
+      "building": "T4",
+      "floor": 4,
+      "x": 911,
+      "y": 249,
+      "color": "#ff5555"
+    },
+    {
+      "id": "T1-400-2",
+      "building": "T1",
+      "floor": 4,
+      "x": 211,
+      "y": 845,
+      "color": "#ff5555"
+    },
+    {
+      "id": "RB-300-2",
+      "building": "RB",
+      "floor": 3,
+      "x": 273,
+      "y": 733,
+      "color": "#ff5555"
+    },
+    {
+      "id": "RB-300-3",
+      "building": "RB",
+      "floor": 3,
+      "x": 553,
+      "y": 734,
+      "color": "#ff5555"
+    },
+    {
+      "id": "RB-300-6",
+      "building": "RB",
+      "floor": 3,
+      "x": 457,
+      "y": 754,
+      "color": "#ff5555"
+    },
+    {
+      "id": "T1-403-1",
+      "building": "T1",
+      "floor": 4,
+      "x": 196,
+      "y": 483,
+      "color": "#ff5555"
+    },
+    {
+      "id": "T1-404-1",
+      "building": "T1",
+      "floor": 4,
+      "x": 195,
+      "y": 502,
+      "color": "#ff5555"
+    },
+    {
+      "id": "T1-405-1",
+      "building": "T1",
+      "floor": 4,
+      "x": 195,
+      "y": 574,
+      "color": "#ff5555"
+    },
+    {
+      "id": "T1-406-1",
+      "building": "T1",
+      "floor": 4,
+      "x": 195,
+      "y": 594,
+      "color": "#ff5555"
+    },
+    {
+      "id": "T1-407-1",
+      "building": "T1",
+      "floor": 4,
+      "x": 196,
+      "y": 664,
+      "color": "#ff5555"
+    },
+    {
+      "id": "T1-408-1",
+      "building": "T1",
+      "floor": 4,
+      "x": 196,
+      "y": 711,
+      "color": "#ff5555"
+    },
+    {
+      "id": "T1-409-1",
+      "building": "T1",
+      "floor": 4,
+      "x": 195,
+      "y": 755,
+      "color": "#ff5555"
+    },
+    {
+      "id": "T1-410-7",
+      "building": "T1",
+      "floor": 4,
+      "x": 194,
+      "y": 774,
+      "color": "#ff5555"
+    },
+    {
+      "id": "RB-306",
+      "building": "RB",
+      "floor": 3,
+      "x": 272,
+      "y": 751,
+      "color": "#ff5555"
+    },
+    {
+      "id": "RB-308",
+      "building": "RB",
+      "floor": 3,
+      "x": 435,
+      "y": 716,
+      "color": "#ff5555"
+    },
+    {
+      "id": "RB-304",
+      "building": "RB",
+      "floor": 3,
+      "x": 435,
+      "y": 750,
+      "color": "#ff5555"
+    },
+    {
+      "id": "RB-300-1",
+      "building": "RB",
+      "floor": 3,
+      "x": 447,
+      "y": 736,
+      "color": "#ff5555"
+    },
+    {
+      "id": "RB-300-4",
+      "building": "RB",
+      "floor": 3,
+      "x": 570,
+      "y": 750,
+      "color": "#ff5555"
+    },
+    {
+      "id": "RB-300-5",
+      "building": "RB",
+      "floor": 3,
+      "x": 704,
+      "y": 762,
+      "color": "#ff5555"
+    },
+    {
+      "id": "RB-307",
+      "building": "RB",
+      "floor": 3,
+      "x": 272,
+      "y": 710,
+      "color": "#ff5555"
+    },
+    {
+      "id": "T1-410-6",
+      "building": "T1",
+      "floor": 4,
+      "x": 193,
+      "y": 846,
+      "color": "#ff5555"
+    },
+    {
+      "id": "T4-S3-4F",
+      "building": "T4",
+      "floor": 4,
+      "x": 184,
+      "y": 263,
+      "color": "#5599ff"
+    },
+    {
+      "id": "C3-T1-RB-4F",
+      "building": "T1",
+      "floor": 4,
+      "x": 221,
+      "y": 754,
+      "color": "#87de87"
+    },
+    {
+      "id": "RB-SC-3F",
+      "building": "RB",
+      "floor": 3,
+      "x": 263,
+      "y": 721,
+      "color": "#5599ff"
+    },
+    {
+      "id": "RB-E-3F",
+      "building": "RB",
+      "floor": 3,
+      "x": 495,
+      "y": 757,
+      "color": "#5599ff"
+    },
+    {
+      "id": "RB-E-1F",
+      "building": "RB",
+      "floor": 1,
+      "x": 496,
+      "y": 726,
+      "color": "#5599ff"
+    },
+    {
+      "id": "T4-E-4F",
+      "building": "T4",
+      "floor": 4,
+      "x": 392,
+      "y": 214,
+      "color": "#5599ff"
+    },
+    {
+      "id": "T4-S2-4F",
+      "building": "T4",
+      "floor": 4,
+      "x": 422,
+      "y": 159,
+      "color": "#5599ff"
+    },
+    {
+      "id": "T4-S1-4F",
+      "building": "T4",
+      "floor": 4,
+      "x": 908,
+      "y": 231,
+      "color": "#5599ff"
+    },
+    {
+      "id": "RB-SB-3F",
+      "building": "RB",
+      "floor": 3,
+      "x": 531,
+      "y": 782,
+      "color": "#5599ff"
+    },
+    {
+      "id": "RB-SF-3F",
+      "building": "RB",
+      "floor": 3,
+      "x": 591,
+      "y": 775,
+      "color": "#5599ff"
+    },
+    {
+      "id": "RB-SA-3F",
+      "building": "RB",
+      "floor": 3,
+      "x": 737,
+      "y": 763,
+      "color": "#5599ff"
+    },
+    {
+      "id": "RB-SD-3F",
+      "building": "RB",
+      "floor": 3,
+      "x": 877,
+      "y": 756,
+      "color": "#5599ff"
+    },
+    {
+      "id": "T1-S2-4F",
+      "building": "T1",
+      "floor": 4,
+      "x": 212,
+      "y": 857,
+      "color": "#5599ff"
+    },
+    {
+      "id": "C3-RB-T1-3F",
+      "building": "RB",
+      "floor": 3,
+      "x": 238,
+      "y": 754,
+      "color": "#87de87"
+    }
+  ],
+  "edges": [
+    {
+      "from": "C3-T4-T1-4F",
+      "to": "C3-T1-T4-4F",
+      "distance": 1.8,
+      "type": "bridge"
+    },
+    {
+      "from": "C3-T4-T1-4F",
+      "to": "T4-400-3",
+      "distance": 1.33,
+      "type": "bridge"
+    },
+    {
+      "from": "C3-T4-T1-4F",
+      "to": "T4-S3-4F",
+      "distance": 1.34,
+      "type": "bridge"
+    },
+    {
+      "from": "C3-T1-T4-4F",
+      "to": "T1-S1-4F",
+      "distance": 0.78,
+      "type": "bridge"
+    },
+    {
+      "from": "C3-T1-T4-4F",
+      "to": "T1-400-1",
+      "distance": 2.45,
+      "type": "bridge"
+    },
+    {
+      "from": "C3-T1-RB-4F",
+      "to": "C3-RB-T1-3F",
+      "distance": 0.85,
+      "type": "bridge"
+    },
+    {
+      "from": "C3-T1-RB-4F",
+      "to": "T1-409-1",
+      "distance": 1.3,
+      "type": "bridge"
+    },
+    {
+      "from": "C3-T1-RB-4F",
+      "to": "T1-410-7",
+      "distance": 1.68,
+      "type": "bridge"
+    },
+    {
+      "from": "C3-RB-T1-3F",
+      "to": "RB-SC-3F",
+      "distance": 2.07,
+      "type": "bridge"
+    },
+    {
+      "from": "C3-RB-T1-3F",
+      "to": "RB-300-2",
+      "distance": 2.04,
+      "type": "bridge"
+    },
+    {
+      "from": "T4-S1-4F",
+      "to": "T4-400-1",
+      "distance": 0.91,
+      "type": "backbone"
+    },
+    {
+      "from": "T4-400-1",
+      "to": "T4-400-2",
+      "distance": 23.9,
+      "type": "backbone"
+    },
+    {
+      "from": "T4-400-2",
+      "to": "T4-S2-4F",
+      "distance": 4.24,
+      "type": "backbone"
+    },
+    {
+      "from": "T4-400-2",
+      "to": "T4-E-4F",
+      "distance": 2.51,
+      "type": "backbone"
+    },
+    {
+      "from": "T4-400-2",
+      "to": "T4-400-3",
+      "distance": 10.95,
+      "type": "backbone"
+    },
+    {
+      "from": "T4-400-3",
+      "to": "T4-S3-4F",
+      "distance": 1.66,
+      "type": "backbone"
+    },
+    {
+      "from": "T4-400-3",
+      "to": "T4-E-4F",
+      "distance": 9.07,
+      "type": "backbone"
+    },
+    {
+      "from": "T1-S1-4F",
+      "to": "T1-400-1",
+      "distance": 1.98,
+      "type": "backbone"
+    },
+    {
+      "from": "T1-400-1",
+      "to": "T1-402-1",
+      "distance": 2.63,
+      "type": "backbone"
+    },
+    {
+      "from": "T1-402-1",
+      "to": "T1-403-1",
+      "distance": 3.6,
+      "type": "backbone"
+    },
+    {
+      "from": "T1-403-1",
+      "to": "T1-404-1",
+      "distance": 0.95,
+      "type": "backbone"
+    },
+    {
+      "from": "T1-404-1",
+      "to": "T1-405-1",
+      "distance": 3.6,
+      "type": "backbone"
+    },
+    {
+      "from": "T1-405-1",
+      "to": "T1-406-1",
+      "distance": 1.0,
+      "type": "backbone"
+    },
+    {
+      "from": "T1-406-1",
+      "to": "T1-407-1",
+      "distance": 3.5,
+      "type": "backbone"
+    },
+    {
+      "from": "T1-407-1",
+      "to": "T1-408-1",
+      "distance": 2.35,
+      "type": "backbone"
+    },
+    {
+      "from": "T1-408-1",
+      "to": "T1-409-1",
+      "distance": 2.2,
+      "type": "backbone"
+    },
+    {
+      "from": "T1-409-1",
+      "to": "T1-410-7",
+      "distance": 0.95,
+      "type": "backbone"
+    },
+    {
+      "from": "T1-410-7",
+      "to": "T1-410-6",
+      "distance": 3.6,
+      "type": "backbone"
+    },
+    {
+      "from": "T1-410-6",
+      "to": "T1-400-2",
+      "distance": 0.9,
+      "type": "backbone"
+    },
+    {
+      "from": "T1-400-2",
+      "to": "T1-S2-4F",
+      "distance": 0.6,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-E-1F",
+      "to": "RB-E-3F",
+      "distance": 1.55,
+      "type": "elevator"
+    },
+    {
+      "from": "RB-SC-3F",
+      "to": "RB-300-2",
+      "distance": 0.78,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-300-2",
+      "to": "RB-307",
+      "distance": 1.15,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-300-2",
+      "to": "RB-306",
+      "distance": 0.9,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-300-2",
+      "to": "RB-300-1",
+      "distance": 8.7,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-300-1",
+      "to": "RB-308",
+      "distance": 1.17,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-300-1",
+      "to": "RB-304",
+      "distance": 0.92,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-300-1",
+      "to": "RB-300-6",
+      "distance": 1.03,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-300-1",
+      "to": "RB-300-3",
+      "distance": 5.3,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-300-1",
+      "to": "RB-E-3F",
+      "distance": 2.62,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-300-1",
+      "to": "RB-SB-3F",
+      "distance": 4.79,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-300-3",
+      "to": "RB-300-4",
+      "distance": 1.17,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-300-3",
+      "to": "RB-E-3F",
+      "distance": 3.12,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-300-3",
+      "to": "RB-SB-3F",
+      "distance": 2.64,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-300-3",
+      "to": "RB-SE-3F",
+      "distance": 0.5,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-300-3",
+      "to": "RB-300-4",
+      "distance": 1.17,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-300-4",
+      "to": "RB-SF-3F",
+      "distance": 1.63,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-300-4",
+      "to": "RB-300-5",
+      "distance": 6.73,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-300-5",
+      "to": "RB-SA-3F",
+      "distance": 1.65,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-SA-3F",
+      "to": "RB-311",
+      "distance": 2.51,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-311",
+      "to": "RB-SD-3F",
+      "distance": 4.73,
+      "type": "backbone"
+    }
+  ]
+}

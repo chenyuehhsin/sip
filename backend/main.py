@@ -3,18 +3,13 @@ import math
 import heapq
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
 
-app = FastAPI(title="SIP Navigation Engine")
+app = FastAPI(title="SIP Multi-floor Navigation Engine")
 
-# 比例尺常數
 SCALE_FACTOR = 0.05 
 
-print("🚀 啟動 SIP 後端導航引擎...")
+print("🚀 啟動 SIP 跨樓層雙向尋路引擎 (含備選路徑)...")
 
-# ==========================================
-# 1. 載入我們精心準備的「三神裝」資料檔
-# ==========================================
 try:
     with open('data/routing_nodes.json', 'r', encoding='utf-8') as f:
         routing_data = json.load(f)
@@ -23,83 +18,51 @@ try:
     with open('data/final_connections.json', 'r', encoding='utf-8') as f:
         connections_data = json.load(f)
 except FileNotFoundError as e:
-    print(f"❌ 嚴重錯誤：找不到 {e.filename}！請確認已執行完 1~3 步驟的管線腳本。")
+    print(f"❌ 嚴重錯誤：找不到 {e.filename}！請確認已完成 1~3 資料融合步驟。")
     exit(1)
 
-# ==========================================
-# 2. 建立靜態骨幹網路 (Base Graph) 與座標字典
-# ==========================================
 base_graph = {}
 node_coords = {}
+node_floors = {}
 
-# 載入骨幹節點座標
 for node in routing_data['nodes']:
     base_graph[node['id']] = {}
     node_coords[node['id']] = (node['x'], node['y'])
+    node_floors[node['id']] = node['floor']
 
-# 載入骨幹連線 (雙向邊)
 for edge in routing_data['edges']:
     u, v, w = edge['from'], edge['to'], edge['distance']
     if u in base_graph and v in base_graph:
         base_graph[u][v] = w
         base_graph[v][u] = w
 
-# 載入 POI 座標 (為了計算虛擬連線的距離)
 poi_dict = {poi['id']: poi for poi in pois_data}
 for poi in pois_data:
     node_coords[poi['id']] = (poi['x'], poi['y'])
+    node_floors[poi['id']] = poi['floor']
 
 def calculate_distance(id1, id2):
+    f1, f2 = node_floors.get(id1, 1.0), node_floors.get(id2, 1.0)
+    if f1 != f2:
+        return round(abs(f1 - f2) * 10.0, 2)
     x1, y1 = node_coords[id1]
     x2, y2 = node_coords[id2]
     return round(math.sqrt((x1 - x2)**2 + (y1 - y2)**2) * SCALE_FACTOR, 2)
 
-# ==========================================
-# 3. 核心 API：Dijkstra 尋路 (搭載虛擬節點技術)
-# ==========================================
-@app.get("/api/route")
-def get_shortest_path(start: str, end: str):
-    if start not in node_coords:
-        raise HTTPException(status_code=404, detail=f"找不到起點 {start}")
-    if end not in node_coords:
-        raise HTTPException(status_code=404, detail=f"找不到終點 {end}")
-
-    # 🌟 複製一份臨時的 Graph，用來注入虛擬節點
-    local_graph = {node: neighbors.copy() for node, neighbors in base_graph.items()}
-
-    # 注入虛擬節點的閉包函數
-    def inject_virtual_node(poi_id):
-        if poi_id not in local_graph:
-            local_graph[poi_id] = {}
-        # 去 final_connections 查這個 POI 有幾個門
-        targets = connections_data.get(poi_id, [])
-        for target in targets:
-            if target in local_graph:
-                dist = calculate_distance(poi_id, target)
-                local_graph[poi_id][target] = dist
-                local_graph[target][poi_id] = dist # 雙向連通
-
-    # 如果起終點是教室(POI)，就把他們動態插進地圖裡
-    if start in poi_dict:
-        inject_virtual_node(start)
-    if end in poi_dict:
-        inject_virtual_node(end)
-
-    # 🧠 標準 Dijkstra 演算法 (跑在包含虛擬點的 local_graph 上)
-    distances = {node: float('inf') for node in local_graph}
+def run_dijkstra(graph, start, end):
+    distances = {node: float('inf') for node in graph}
     distances[start] = 0
     pq = [(0, start)]
-    previous = {node: None for node in local_graph}
+    previous = {node: None for node in graph}
 
     while pq:
         current_dist, current_node = heapq.heappop(pq)
-        
         if current_dist > distances[current_node]:
             continue
         if current_node == end:
             break
             
-        for neighbor, weight in local_graph[current_node].items():
+        for neighbor, weight in graph[current_node].items():
             dist = current_dist + weight
             if dist < distances[neighbor]:
                 distances[neighbor] = dist
@@ -107,56 +70,90 @@ def get_shortest_path(start: str, end: str):
                 heapq.heappush(pq, (dist, neighbor))
 
     if distances[end] == float('inf'):
-        raise HTTPException(status_code=400, detail="這兩個點之間無法連通")
+        return [], float('inf')
 
-    # 回溯路徑
     path = []
     curr = end
     while curr is not None:
         path.append(curr)
         curr = previous[curr]
     path.reverse()
+    return path, round(distances[end], 2)
 
-    # ==========================================
-    # 產出「人類語意化」的精簡文字導航
-    # ==========================================
-    directions = []
-    directions.append(f"🚶 從 {path[0]} 出發，進入走廊")
-    
-    # 只抓取「重大轉換節點」進行提示 (例如跨棟橋樑、電梯、樓梯)
-    for i in range(1, len(path) - 1):
-        curr = path[i]
+@app.get("/api/route")
+def get_shortest_path(start: str, end: str):
+    if start not in node_coords or end not in node_coords:
+        raise HTTPException(status_code=404, detail=f"找不到起點或終點")
+
+    local_graph = {node: neighbors.copy() for node, neighbors in base_graph.items()}
+
+    def inject_virtual_node(poi_id):
+        if poi_id not in local_graph:
+            local_graph[poi_id] = {}
+        targets = connections_data.get(poi_id, [])
+        for target in targets:
+            if target in local_graph:
+                dist = calculate_distance(poi_id, target)
+                local_graph[poi_id][target] = dist
+                local_graph[target][poi_id] = dist 
+
+    if start in poi_dict: inject_virtual_node(start)
+    if end in poi_dict: inject_virtual_node(end)
+
+    # 1. 計算主路線
+    main_path, main_dist = run_dijkstra(local_graph, start, end)
+    if not main_path:
+        raise HTTPException(status_code=400, detail="這兩個點之間無法連通")
+
+    # 2. 計算備選路線 (移除主路線中間的骨幹邊)
+    alt_path, alt_dist = [], float('inf')
+    if len(main_path) > 4:
+        # 找中間的一條邊切斷
+        idx = len(main_path) // 2
+        u, v = main_path[idx], main_path[idx+1]
         
-        # 判斷是否為跨棟橋樑 (例如 C3-T4-T1)
-        if curr.startswith('C') and curr.count('-') >= 2:
-            # 避免連續播報兩個橋樑點，檢查上一個點是不是也是橋樑
-            prev = path[i-1]
-            if not (prev.startswith('C') and prev.count('-') >= 2):
-                directions.append(f"🌉 途經連通道 ({curr}) 前往另一棟建築")
-                
-        # 判斷是否為垂直動線 (樓梯、電梯)
-        elif "stair" in curr.lower() or "elevator" in curr.lower() or "樓梯" in curr:
-             directions.append(f"🪜 經由 {curr} 轉換樓層")
+        # 暫時移除該邊
+        w_uv = local_graph[u].pop(v, None)
+        w_vu = local_graph[v].pop(u, None)
+        
+        alt_path, alt_dist = run_dijkstra(local_graph, start, end)
+        
+        # 恢復該邊 (若有其他用途)
+        if w_uv: local_graph[u][v] = w_uv
+        if w_vu: local_graph[v][u] = w_vu
 
-    directions.append(f"🎯 抵達終點 {path[-1]}")
+        # 如果備選路線太繞路(超過 1.5 倍)或是跟主路線一樣，就作廢
+        if alt_dist > main_dist * 1.5 or alt_path == main_path:
+            alt_path = []
+
+    # 3. 產生文字導航
+    directions = [f"🚶 從 {start} 出發"]
+    for i in range(1, len(main_path) - 1):
+        curr = main_path[i]
+        prev = main_path[i-1]
+        if curr.startswith('C') and curr.count('-') >= 2:
+            if not (prev.startswith('C') and prev.count('-') >= 2):
+                directions.append(f"🌉 經過跨棟連通道 ({curr}) 前往另一大樓")
+        elif "stair" in curr.lower() or "elevator" in curr.lower() or "樓梯" in curr or "電梯" in curr:
+            if node_floors.get(curr) != node_floors.get(prev):
+                directions.append(f"🪜 經由 {curr} 轉換樓層")
+    directions.append(f"🎯 抵達終點 {end}")
 
     return {
-        "path": path,
-        "total_distance": round(distances[end], 2),
-        "directions": directions
+        "path": main_path,
+        "total_distance": main_dist,
+        "directions": directions,
+        "alt_path": alt_path,
+        "alt_distance": alt_dist
     }
 
-# ==========================================
-# 4. 前端資料供應與靜態網頁路由
-# ==========================================
 @app.get("/api/data")
 def get_map_data():
-    """將乾淨的分層資料吐給前端渲染"""
     return {
         "nodes": routing_data['nodes'],
         "edges": routing_data['edges'],
         "pois": pois_data,
-        "connections": connections_data # 🌟 前端畫灰線需要這個！
+        "connections": connections_data 
     }
 
 @app.get("/")

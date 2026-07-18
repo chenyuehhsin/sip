@@ -1,64 +1,517 @@
 {
-    "跨棟連通道": [
-        ["C3-T4-T1-4F", "C3-T1-T4-4F", "bridge"],
-        ["C3-T4-T1-4F", "T4-400-3", "bridge"],
-        ["C3-T4-T1-4F", "T4-S3-4F", "bridge"],
-        ["C3-T1-T4-4F", "T1-S1-4F", "bridge"],
-        ["C3-T1-T4-4F", "T1-400-1", "bridge"],
-        ["C3-T1-RB-4F", "C3-RB-T1-3F", "bridge"],
-        ["C3-T1-RB-4F", "T1-409-1", "bridge"],
-        ["C3-T1-RB-4F", "T1-410-7", "bridge"],
-        ["C3-RB-T1-3F", "RB-SC-3F", "bridge"],
-        ["C3-RB-T1-3F", "RB-300-2", "bridge"]
-      ],
+    "===== [特殊動線: 跨棟與垂直] =====": [],
 
-    "T4大樓內部動線": [
-        ["T4-S1-4F", "T4-400-1", "backbone"], 
-        ["T4-400-1", "T4-400-2", "backbone"],
-        ["T4-400-2", "T4-S2-4F", "backbone"],
-        ["T4-400-2", "T4-E-4F", "backbone"],
-        ["T4-400-2", "T4-400-3", "backbone"],
-        ["T4-400-3", "T4-S3-4F", "backbone"],
-        ["T4-400-3", "T4-E-4F", "backbone"]
+    "水平跨棟連通道 (Bridges) AU": [
+
+      ["C-AU-1F-to-T4-1F", "C-T4-1F-to-AU-1F", "bridge"],
+      ["C-T4-1F-to-AU-1F", "T4-100-2", "bridge"],
+      ["C-AU-1F-to-T4-1F", "AU-100-1", "bridge"],
+      ["C-AU-1F-to-T4-1F", "AU-100-7", "bridge"],
+      
+      ["C-AU-1F-to-RB-1F", "C-RB-1F-to-AU-1F", "bridge"],
+      ["C-AU-1F-to-RB-1F", "AU-100-4", "bridge"],
+      ["C-RB-1F-to-AU-1F", "RB-100-4", "bridge"]
+      
+    ],
+    
+    "水平跨棟連通道 (Bridges) T4-to-T1": [
+
+      ["C-T4-1F-to-T1-1F", "C-T1-1F-to-T4-1F", "bridge"],
+      ["C-T4-1F-to-T1-1F", "T4-100-3", "bridge"],
+      ["C-T4-1F-to-T1-1F", "T4-S1-1F", "bridge"],
+      ["C-T1-1F-to-T4-1F", "T1-100-1", "bridge"],
+      ["C-T1-1F-to-T4-1F", "T1-S1-1F", "bridge"],
+
+      ["C-T4-2F-to-T1-2F", "C-T1-2F-to-T4-2F", "bridge"],
+      ["C-T4-2F-to-T1-2F", "T4-200-4", "bridge"],
+      ["C-T4-2F-to-T1-2F", "T4-S1-2F", "bridge"],
+      ["C-T1-2F-to-T4-2F", "T1-200-1", "bridge"],
+      ["C-T1-2F-to-T4-2F", "T1-S1-2F", "bridge"],
+
+      ["C-T4-3F-to-T1-3F", "C-T1-3F-to-T4-3F", "bridge"],
+      ["C-T4-3F-to-T1-3F", "T4-300-3", "bridge"],
+      ["C-T4-3F-to-T1-3F", "T4-S1-3F", "bridge"],
+      ["C-T1-3F-to-T4-3F", "T1-300-1", "bridge"],
+      ["C-T1-3F-to-T4-3F", "T1-S1-3F", "bridge"],
+      
+      ["C-T4-4F-to-T1-4F", "C-T1-4F-to-T4-4F", "bridge"],
+      ["C-T4-4F-to-T1-4F", "T4-400-3", "bridge"],
+      ["C-T4-4F-to-T1-4F", "T4-S1-4F", "bridge"],
+      ["C-T1-4F-to-T4-4F", "T1-S1-4F", "bridge"],
+      ["C-T1-4F-to-T4-4F", "T1-400-1", "bridge"]
+
     ],
 
-    "T1大樓內部動線": [
-        ["T1-S1-4F", "T1-400-1", "backbone"],
-        ["T1-400-1", "T1-402-1", "backbone"],
-        ["T1-402-1", "T1-403-1", "backbone"],
-        ["T1-403-1", "T1-404-1", "backbone"],
-        ["T1-404-1", "T1-405-1", "backbone"],
-        ["T1-405-1", "T1-406-1", "backbone"],
-        ["T1-406-1", "T1-407-1", "backbone"],
-        ["T1-407-1", "T1-408-1", "backbone"],
-        ["T1-408-1", "T1-409-1", "backbone"],
-        ["T1-409-1", "T1-410-7", "backbone"],
-        ["T1-410-7", "T1-410-6", "backbone"],
-        ["T1-410-6", "T1-400-2", "backbone"],
-        ["T1-400-2", "T1-S2-4F", "backbone"]
+    "水平跨棟連通道 (Bridges) T1-to-RB": [
+      ["C-T1-1F-to-RB-1F", "C-RB-1F-to-T1-1F", "bridge"],
+      ["C-T1-1F-to-RB-1F", "T1-100-2", "bridge"],
+      ["C-RB-1F-to-T1-1F", "RB-100-17", "bridge"],
+      ["C-T1-4F-to-RB-3F", "C-RB-3F-to-T1-4F", "bridge"],
+      ["C-T1-4F-to-RB-3F", "T1-409-1", "bridge"],
+      ["C-T1-4F-to-RB-3F", "T1-410-7", "bridge"],
+      ["C-RB-3F-to-T1-4F", "RB-SC-3F", "bridge"],
+      ["C-RB-3F-to-T1-4F", "RB-300-2", "bridge"]
+
+    ],
+
+    "水平跨棟連通道 (Bridges) RB-Stack-to-RB": [
+
+      ["C-RB-Stack-B1F-to-RB-B1F", "C-RB-B1F-to-RB-Stack-B1F", "bridge"],
+      ["C-RB-Stack-B1F-to-RB-B1F", "RB-SA-B1F", "bridge"],
+      ["C-RB-Stack-B1F-to-RB-B1F", "RB-Stack-B100-1", "bridge"],
+      ["C-RB-B1F-to-RB-Stack-B1F", "RB-SA-B1F", "bridge"],
+      ["C-RB-Stack-7F-to-RB-5F", "C-RB-5F-to-RB-Stack-7F", "bridge"],
+      ["C-RB-Stack-7F-to-RB-5F", "RB-SA-5F", "bridge"],
+      ["C-RB-Stack-7F-to-RB-5F", "RB-Stack-700-1", "bridge"],
+      ["C-RB-5F-to-RB-Stack-7F","RB-SA-5F", "bridge"],
+      ["C-RB-5F-to-RB-Stack-7F","RB-500-6", "bridge"]
+      
     ],
   
-    "RB大樓內部動線": [
-        ["RB-E-1F", "RB-E-3F", "elevator"],
-        ["RB-SC-3F", "RB-300-2", "backbone"],
-        ["RB-300-2", "RB-307", "backbone"],
-        ["RB-300-2", "RB-306", "backbone"],
-        ["RB-300-2", "RB-300-1", "backbone"],
-        ["RB-300-1", "RB-308", "backbone"],
-        ["RB-300-1", "RB-304", "backbone"],
-        ["RB-300-1", "RB-300-6", "backbone"],
-        ["RB-300-1", "RB-300-3", "backbone"],
-        ["RB-300-1", "RB-E-3F", "backbone"],
-        ["RB-300-1", "RB-SB-3F", "backbone"],
-        ["RB-300-3", "RB-300-4", "backbone"],
-        ["RB-300-3", "RB-E-3F", "backbone"],
-        ["RB-300-3", "RB-SB-3F", "backbone"],
-        ["RB-300-3", "RB-SE-3F", "backbone"],
-        ["RB-300-3", "RB-300-4", "backbone"],
-        ["RB-300-4", "RB-SF-3F", "backbone"],
-        ["RB-300-4", "RB-300-5", "backbone"],
-        ["RB-300-5", "RB-SA-3F", "backbone"],
-        ["RB-SA-3F", "RB-311", "backbone"],
-        ["RB-311", "RB-SD-3F", "backbone"]
+    "===== [RB 大樓系統] =====": [],
+
+    "RB大樓-垂直動線 (Stairs & Elevators)": [
+
+      ["RB-E1-B1F", "RB-E1-1F", "elevator"],
+      ["RB-E1-1F", "RB-E1-3F", "elevator"],
+      ["RB-E1-3F", "RB-E1-4F", "elevator"],
+      ["RB-E1-4F", "RB-E1-5F", "elevator"],
+      ["RB-E1-5F", "RB-E1-6F", "elevator"],
+      ["RB-E1-6F", "RB-E1-7F", "elevator"],
+      ["RB-E1-7F", "RB-E1-8F", "elevator"],
+      ["RB-E1-8F", "RB-E1-9F", "elevator"],
+
+      ["RB-SA-B1F", "RB-SA-1F", "stair"],
+      ["RB-SA-1F", "RB-SA-2F", "stair"],
+      ["RB-SA-2F", "RB-SA-3F", "stair"],
+      ["RB-SA-3F", "RB-SA-4F", "stair"],
+      ["RB-SA-4F", "RB-SA-5F", "stair"],
+      ["RB-SA-5F", "RB-SA-6F", "stair"],
+      ["RB-SA-6F", "RB-SA-7F", "stair"],
+      ["RB-SA-7F", "RB-SA-8F", "stair"],
+      ["RB-SA-8F", "RB-SA-9F", "stair"],
+
+      ["RB-SB-B1F", "RB-SB-1F", "stair"],
+      ["RB-SB-1F", "RB-SB-2F", "stair"],
+      ["RB-SB-2F", "RB-SB-3F", "stair"],
+      ["RB-SB-3F", "RB-SB-4F", "stair"],
+      ["RB-SB-4F", "RB-SB-5F", "stair"],
+      ["RB-SB-5F", "RB-SB-6F", "stair"],
+      ["RB-SB-6F", "RB-SB-7F", "stair"],
+      ["RB-SB-7F", "RB-SB-8F", "stair"],
+      ["RB-SB-8F", "RB-SB-9F", "stair"],
+
+      ["RB-SC-1F", "RB-SC-2F", "stair"],
+      ["RB-SC-2F", "RB-SC-3F", "stair"],
+      ["RB-SC-3F", "RB-SC-4F", "stair"],
+      ["RB-SC-4F", "RB-SC-5F", "stair"],
+      ["RB-SC-5F", "RB-SC-6F", "stair"],
+      ["RB-SC-6F", "RB-SC-7F", "stair"],
+      ["RB-SC-7F", "RB-SC-8F", "stair"],
+      ["RB-SC-8F", "RB-SC-9F", "stair"],
+
+      ["RB-SE-2F", "RB-SE-3F", "stair"],
+      ["RB-SF-1F", "RB-SF-2F", "stair"],
+      ["RB-SG-1F", "RB-SG-2F", "stair"],
+      ["RB-SH-1F", "RB-SH-2F", "stair"],
+      ["RB-SI-B1F", "RB-SI-1F", "stair"],
+      ["RB-SJ-2F", "RB-SJ-3F", "stair"]
+
+      ],
+    
+    "RB大樓-B1F水平動線": [
+      ["RB-B100-1", "RB-E1-B1F", "backbone"],
+      ["RB-B100-1", "RB-SB-B1F", "backbone"],
+      ["RB-B100-1", "RB-B100-2", "backbone"],
+      ["RB-B100-2", "RB-B100-3", "backbone"],
+      ["RB-B100-3", "RB-B100-4", "backbone"],
+      ["RB-B100-4", "RB-SI-B1F", "backbone"]
+    ],
+
+    "RB大樓-1F水平動線": [
+      ["RB-100-1", "RB-100-2", "backbone"],
+      ["RB-100-2", "RB-100-3", "backbone"],
+      ["RB-100-3", "RB-100-4", "backbone"],
+      ["RB-100-4", "RB-100-5", "backbone"],
+      ["RB-100-5", "RB-100-17", "backbone"],
+      ["RB-100-17", "RB-SI-1F", "backbone"],
+      ["RB-100-3", "RB-100-9", "backbone"],
+      ["RB-100-9", "RB-100-10", "backbone"],
+      ["RB-100-10", "RB-100-11", "backbone"],
+      ["RB-100-1", "RB-100-13", "backbone"],
+      ["RB-100-1", "RB-E1-1F", "backbone"],
+      ["RB-100-1", "RB-SB-1F", "backbone"],
+      ["RB-100-2", "RB-100-8", "backbone"],
+      ["RB-100-5", "RB-100-6", "backbone"],
+      ["RB-100-6", "RB-100-7", "backbone"],
+      ["RB-100-6", "RB-100-8", "backbone"],
+      ["RB-100-7", "RB-SG-1F", "backbone"],
+      ["RB-100-8", "RB-SF-1F", "backbone"],
+      ["RB-100-14", "RB-SC-1F", "backbone"],
+      ["RB-100-15", "RB-SH-1F", "backbone"]
+    ],
+
+    "RB大樓-2F水平動線": [
+      ["RB-200-1", "RB-SB-2F", "backbone"],
+      ["RB-200-2", "RB-SE-2F", "backbone"],
+      ["RB-200-2", "RB-SE-2F", "backbone"],
+      ["RB-200-3", "RB-SE-2F", "backbone"],
+      ["RB-200-4", "RB-SJ-2F", "backbone"]
+    ],
+    "RB大樓-3F水平動線": [
+      ["RB-SC-3F", "RB-300-2", "backbone"],
+      ["RB-300-2", "RB-307", "backbone"],
+      ["RB-300-2", "RB-306", "backbone"],
+      ["RB-300-2", "RB-300-1", "backbone"],
+      ["RB-300-1", "RB-308", "backbone"],
+      ["RB-300-1", "RB-304", "backbone"],
+      ["RB-300-1", "RB-300-6", "backbone"],
+      ["RB-300-1", "RB-300-3", "backbone"],
+      ["RB-300-1", "RB-E1-3F", "backbone"],
+      ["RB-300-1", "RB-SB-3F", "backbone"],
+      ["RB-300-3", "RB-300-4", "backbone"],
+      ["RB-300-3", "RB-E1-3F", "backbone"],
+      ["RB-300-3", "RB-SB-3F", "backbone"],
+      ["RB-300-3", "RB-SE-3F", "backbone"],
+      ["RB-300-3", "RB-300-4", "backbone"],
+      ["RB-300-4", "RB-SJ-3F", "backbone"],
+      ["RB-300-4", "RB-300-5", "backbone"],
+      ["RB-300-5", "RB-SA-3F", "backbone"]
+    ],
+
+    "RB大樓-4F水平動線": [
+      ["RB-400-1", "RB-400-5", "backbone"],
+      ["RB-400-1", "RB-E1-4F", "backbone"],
+      ["RB-400-1", "RB-400-2", "backbone"],
+      ["RB-400-2", "RB-400-3", "backbone"],
+      ["RB-400-3", "RB-SC-4F", "backbone"],
+      ["RB-400-5", "RB-E1-4F", "backbone"],
+      ["RB-400-5", "RB-SB-4F", "backbone"],
+      ["RB-400-5", "RB-400-6", "backbone"],
+      ["RB-400-6", "RB-400-7", "backbone"],
+      ["RB-400-7", "RB-SA-4F", "backbone"]
+    ],
+
+    "RB大樓-5F水平動線": [
+      ["RB-500-1", "RB-500-4", "backbone"],
+      ["RB-500-1", "RB-E1-5F", "backbone"],
+      ["RB-500-1", "RB-500-2", "backbone"],
+      ["RB-500-2", "RB-500-3", "backbone"],
+      ["RB-500-3", "RB-SC-5F", "backbone"],
+      ["RB-500-4", "RB-E1-5F", "backbone"],
+      ["RB-500-4", "RB-SB-5F", "backbone"],
+      ["RB-500-4", "RB-500-5", "backbone"],
+      ["RB-500-5", "RB-500-6", "backbone"],
+      ["RB-500-6", "RB-SA-5F", "backbone"]
+    ],
+
+    "RB大樓-6F水平動線": [
+      ["RB-600-1", "RB-600-4", "backbone"],
+      ["RB-600-1", "RB-E1-6F", "backbone"],
+      ["RB-600-1", "RB-600-2", "backbone"],
+      ["RB-600-2", "RB-600-3", "backbone"],
+      ["RB-600-3", "RB-SC-6F", "backbone"],
+      ["RB-600-4", "RB-E1-6F", "backbone"],
+      ["RB-600-4", "RB-SB-6F", "backbone"],
+      ["RB-600-4", "RB-600-5", "backbone"],
+      ["RB-600-5", "RB-600-6", "backbone"],
+      ["RB-600-6", "RB-SA-6F", "backbone"]
+    ],
+
+    "RB大樓-7F水平動線": [
+      ["RB-700-1", "RB-700-4", "backbone"],
+      ["RB-700-1", "RB-E1-7F", "backbone"],
+      ["RB-700-1", "RB-700-2", "backbone"],
+      ["RB-700-2", "RB-700-3", "backbone"],
+      ["RB-700-3", "RB-SC-7F", "backbone"],
+      ["RB-700-4", "RB-E1-7F", "backbone"],
+      ["RB-700-4", "RB-SB-7F", "backbone"],
+      ["RB-700-4", "RB-700-5", "backbone"],
+      ["RB-700-5", "RB-700-6", "backbone"],
+      ["RB-700-6", "RB-SA-7F", "backbone"]
+    ],
+
+    "RB大樓-8F水平動線": [
+      ["RB-800-1", "RB-800-4", "backbone"],
+      ["RB-800-1", "RB-E1-8F", "backbone"],
+      ["RB-800-1", "RB-800-2", "backbone"],
+      ["RB-800-2", "RB-800-3", "backbone"],
+      ["RB-800-3", "RB-SC-8F", "backbone"],
+      ["RB-800-4", "RB-E1-8F", "backbone"],
+      ["RB-800-4", "RB-SB-8F", "backbone"],
+      ["RB-800-4", "RB-800-5", "backbone"],
+      ["RB-800-5", "RB-800-6", "backbone"],
+      ["RB-800-6", "RB-SA-8F", "backbone"]
+    ],
+
+    "RB大樓-9F水平動線": [
+      ["RB-900-1", "RB-900-4", "backbone"],
+      ["RB-900-1", "RB-E1-9F", "backbone"],
+      ["RB-900-1", "RB-900-2", "backbone"],
+      ["RB-900-2", "RB-900-3", "backbone"],
+      ["RB-900-3", "RB-SC-9F", "backbone"],
+      ["RB-900-4", "RB-E1-9F", "backbone"],
+      ["RB-900-4", "RB-SB-9F", "backbone"],
+      ["RB-900-4", "RB-900-5", "backbone"],
+      ["RB-900-5", "RB-900-6", "backbone"],
+      ["RB-900-6", "RB-SA-9F", "backbone"]
+    ],
+  
+    "RB-Stack大樓-垂直動線 (Stairs & Elevators)": [
+
+      ["RB-Stack-E2-1F", "RB-Stack-E2-2F", "elevator"],
+      ["RB-Stack-E2-2F", "RB-Stack-E2-3F", "elevator"],
+      ["RB-Stack-E2-3F", "RB-Stack-E2-4F", "elevator"],
+      ["RB-Stack-E2-4F", "RB-Stack-E2-5F", "elevator"],
+      ["RB-Stack-E2-5F", "RB-Stack-E2-6F", "elevator"],
+      ["RB-Stack-E2-6F", "RB-Stack-E2-7F", "elevator"],
+      ["RB-Stack-E2-7F", "RB-Stack-E2-8F", "elevator"],
+
+      ["RB-Stack-SD-B1F", "RB-Stack-SD-1F", "stair"],
+      ["RB-Stack-SD-1F", "RB-Stack-SD-2F", "stair"],
+      ["RB-Stack-SD-2F", "RB-Stack-SD-3F", "stair"],
+      ["RB-Stack-SD-3F", "RB-Stack-SD-4F", "stair"],
+      ["RB-Stack-SD-4F", "RB-Stack-SD-5F", "stair"],
+      ["RB-Stack-SD-5F", "RB-Stack-SD-6F", "stair"],
+      ["RB-Stack-SD-6F", "RB-Stack-SD-7F", "stair"],
+      ["RB-Stack-SD-7F", "RB-Stack-SD-8F", "stair"],
+      ["RB-Stack-SD-8F", "RB-Stack-SD-9F", "stair"],
+      ["RB-Stack-SD-9F", "RB-Stack-SD-10F", "stair"]
+
+      ],
+
+    "RB-Stack書庫-B1F水平動線": [
+      ["RB-Stack-B100-1", "RB-Stack-SD-B1F", "backbone"]
+      
+    ],
+    "RB-Stack書庫-4F水平動線": [
+      ["RB-SA-3F", "RB-Stack-400-2", "backbone"],
+      ["RB-Stack-400-1", "RB-Stack-400-2", "backbone"],
+      ["RB-Stack-SD-4F", "RB-Stack-400-1", "backbone"],
+      ["RB-Stack-E2-4F", "RB-Stack-400-1", "backbone"]
+    ],
+
+    "RB-Stack書庫-8F水平動線": [
+      ["RB-SA-6F", "RB-Stack-800-2", "backbone"],
+      ["RB-Stack-800-1", "RB-Stack-800-2", "backbone"],
+      ["RB-Stack-SD-8F", "RB-Stack-800-1", "backbone"],
+      ["RB-Stack-E2-8F", "RB-Stack-800-1", "backbone"]
+    ],
+  
+    "===== [T4 大樓系統] =====": [],
+
+    "T4大樓-垂直動線 (Stairs & Elevators)": [
+      ["T4-E-B1F", "T4-E-1F", "elevator"],
+      ["T4-E-1F", "T4-E-2F", "elevator"],
+      ["T4-E-2F", "T4-E-3F", "elevator"],
+      ["T4-E-3F", "T4-E-4F", "elevator"],
+      ["T4-E-4F", "T4-E-5F", "elevator"],
+      ["T4-E-5F", "T4-E-6F", "elevator"],
+      ["T4-E-6F", "T4-E-7F", "elevator"],
+      ["T4-E-7F", "T4-E-8F", "elevator"],
+
+      ["T4-S1-1F", "T4-S1-2F", "stair"],
+      ["T4-S1-2F", "T4-S1-3F", "stair"],
+      ["T4-S1-3F", "T4-S1-4F", "stair"],
+      ["T4-S1-4F", "T4-S1-5F", "stair"],
+      ["T4-S1-5F", "T4-S1-6F", "stair"],
+      ["T4-S1-6F", "T4-S1-7F", "stair"],
+      ["T4-S1-7F", "T4-S1-8F", "stair"],
+
+      ["T4-S2-B1F", "T4-S2-1F", "stair"],
+      ["T4-S2-1F", "T4-S2-2F", "stair"],
+      ["T4-S2-2F", "T4-S2-3F", "stair"],
+      ["T4-S2-3F", "T4-S2-4F", "stair"],
+      ["T4-S2-4F", "T4-S2-5F", "stair"],
+      ["T4-S2-5F", "T4-S2-6F", "stair"],
+      ["T4-S2-6F", "T4-S2-7F", "stair"],
+      ["T4-S2-7F", "T4-S2-8F", "stair"],
+  
+      ["T4-S3-B1F", "T4-S3-1F", "stair"],
+      ["T4-S3-1F", "T4-S3-2F", "stair"],
+      ["T4-S3-2F", "T4-S3-3F", "stair"],
+      ["T4-S3-3F", "T4-S3-4F", "stair"],
+      ["T4-S3-4F", "T4-S3-5F", "stair"],
+      ["T4-S3-5F", "T4-S3-6F", "stair"],
+      ["T4-S3-6F", "T4-S3-7F", "stair"],
+      ["T4-S3-7F", "T4-S3-8F", "stair"],
+
+      ["T4-S4-B1F", "T4-S4-1F", "stair"]
+
+      ],
+    "T4大樓-B1F水平動線": [
+
+      ["T4-B100-1", "T4-E-B1F", "backbone"],
+      ["T4-B100-1", "T4-B100-9", "backbone"],
+      ["T4-B100-1", "T4-B100-2", "backbone"],
+      ["T4-B100-2", "T4-S2-B1F", "backbone"],
+      ["T4-B100-2", "T4-B100-3", "backbone"],
+      ["T4-B100-3", "T4-B100-4", "backbone"],
+      ["T4-B100-4", "T4-B100-5", "backbone"],
+      ["T4-B100-5", "T4-B100-6", "backbone"],
+      ["T4-B100-5", "T4-B100-7", "backbone"],
+      ["T4-B100-5", "T4-S4-B1F", "backbone"],
+      ["T4-B100-9", "T4-E-B1F", "backbone"],
+      ["T4-B100-9", "T4-B100-10", "backbone"],
+
+      ["T4-B100-8", "T4-S3-B1F", "backbone"]
+
+    ],
+
+    "T4大樓-1F水平動線": [
+
+      ["T4-100-1", "T4-S3-1F", "backbone"],
+      ["T4-100-5", "T4-S4-1F", "backbone"],
+      ["T4-100-2", "T4-E-1F", "backbone"],
+      ["T4-100-2", "T4-S2-1F", "backbone"],
+      ["T4-100-3", "T4-S1-1F", "backbone"],
+      ["T4-100-1", "T4-100-4", "backbone"],
+      ["T4-100-1", "T4-100-5", "backbone"],
+      ["T4-100-1", "T4-100-6", "backbone"],
+      ["T4-100-1", "T4-100-2", "backbone"],
+      ["T4-100-2", "T4-100-4", "backbone"],
+      ["T4-100-2", "T4-100-5", "backbone"],
+      ["T4-100-2", "T4-100-6", "backbone"],
+      ["T4-100-2", "T4-100-3", "backbone"],
+      ["T4-100-4", "T4-100-5", "backbone"],
+      ["T4-100-5", "T4-100-6", "backbone"],
+      ["T4-100-3", "T4-100-7", "backbone"],
+      ["T4-100-3", "T4-100-8", "backbone"],
+      ["T4-100-7", "T4-100-8", "backbone"]
+
+    ],
+    "T4大樓-2F水平動線": [
+      ["T4-200-1", "T4-S3-2F", "backbone"],
+      ["T4-200-1", "T4-200-2", "backbone"],
+      ["T4-200-2", "T4-200-3", "backbone"],
+      ["T4-200-3", "T4-200-4", "backbone"],
+      ["T4-200-3", "T4-E-2F", "backbone"],
+      ["T4-200-3", "T4-S2-2F", "backbone"],
+      ["T4-200-4", "T4-S1-2F", "backbone"]
+    ],
+    "T4大樓-3F水平動線": [
+      ["T4-300-1", "T4-S3-3F", "backbone"],
+      ["T4-300-1", "T4-300-2", "backbone"],
+      ["T4-200-2", "T4-200-3", "backbone"],
+      ["T4-200-2", "T4-E-3F", "backbone"],
+      ["T4-200-2", "T4-S2-3F", "backbone"],
+      ["T4-200-3", "T4-S1-3F", "backbone"]
+    ],
+    "T4大樓-4F水平動線": [
+      ["T4-S3-4F", "T4-400-1", "backbone"], 
+      ["T4-400-1", "T4-400-2", "backbone"],
+      ["T4-400-2", "T4-S2-4F", "backbone"],
+      ["T4-400-2", "T4-E-4F", "backbone"],
+      ["T4-400-2", "T4-400-3", "backbone"],
+      ["T4-400-3", "T4-S1-4F", "backbone"]
+    ],
+
+    "T4大樓-5F水平動線": [
+      ["T4-S3-5F", "T4-500-1", "backbone"], 
+      ["T4-500-1", "T4-500-2", "backbone"],
+      ["T4-500-2", "T4-S2-5F", "backbone"],
+      ["T4-500-2", "T4-E-5F", "backbone"],
+      ["T4-500-2", "T4-500-3", "backbone"],
+      ["T4-500-3", "T4-S1-5F", "backbone"]
+    ],
+
+    "T4大樓-6F水平動線": [
+      ["T4-S3-6F", "T4-600-1", "backbone"], 
+      ["T4-600-1", "T4-600-2", "backbone"],
+      ["T4-600-2", "T4-S2-6F", "backbone"],
+      ["T4-600-2", "T4-E-6F", "backbone"],
+      ["T4-600-2", "T4-600-3", "backbone"],
+      ["T4-600-3", "T4-S1-6F", "backbone"]
+    ],
+
+    "T4大樓-7F水平動線": [
+      ["T4-S3-7F", "T4-700-1", "backbone"], 
+      ["T4-700-1", "T4-700-2", "backbone"],
+      ["T4-700-2", "T4-S2-7F", "backbone"],
+      ["T4-700-2", "T4-E-7F", "backbone"],
+      ["T4-700-2", "T4-700-3", "backbone"],
+      ["T4-700-3", "T4-E-7F", "backbone"],
+      ["T4-700-3", "T4-700-4", "backbone"],
+      ["T4-700-4", "T4-S1-6F", "backbone"]
+    ],
+
+    "T4大樓-8F水平動線": [
+      ["T4-800-1", "T4-S3-8F", "backbone"],
+      ["T4-800-1", "T4-800-2", "backbone"],
+      ["T4-800-2", "T4-800-3", "backbone"],
+      ["T4-800-3", "T4-800-4", "backbone"],
+      ["T4-800-3", "T4-E-8F", "backbone"],
+      ["T4-800-3", "T4-S2-8F", "backbone"],
+      ["T4-800-4", "T4-800-5", "backbone"],
+      ["T4-800-4", "T4-E-8F", "backbone"],
+      ["T4-800-5", "T4-S1-8F", "backbone"]
+    ],
+
+    "===== [AU 演講廳系統] =====": [],
+  
+    "AU演講廳-1F水平動線": [
+      ["AU-100-1", "AU-100-2", "backbone"], 
+      ["AU-100-2", "AU-100-3", "backbone"], 
+      ["AU-100-3", "AU-100-4", "backbone"], 
+      ["AU-100-4", "AU-100-5", "backbone"], 
+      ["AU-100-5", "AU-100-6", "backbone"], 
+      ["AU-100-6", "AU-100-7", "backbone"]
+    ],
+  
+    "===== [T1 大樓系統] =====": [],
+
+    "T1大樓-垂直動線 (Stairs & Elevators)": [
+
+      ["T1-S1-1F", "T1-S1-2F", "stair"],
+      ["T1-S1-2F", "T1-S1-3F", "stair"],
+      ["T1-S1-3F", "T1-S1-4F", "stair"],
+
+      ["T1-S2-1F", "T1-S2-2F", "stair"],
+      ["T1-S2-2F", "T1-S2-3F", "stair"],
+      ["T1-S2-3F", "T1-S2-4F", "stair"]
+        
+      ],
+  
+    "T1大樓-1F水平動線": [
+      ["T1-100-1", "T1-S1-1F", "backbone"],
+      ["T1-100-1", "T1-100-2", "backbone"],
+      ["T1-100-2", "T1-100-3", "backbone"],
+      ["T1-100-3", "T1-100-4", "backbone"],
+      ["T1-100-3", "T1-S2-1F", "backbone"],
+
+      ["T1-100-3", "RB-100-14", "connect"],
+      ["T1-100-4", "RB-100-15", "connect"]
+    ],
+
+    "T1大樓-2F水平動線": [
+      ["T1-200-1", "T1-S1-2F", "backbone"],
+      ["T1-200-1", "T1-200-2", "backbone"],
+      ["T1-200-2", "T1-200-3", "backbone"],
+      ["T1-200-3", "T1-S2-2F", "backbone"]
+    ],
+
+    "T1大樓-3F水平動線": [
+      ["T1-300-1", "T1-S1-3F", "backbone"],
+      ["T1-300-1", "T1-300-2", "backbone"],
+      ["T1-300-2", "T1-300-3", "backbone"],
+      ["T1-300-3", "T1-S2-3F", "backbone"]
+    ],
+
+    "T1大樓-4F水平動線": [
+
+      ["T1-S1-4F", "T1-400-1", "backbone"],
+      ["T1-400-1", "T1-402-1", "backbone"],
+      ["T1-402-1", "T1-403-1", "backbone"],
+      ["T1-403-1", "T1-404-1", "backbone"],
+      ["T1-404-1", "T1-405-1", "backbone"],
+      ["T1-405-1", "T1-406-1", "backbone"],
+      ["T1-406-1", "T1-407-1", "backbone"],
+      ["T1-407-1", "T1-408-1", "backbone"],
+      ["T1-408-1", "T1-409-1", "backbone"],
+      ["T1-409-1", "T1-410-7", "backbone"],
+      ["T1-410-7", "T1-410-6", "backbone"],
+      ["T1-410-6", "T1-400-2", "backbone"],
+      ["T1-400-2", "T1-S2-4F", "backbone"]
+
     ]
   }

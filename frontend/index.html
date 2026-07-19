@@ -82,23 +82,23 @@
         .hover-tooltip .tt-meta { display: flex; flex-direction: column; gap: 6px; color: var(--text-muted); }
         .hover-tooltip .tt-meta span.tt-val { color: var(--text-main); font-weight: 700; }
 
-        /* 🌟 Item 5: 單一直列排版相機控制 */
+        /* 🌟 Item 2: 單一直列相機控制 (共 13 顆按鈕) */
         .camera-controls-wrapper {
             position: absolute; top: 20px; right: 20px; z-index: 20;
             background: rgba(255,255,255,0.95); padding: 8px; border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid var(--border);
-            display: flex; flex-direction: column; gap: 8px; backdrop-filter: blur(8px);
+            display: flex; flex-direction: column; gap: 6px; backdrop-filter: blur(8px);
+            width: 40px; /* 強制單一直列 */
         }
         .camera-controls-wrapper button {
             width: 40px; height: 40px; padding: 0; background: #ffffff; border: 1px solid var(--border);
-            border-radius: 8px; font-size: 1.1rem; color: var(--text-main); display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s; cursor: pointer; font-weight: 700;
+            border-radius: 8px; font-size: 0.9rem; color: var(--text-main); display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; cursor: pointer; font-weight: 800;
         }
         .camera-controls-wrapper button:hover { background: var(--primary); color: white; border-color: var(--primary); transform: scale(1.05); }
         .camera-controls-wrapper button:active { transform: scale(0.95); }
         .ctrl-divider { height: 1px; background: var(--border); margin: 2px 0; width: 100%; }
 
-        /* 🌟 Item 2: 左下角 HUD (比例尺與指北針) */
         .hud-bottom-left {
             position: absolute; bottom: 20px; left: 20px; z-index: 20;
             display: flex; align-items: flex-end; gap: 20px; pointer-events: none;
@@ -120,19 +120,19 @@
         .scale-text { font-size: 0.8rem; font-weight: 800; color: var(--text-main); text-align: center; margin-bottom: 4px; }
         .scale-bar { height: 4px; border-left: 2px solid var(--text-main); border-right: 2px solid var(--text-main); border-bottom: 2px solid var(--text-main); transition: width 0.1s; }
 
-        /* 🌟 Item 4: 2D 視圖專用的右下角 2.5D 迷你示意圖 */
+        /* 🌟 Item 4: Minimap 放大版 (460x420)，讓正方形區域更大 */
         .minimap-wrapper {
             position: absolute; bottom: 20px; right: 20px; z-index: 20;
-            width: 320px; height: 320px; background: rgba(255,255,255,0.9); border-radius: 16px;
+            width: 460px; height: 420px; background: rgba(255,255,255,0.95); border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 2px solid var(--border);
-            overflow: hidden; backdrop-filter: blur(8px); display: none; /* 預設隱藏，由 JS 控制 */
+            overflow: hidden; backdrop-filter: blur(8px); display: none; 
             flex-direction: column;
         }
         .minimap-title {
-            background: #f8fafc; padding: 8px; font-size: 0.75rem; font-weight: 800; text-align: center;
+            background: #f8fafc; padding: 10px; font-size: 0.8rem; font-weight: 800; text-align: center;
             color: var(--text-muted); border-bottom: 1px solid var(--border);
         }
-        .minimap-canvas { width: 100%; height: calc(100% - 35px); }
+        .minimap-canvas { width: 100%; height: calc(100% - 38px); }
 
         .canvas-wrapper { width: 100%; height: 100%; background: transparent; }
         canvas { display: block; width: 100%; height: 100%; cursor: grab; }
@@ -175,7 +175,6 @@
     <div class="control-panel">
         <h1>🗺️ NTUST Pathfinder</h1>
         
-        <!-- 預設已透過 JS 切換為 2D 按鈕樣式 -->
         <button id="toggle-3d-btn" class="action-btn">🎯 返回 2D 平面視角</button>
 
         <div class="section-title">👁️ 視圖切換</div>
@@ -244,7 +243,6 @@
     </div>
 
     <div class="map-container">
-        <!-- 頂部大樓過濾 -->
         <div class="top-filter-bar">
             <button class="filter-btn active" onclick="setBuildingFilter('General')">全部顯示</button>
             <button class="filter-btn" onclick="setBuildingFilter('RB')">RB綜合研究大樓</button>
@@ -253,7 +251,7 @@
             <button class="filter-btn" onclick="setBuildingFilter('AU')">AU視聽館</button>
         </div>
 
-        <!-- 🌟 Item 5: 單一直列相機控制 -->
+        <!-- 🌟 Item 2: 單一直列 13 顆控制按鈕 (不折行) -->
         <div class="camera-controls-wrapper">
             <button onclick="changeZoom(1.2)" title="放大">➕</button>
             <button onclick="changeZoom(0.833)" title="縮小">➖</button>
@@ -261,15 +259,18 @@
             <button onclick="changeAngle(-Math.PI/12)" title="逆時針旋轉">↺</button>
             <button onclick="changeAngle(Math.PI/12)" title="順時針旋轉">↻</button>
             <div class="ctrl-divider"></div>
-            <button onclick="setAngle(3*Math.PI/4)" title="視角面北">北</button>
-            <button onclick="setAngle(Math.PI/4)" title="視角面東">東</button>
-            <button onclick="setAngle(-3*Math.PI/4)" title="視角面西">西</button>
-            <button onclick="setAngle(-Math.PI/4)" title="視角面南">南</button>
+            <button onclick="setAngle(0)" title="North">N</button>
+            <button onclick="setAngle(Math.PI)" title="South">S</button>
+            <button onclick="setAngle(-Math.PI/2)" title="East">E</button>
+            <button onclick="setAngle(Math.PI/2)" title="West">W</button>
+            <button onclick="setAngle(-Math.PI/4)" title="Northeast">NE</button>
+            <button onclick="setAngle(3*Math.PI/4)" title="Northwest">NW</button>
+            <button onclick="setAngle(-3*Math.PI/4)" title="Southeast">SE</button>
+            <button onclick="setAngle(Math.PI/4)" title="Southwest">SW</button>
             <div class="ctrl-divider"></div>
-            <button onclick="resetCamera()" title="重置視角">🏠</button>
+            <button onclick="resetCamera()" title="重置視角" style="font-size: 1.2rem;">🏠</button>
         </div>
         
-        <!-- 🌟 Item 2: 左下角動態比例尺與指北針 -->
         <div class="hud-bottom-left">
             <div class="compass-container">
                 <div class="compass-needle" id="compass-needle">
@@ -277,15 +278,15 @@
                 </div>
             </div>
             <div class="scale-container">
-                <div class="scale-text" id="scale-text">10 m</div>
+                <div class="scale-text" id="scale-text">16 m</div>
                 <div class="scale-bar" id="scale-bar" style="width: 100px;"></div>
             </div>
         </div>
 
-        <!-- 🌟 Item 4: 2D 專屬的 2.5D 迷你示意圖 -->
+        <!-- 🌟 Item 4: Minimap 放大為 460x420 -->
         <div id="minimap-wrapper" class="minimap-wrapper">
             <div class="minimap-title">🏢 目前 2D 剖面空間關聯示意圖</div>
-            <canvas id="minimapCanvas" class="minimap-canvas" width="320" height="280"></canvas>
+            <canvas id="minimapCanvas" class="minimap-canvas" width="460" height="380"></canvas>
         </div>
 
         <div id="route-selector" class="route-selector">
@@ -327,14 +328,14 @@
     let nodesData = [], edgesData = [], poisData = [], connectionsData = {}, nodeMap = {}; 
     let currentPath = [], altPath = [];
     let currentElevation = 1000; 
-    let is3DMode = true; // 🌟 Item 1: 預設為 2.5D 模式
+    let is3DMode = true; 
     
     let currentViewMode = 'all';
     let showGlGrid = true; 
     let currentBuildingFilter = 'General'; 
     let activeRoute = 'main'; 
 
-    let mapOffsetX = 0, mapOffsetY = 150, mapZoom = 1.0, mapRotation = 0; // 預設偏移適應 2.5D
+    let mapOffsetX = 0, mapOffsetY = 150, mapZoom = 1.0, mapRotation = 0; 
     let mouseX = -1000, mouseY = -1000;
     const zScale = 0.2; 
     let clickState = 0, tempStart = null, tempEnd = null;
@@ -360,16 +361,16 @@
         "T1-404-4F": { name: "建築設計工坊", dept: "建築學系", hours: "08:30 - 18:00" }
     };
 
-    // 🌟 Item 3: 更新五大樓層精確高度設定
+    // 🌟 Item 1: T4 8F 已修正為 2520
     const BUILDING_HEIGHTS = {
         "RB": {"B1": -360, "1": 0, "2": 500, "3": 1000, "4": 1360, "5": 1720, "6": 2080, "7": 2440, "8": 2800, "9": 3160},
         "RB-STACK": {"B1": -360, "1": 0, "2": 360, "3": 720, "4": 970, "5": 1220, "6": 1470, "7": 1720, "8": 1970},
         "AU": {"1": 0},
         "T1": {"1": 0, "2": 360, "3": 720, "4": 1080},
-        "T4": {"B1": -360, "1": 0, "2": 360, "3": 720, "4": 1080, "5": 1440, "6": 1880, "7": 2160, "8": 2880}
+        "T4": {"B1": -360, "1": 0, "2": 360, "3": 720, "4": 1080, "5": 1440, "6": 1880, "7": 2160, "8": 2520}
     };
 
-    const BLDG_SHAPES = {
+    let BLDG_SHAPES = {
         "RB": [[230,600],[910,600],[910,900],[230,900]],
         "RB-STACK": [[150,600],[220,600],[220,750],[150,750]], 
         "T4": [[120,140],[950,140],[950,290],[120,290]],
@@ -379,7 +380,6 @@
 
     let active3DCheckboxes = new Set(); 
 
-    // DOM 載入時初始化 UI
     document.addEventListener("DOMContentLoaded", () => {
         toggle3DBtn.innerHTML = '🎯 返回 2D 平面視角'; toggle3DBtn.style.backgroundColor = '#10b981';
     });
@@ -425,6 +425,8 @@
         .then(data => {
             nodesData = data.nodes || []; edgesData = data.edges || [];
             poisData = data.pois || []; connectionsData = data.connections || {};
+            // 如果後端有吐出自定義 SVG 樓板邊界，則取代預設形狀
+            if (data.slabs) BLDG_SHAPES = data.slabs; 
             [...nodesData, ...poisData].forEach(n => { n.z = getNodeElevation(n.building, n.floor_name); nodeMap[n.id] = n; });
             generateGroupedFloorCheckboxes(); initThreeStageDropdowns(); drawMap();
         })
@@ -467,7 +469,9 @@
 
     function isNodeVisible(node) {
         if (!node) return false;
-        if (currentBuildingFilter !== 'General' && node.building !== currentBuildingFilter) return true; 
+        let isActiveByFilter = currentBuildingFilter === 'General' || node.building === currentBuildingFilter || (currentBuildingFilter === 'RB' && node.building === 'RB-STACK');
+        if (!isActiveByFilter) return true; 
+
         if (is3DMode) return active3DCheckboxes.has(`${node.building}-${node.floor_name}`);
         if (currentPath.includes(node.id) || altPath.includes(node.id)) return true;
         return Math.abs(node.z - currentElevation) <= 200; 
@@ -525,9 +529,10 @@
 
     function getProjectedCoords(node, customZ, customZoom = mapZoom, customOffsetX = mapOffsetX, customOffsetY = mapOffsetY, isMinimap = false) {
         if (!node) return {x: 0, y: 0};
-        const cx = isMinimap ? 160 : 700; 
-        const cy = isMinimap ? 140 : 450; 
-        const rot = isMinimap ? 0 : mapRotation; // Minimap 固定視角
+        // 🌟 配合 Minimap 放大，中心點微調
+        const cx = isMinimap ? 230 : 700; 
+        const cy = isMinimap ? 200 : 450; 
+        const rot = isMinimap ? 0 : mapRotation; 
         const force3D = isMinimap ? true : is3DMode;
 
         const rx = (node.x - 500) * Math.cos(rot) - (node.y - 500) * Math.sin(rot);
@@ -536,7 +541,7 @@
         if (force3D) {
             let actualZ = customZ !== undefined ? customZ : node.z;
             outX = cx + (rx - ry) * COS_ISO;
-            outY = cy + (rx + ry) * SIN_ISO - (actualZ * zScale) + (isMinimap ? 40 : 150); 
+            outY = cy + (rx + ry) * SIN_ISO - (actualZ * zScale) + (isMinimap ? 130 : 150); 
         } else {
             outX = cx + rx; outY = cy + ry;
         }
@@ -600,10 +605,11 @@
         });
     }
 
-    // 🌟 Item 4: 繪製右下角 Minimap (僅 2D 狀態)
+    // 🌟 Item 4: 放大版 Minimap，非關聯樓板極度透明 (5%)，並標示關聯樓層
     function drawMinimap() {
         minimapCtx.clearRect(0, 0, minimapCanvas.width, minimapCanvas.height);
-        let mZoom = 0.23, mOffsetX = 0, mOffsetY = 0; // 調整縮放以適應 320x320
+        // 為了將所有建築容納進去，縮小內部畫布的 Zoom
+        let mZoom = 0.22, mOffsetX = 0, mOffsetY = 0; 
 
         const slabsToDraw = [];
         for (let bldg in BUILDING_HEIGHTS) {
@@ -613,36 +619,46 @@
         }
         slabsToDraw.sort((a, b) => a.z - b.z);
 
-        const BLDG_COLORS = { "RB": 'rgba(173, 216, 230, 0.4)', "RB-STACK": 'rgba(173, 216, 230, 0.3)', "T4": 'rgba(144, 238, 144, 0.4)', "T1": 'rgba(255, 235, 153, 0.4)', "AU": 'rgba(251, 146, 60, 0.5)' };
+        const BLDG_COLORS = { "RB": 'rgba(173, 216, 230, 0.45)', "RB-STACK": 'rgba(173, 216, 230, 0.35)', "T4": 'rgba(144, 238, 144, 0.45)', "T1": 'rgba(255, 235, 153, 0.45)', "AU": 'rgba(251, 146, 60, 0.55)' };
 
         slabsToDraw.forEach(slab => {
-            // 判斷是否為 2D 主地圖關聯樓層
             let isRelated = Math.abs(slab.z - currentElevation) <= 200;
-            minimapCtx.fillStyle = isRelated ? (BLDG_COLORS[slab.b] || '#cbd5e1') : 'rgba(226, 232, 240, 0.4)';
+            
+            // 只有相關樓板顯示顏色，無關樓板顯示 5% 透明度的白色 (rgba 255,255,255,0.05)
+            minimapCtx.fillStyle = isRelated ? (BLDG_COLORS[slab.b] || '#cbd5e1') : 'rgba(255, 255, 255, 0.05)';
             
             minimapCtx.beginPath();
+            let minX = Infinity; let leftMostPt = null;
             slab.path.forEach((pt, i) => {
                 let proj = getProjectedCoords({x: pt[0], y: pt[1]}, slab.z, mZoom, mOffsetX, mOffsetY, true);
+                if (proj.x < minX) { minX = proj.x; leftMostPt = proj; }
                 i === 0 ? minimapCtx.moveTo(proj.x, proj.y) : minimapCtx.lineTo(proj.x, proj.y);
             });
             minimapCtx.closePath(); minimapCtx.fill();
-            minimapCtx.strokeStyle = isRelated ? 'rgba(255,255,255,0.9)' : 'rgba(200,200,200,0.3)';
+            
+            // 邊框也配合：相關樓板明顯白色邊框，無關樓板非常淡的灰色邊框以防完全隱形
+            minimapCtx.strokeStyle = isRelated ? 'rgba(255,255,255,0.9)' : 'rgba(150,150,150,0.1)';
             minimapCtx.lineWidth = 1; minimapCtx.stroke();
+
+            // 只有「相關的基準樓板」才顯示 1F, 2F 的文字
+            if (leftMostPt && isRelated) {
+                minimapCtx.fillStyle = 'rgba(71, 85, 105, 0.95)';
+                minimapCtx.font = "bold 13px Arial";
+                minimapCtx.textAlign = "right";
+                minimapCtx.fillText(`${slab.f}F`, leftMostPt.x - 6, leftMostPt.y);
+                minimapCtx.textAlign = "left";
+            }
         });
     }
 
     function updateHUD() {
-        // 🌟 Item 2: 指北針與比例尺更新
-        // 2D 預設 Up (0 deg) = 東南方(SE)。North 為左下角 (-135度)
-        let baseNorthAngle = -135; 
-        // 旋轉地圖時，指北針反向旋轉以保持相對正確 (Canvas座標系轉換)
+        let baseNorthAngle = 135; 
         let actualAngle = baseNorthAngle - (mapRotation * 180 / Math.PI);
         document.getElementById('compass-needle').style.transform = `rotate(${actualAngle}deg)`;
 
-        // 計算 100px 在當前 Zoom 下代表多少公尺
-        // 原始設計 500單位 = 500cm = 5m
-        let pixelsPerUnit = 1 * mapZoom; // 1 map unit = 1 pixel at zoom 1
-        let realMeters = (100 / pixelsPerUnit) / 100; // 1 unit = 1 cm
+        // 🌟 Item 3: 比例尺精準修正，確保預設 100px 對應到實際的 16 公尺
+        let pixelsPerUnit = 1 * mapZoom; 
+        let realMeters = (100 / pixelsPerUnit) * 1.6; 
         
         let displayMeters;
         if (realMeters < 1) displayMeters = (realMeters * 100).toFixed(0) + " cm";
@@ -655,9 +671,8 @@
     function drawMap() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         let topLayerCapsules = []; 
-        updateHUD(); // 更新左下角儀表板
+        updateHUD(); 
 
-        // 控制 Minimap 顯示與否
         minimapWrapper.style.display = is3DMode ? 'none' : 'flex';
         if (!is3DMode) drawMinimap();
         
@@ -702,7 +717,7 @@
                 if (slab.b === 'T4') finalColor = 'rgba(100, 190, 100, 0.45)';
             }
             
-            let isBldgActive = currentBuildingFilter === 'General' || slab.b === currentBuildingFilter;
+            let isBldgActive = currentBuildingFilter === 'General' || slab.b === currentBuildingFilter || (currentBuildingFilter === 'RB' && slab.b === 'RB-STACK');
             if (!isBldgActive) finalColor = 'rgba(200, 200, 200, 0.08)'; 
 
             ctx.fillStyle = finalColor; ctx.beginPath();
@@ -714,9 +729,7 @@
             ctx.strokeStyle = isBldgActive ? 'rgba(255,255,255,0.7)' : 'rgba(200,200,200,0.3)'; 
             ctx.lineWidth = 1; ctx.stroke();
             
-            // 🌟 Item 3: 2.5D 樓板邊緣高度標籤
             if (is3DMode && isBldgActive) {
-                // 找出該樓板最左側的點作為標籤依附點
                 let leftMostPt = null; let minX = Infinity;
                 slab.path.forEach(pt => {
                     let proj = getProjectedCoords({x: pt[0], y: pt[1]}, slab.z);
@@ -724,12 +737,12 @@
                 });
                 
                 if (leftMostPt) {
-                    ctx.fillStyle = 'rgba(100, 116, 139, 0.85)'; // 質感灰色
+                    ctx.fillStyle = 'rgba(100, 116, 139, 0.85)'; 
                     ctx.font = `bold ${Math.max(10, 11 * mapZoom)}px 'Segoe UI', Arial`;
                     ctx.textAlign = "right"; ctx.textBaseline = "middle";
                     let sign = slab.z >= 0 ? '+' : '';
                     ctx.fillText(`${slab.f}F ${sign}${slab.z}`, leftMostPt.x - 10 * mapZoom, leftMostPt.y);
-                    ctx.textAlign = "left"; // reset
+                    ctx.textAlign = "left"; 
                 }
             } else if (!is3DMode) {
                 if (slab.b === 'RB-STACK') return; 
@@ -745,7 +758,7 @@
         if (is3DMode) {
             let highestZ = {}, highestPt = {};
             slabsToDraw.forEach(slab => {
-                let isBldgActive = currentBuildingFilter === 'General' || slab.b === currentBuildingFilter;
+                let isBldgActive = currentBuildingFilter === 'General' || slab.b === currentBuildingFilter || (currentBuildingFilter === 'RB' && slab.b === 'RB-STACK');
                 if (!isBldgActive) return;
 
                 if (!(slab.b in highestZ) || slab.z > highestZ[slab.b]) {
@@ -787,7 +800,11 @@
         edgesData.forEach(edge => {
             const n1 = nodeMap[edge.from], n2 = nodeMap[edge.to];
             if (!n1 || !n2 || !isNodeVisible(n1) || !isNodeVisible(n2)) return;
-            let isBldgActive = currentBuildingFilter === 'General' || (n1.building === currentBuildingFilter && n2.building === currentBuildingFilter);
+            
+            let n1Active = currentBuildingFilter === 'General' || n1.building === currentBuildingFilter || (currentBuildingFilter === 'RB' && n1.building === 'RB-STACK');
+            let n2Active = currentBuildingFilter === 'General' || n2.building === currentBuildingFilter || (currentBuildingFilter === 'RB' && n2.building === 'RB-STACK');
+            let isBldgActive = n1Active && n2Active;
+
             let isVertical = ['stair', 'elevator'].includes(edge.type);
             if (vMode === 'main_only' && isVertical) return;
             if (vMode === 'vertical_only' && !isVertical) return; 
@@ -852,7 +869,7 @@
             let onActivePath = activePathArray.includes(node.id);
             let isSelected = node.id === tempStart || node.id === tempEnd;
             if (vMode === 'main_only' && node.type === 'poi' && !onPath && !isSelected) return;
-            let isBldgActive = currentBuildingFilter === 'General' || node.building === currentBuildingFilter;
+            let isBldgActive = currentBuildingFilter === 'General' || node.building === currentBuildingFilter || (currentBuildingFilter === 'RB' && node.building === 'RB-STACK');
 
             let p = getProjectedCoords(node);
             let nodeColor = node.color || '#94a3b8';

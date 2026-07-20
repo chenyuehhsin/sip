@@ -6,7 +6,8 @@ from fastapi.responses import FileResponse
 
 app = FastAPI(title="SIP Multi-floor Navigation Engine")
 
-SCALE_FACTOR = 0.05 
+# RB-B104 (356, 673) 到 RB-B105 (299, 674) 校準為 500 cm。
+SCALE_FACTOR = 5.0 / math.sqrt((356 - 299)**2 + (673 - 674)**2)
 
 print("🚀 啟動 SIP 跨樓層雙向尋路引擎 (含備選路徑)...")
 

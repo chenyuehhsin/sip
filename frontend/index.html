@@ -6,187 +6,281 @@
     <title>智慧室內導航系統 (SIP) | 3D BIM Dashboard</title>
     <style>
         :root {
-            --bg-main: #f8fafc;
-            --bg-card: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
-            --danger: #ef4444;
-            --vertical-color: #0ea5e9; 
-            --border: #e2e8f0;
+            --bg-main: #edf5f1;
+            --bg-gradient: radial-gradient(circle at top left, rgba(178, 220, 205, 0.42), transparent 28%), linear-gradient(180deg, #f8fcfa 0%, #edf5f1 52%, #e8f2ee 100%);
+            --bg-panel: rgba(251, 255, 253, 0.92);
+            --bg-soft: #f4f9f6;
+            --bg-control: rgba(255, 255, 255, 0.96);
+            --map-bg: #edf5f1;
+            --text-main: #1f3a34;
+            --text-muted: #5f7b73;
+            --text-faint: #7c958e;
+            --primary: #2f7d68;
+            --primary-hover: #256754;
+            --primary-soft: #e4f2ec;
+            --accent: #76b4a0;
+            --danger: #b65050;
+            --danger-soft: #f8e3e1;
+            --route-main: #0068b7;
+            --route-alt: #60a5fa;
+            --vertical-color: #3c8f80;
+            --vertical-soft: #e2f3ee;
+            --border: rgba(71, 107, 96, 0.16);
+            --border-strong: rgba(47, 125, 104, 0.28);
+            --shadow-sm: 0 8px 20px rgba(48, 84, 73, 0.08);
+            --shadow-md: 0 14px 36px rgba(48, 84, 73, 0.12);
         }
 
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            margin: 0; padding: 0; 
-            background-color: var(--bg-main); color: var(--text-main);
+        body {
+            font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0; padding: 16px;
+            background: var(--bg-gradient); color: var(--text-main);
             height: 100vh; width: 100vw; box-sizing: border-box; overflow: hidden;
+            line-height: 1.45;
+            letter-spacing: 0.01em;
         }
 
-        .container { 
-            width: 100vw; height: 100vh; display: flex; gap: 0; 
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(90deg, rgba(255,255,255,0.34) 0, rgba(255,255,255,0.1) 1px, transparent 1px),
+                        linear-gradient(180deg, rgba(255,255,255,0.26) 0, rgba(255,255,255,0.08) 1px, transparent 1px);
+            background-size: 28px 28px;
+            opacity: 0.16;
         }
 
-        .control-panel { 
-            flex: 0 0 420px;
-            background: var(--bg-card); 
-            padding: 24px; 
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-            display: flex; 
-            flex-direction: column; 
-            gap: 16px; 
-            border-right: 1px solid var(--border);
+        * { box-sizing: border-box; }
+        button, select { font: inherit; }
+
+        .container {
+            width: 100%; height: calc(100vh - 32px); display: flex; gap: 16px;
+            position: relative; z-index: 1;
+        }
+
+        .control-panel {
+            flex: 0 0 460px;
+            background: var(--bg-panel);
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border: 1px solid rgba(255,255,255,0.72);
+            border-radius: 22px;
             overflow-y: auto;
             z-index: 10;
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(18px);
         }
 
-        .map-container { 
-            flex: 1; background: #f1f5f9; position: relative; 
+        .panel-header { display: flex; flex-direction: column; gap: 5px; padding-bottom: 4px; line-height: 1.35; }
+        .app-eyebrow {
+            color: var(--primary); font-size: 0.76rem; font-weight: 800;
+            letter-spacing: 0.08em; text-transform: uppercase;
+        }
+        .app-title { margin: 0; font-size: 1.48rem; font-weight: 850; letter-spacing: 0; color: var(--text-main); line-height: 1.28; }
+        .app-subtitle { margin: 0; color: var(--text-muted); font-size: 0.87rem; line-height: 1.35; }
+        .panel-section {
+            display: flex; flex-direction: column; gap: 8px;
+            padding: 10px 12px;
+            border: 1px solid rgba(47,125,104,0.12);
+            border-radius: 15px;
+            background: rgba(255,255,255,0.74);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .map-container {
+            flex: 1; background: linear-gradient(180deg, #f7fbf9 0%, #edf5f1 100%); position: relative;
             display: flex; align-items: center; justify-content: center;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(255,255,255,0.7);
         }
 
         .top-filter-bar {
-            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 8px; z-index: 30; 
-            background: rgba(255,255,255,0.9); padding: 8px 12px; 
-            border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
-            backdrop-filter: blur(8px); border: 1px solid var(--border);
+            position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 8px; z-index: 30;
+            background: rgba(255,255,255,0.78); padding: 8px 10px;
+            border-radius: 16px; box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(14px); border: 1px solid rgba(47,125,104,0.12);
+            max-width: calc(100% - 240px); overflow-x: auto; scrollbar-width: none;
         }
+        .top-filter-bar::-webkit-scrollbar { display: none; }
         .filter-btn {
-            padding: 8px 16px; border: none; background: transparent; border-radius: 8px;
-            font-size: 0.85rem; font-weight: 700; color: var(--text-muted); 
+            min-height: 34px; padding: 7px 14px; border: 1px solid transparent; background: transparent; border-radius: 10px;
+            font-size: 0.84rem; font-weight: 760; color: var(--text-muted);
             cursor: pointer; transition: all 0.2s;
+            white-space: nowrap;
         }
-        .filter-btn:hover { background: #e0f2fe; color: var(--primary); }
-        .filter-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+        .filter-btn:hover { background: var(--primary-soft); color: var(--primary); border-color: rgba(47,125,104,0.12); }
+        .filter-btn.active { background: var(--primary); color: white; box-shadow: 0 8px 18px rgba(47, 125, 104, 0.24); }
 
         .route-selector {
             position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            display: none; background: #ffffff; padding: 6px; border-radius: 30px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15); z-index: 30; border: 1px solid var(--border);
+            display: none; background: rgba(255,255,255,0.92); padding: 6px; border-radius: 16px;
+            box-shadow: var(--shadow-md); z-index: 30; border: 1px solid rgba(47,125,104,0.14);
+            backdrop-filter: blur(12px);
         }
         .route-select-btn {
-            padding: 10px 24px; border: none; background: transparent; border-radius: 24px;
-            font-size: 0.9rem; font-weight: 800; cursor: pointer; color: var(--text-muted); transition: all 0.2s;
+            min-height: 38px; padding: 9px 24px; border: none; background: transparent; border-radius: 10px;
+            font-size: 0.88rem; font-weight: 800; cursor: pointer; color: var(--text-muted); transition: all 0.2s;
         }
-        .route-select-btn:hover { background: #f1f5f9; }
-        .route-select-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(59,130,246,0.3); }
+        .route-select-btn:hover { background: var(--bg-soft); }
+        .route-select-btn.active { background: var(--primary); color: white; box-shadow: 0 8px 18px rgba(47,125,104,0.22); }
 
         .hover-tooltip {
-            position: fixed; display: none; background: #ffffff; color: var(--text-main);
-            padding: 14px 18px; border-radius: 12px; pointer-events: none; z-index: 9999;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.12); font-size: 0.9rem; border: 1px solid var(--border);
+            position: fixed; display: none; background: rgba(255,255,255,0.96); color: var(--text-main);
+            padding: 14px 18px; border-radius: 14px; pointer-events: none; z-index: 9999;
+            box-shadow: var(--shadow-md); font-size: 0.9rem; border: 1px solid rgba(47,125,104,0.14);
+            backdrop-filter: blur(12px);
         }
-        .hover-tooltip .tt-title { font-weight: 900; font-size: 1.15rem; margin-bottom: 8px; color: var(--primary); border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+        .hover-tooltip .tt-title { font-weight: 850; font-size: 1rem; margin-bottom: 8px; color: var(--primary); border-bottom: 1px solid rgba(47,125,104,0.12); padding-bottom: 6px; }
         .hover-tooltip .tt-meta { display: flex; flex-direction: column; gap: 6px; color: var(--text-muted); }
         .hover-tooltip .tt-meta span.tt-val { color: var(--text-main); font-weight: 700; }
 
-        /* 🌟 Item 2: 單一直列相機控制 (共 13 顆按鈕) */
+        /* 🌟 Item 2: 分群直列相機控制 (4 / 4 / 4 / 1) */
         .camera-controls-wrapper {
-            position: absolute; top: 20px; right: 20px; z-index: 20;
-            background: rgba(255,255,255,0.95); padding: 8px; border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid var(--border);
-            display: flex; flex-direction: column; gap: 6px; backdrop-filter: blur(8px);
-            width: 40px; /* 強制單一直列 */
+            position: absolute; top: 56px; right: 18px; z-index: 20;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .camera-control-group {
+            display: flex; flex-direction: column; gap: 6px;
+            background: rgba(255,255,255,0.86); padding: 7px; border-radius: 15px;
+            box-shadow: var(--shadow-sm); border: 1px solid rgba(47,125,104,0.12);
+            backdrop-filter: blur(14px);
         }
         .camera-controls-wrapper button {
-            width: 40px; height: 40px; padding: 0; background: #ffffff; border: 1px solid var(--border);
-            border-radius: 8px; font-size: 0.9rem; color: var(--text-main); display: flex; align-items: center; justify-content: center;
+            width: 42px; height: 42px; padding: 0; background: rgba(255,255,255,0.95); border: 1px solid rgba(47,125,104,0.1);
+            border-radius: 10px; font-size: 0.92rem; color: var(--text-main); display: flex; align-items: center; justify-content: center;
             transition: all 0.2s; cursor: pointer; font-weight: 800;
         }
-        .camera-controls-wrapper button:hover { background: var(--primary); color: white; border-color: var(--primary); transform: scale(1.05); }
+        .camera-controls-wrapper button:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-1px); }
         .camera-controls-wrapper button:active { transform: scale(0.95); }
-        .ctrl-divider { height: 1px; background: var(--border); margin: 2px 0; width: 100%; }
 
         .hud-bottom-left {
-            position: absolute; bottom: 20px; left: 20px; z-index: 20;
-            display: flex; align-items: flex-end; gap: 20px; pointer-events: none;
+            position: absolute; bottom: 18px; left: 18px; z-index: 20;
+            display: flex; align-items: flex-end; gap: 16px; pointer-events: none;
         }
         .compass-container {
-            width: 60px; height: 60px; background: rgba(255,255,255,0.8); border-radius: 50%;
-            border: 2px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            position: relative; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px);
+            width: 64px; height: 64px; background: rgba(255,255,255,0.82); border-radius: 50%;
+            border: 1px solid rgba(47,125,104,0.14); box-shadow: var(--shadow-sm);
+            position: relative; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px);
         }
         .compass-needle {
-            position: absolute; width: 4px; height: 40px; background: linear-gradient(to top, #94a3b8 50%, #ef4444 50%);
-            border-radius: 2px; transition: transform 0.1s ease-out;
+            position: absolute; width: 4px; height: 40px; background: linear-gradient(to top, #8ca49d 50%, #b75a5a 50%);
+            border-radius: 999px; transition: transform 0.1s ease-out;
         }
-        .compass-n-text { position: absolute; top: -18px; font-weight: 900; color: #ef4444; font-size: 14px; }
+        .compass-n-text { position: absolute; top: -18px; font-weight: 900; color: #b75a5a; font-size: 13px; }
         .scale-container {
-            background: rgba(255,255,255,0.8); padding: 6px 12px; border-radius: 8px;
-            border: 1px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.1); backdrop-filter: blur(4px);
+            background: rgba(255,255,255,0.82); padding: 8px 12px; border-radius: 13px;
+            border: 1px solid rgba(47,125,104,0.12); box-shadow: var(--shadow-sm); backdrop-filter: blur(8px);
         }
         .scale-text { font-size: 0.8rem; font-weight: 800; color: var(--text-main); text-align: center; margin-bottom: 4px; }
         .scale-bar { height: 4px; border-left: 2px solid var(--text-main); border-right: 2px solid var(--text-main); border-bottom: 2px solid var(--text-main); transition: width 0.1s; }
 
         /* 🌟 Item 4: Minimap 放大版 (460x420)，讓正方形區域更大 */
         .minimap-wrapper {
-            position: absolute; bottom: 20px; right: 20px; z-index: 20;
-            width: 460px; height: 420px; background: rgba(255,255,255,0.95); border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 2px solid var(--border);
-            overflow: hidden; backdrop-filter: blur(8px); display: none; 
+            position: absolute; bottom: 18px; right: 18px; z-index: 20;
+            width: 420px; height: 380px; background: rgba(255,255,255,0.88); border-radius: 18px;
+            box-shadow: var(--shadow-md); border: 1px solid rgba(47,125,104,0.14);
+            overflow: hidden; backdrop-filter: blur(14px); display: none;
             flex-direction: column;
         }
         .minimap-title {
-            background: #f8fafc; padding: 10px; font-size: 0.8rem; font-weight: 800; text-align: center;
-            color: var(--text-muted); border-bottom: 1px solid var(--border);
+            background: rgba(244,249,246,0.94); padding: 10px; font-size: 0.75rem; font-weight: 800; text-align: center;
+            color: var(--text-muted); border-bottom: 1px solid rgba(47,125,104,0.1);
+            letter-spacing: 0.06em;
         }
         .minimap-canvas { width: 100%; height: calc(100% - 38px); }
 
-        .canvas-wrapper { width: 100%; height: 100%; background: transparent; }
+        .canvas-wrapper {
+            width: 100%; height: 100%;
+            background: linear-gradient(180deg, rgba(249,252,250,0.75), rgba(235,244,240,0.48));
+        }
         canvas { display: block; width: 100%; height: 100%; cursor: grab; }
         canvas:active { cursor: grabbing; }
-        
-        h1 { margin: 0; font-size: 1.3rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
-        .section-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 6px; font-weight: 700; }
-        
-        .view-mode-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-        .view-btn { padding: 8px; border: 1px solid var(--border); background: #f8fafc; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); transition: all 0.2s; }
-        .view-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .view-btn.gl-active { background: var(--text-main); color: white; border-color: var(--text-main); }
-        
-        .select-group { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 8px; }
-        select { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; background-color: #f8fafc; outline: none; }
-        
-        .btn-container { display: flex; gap: 10px; }
-        button.action-btn { padding: 12px; border-radius: 8px; font-size: 0.95rem; cursor: pointer; font-weight: 600; border: none; transition: all 0.2s; }
-        #route-btn { background-color: var(--primary); color: white; flex: 2; }
-        #clear-btn { background-color: #fee2e2; color: var(--danger); flex: 1; }
-        
-        #toggle-3d-btn { background-color: var(--vertical-color); color: white; width: 100%; }
 
-        .floor-selector-list { display: flex; flex-direction: column; gap: 10px; max-height: 200px; overflow-y: auto; border: 1px solid var(--border); padding: 10px; border-radius: 12px; background: #f8fafc; }
-        .bldg-group-title { font-size: 0.8rem; font-weight: 700; color: var(--primary); border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 8px; }
-        .bldg-group-items { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
-        .floor-checkbox-item { display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; font-weight: 600; color: var(--text-main); cursor: pointer; background: #e2e8f0; padding: 4px 10px; border-radius: 6px; transition: all 0.2s; }
-        .floor-checkbox-item:hover { background: #cbd5e1; }
-        
-        #info-box { background: #f8fafc; padding: 14px; border-radius: 12px; font-size: 0.85rem; white-space: pre-wrap; line-height: 1.5; border-left: 4px solid var(--primary); border: 1px solid var(--border); }
-        
-        .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.75rem; padding: 12px; background: #f8fafc; border-radius: 10px; border: 1px solid var(--border); }
-        .legend-item { display: flex; align-items: center; gap: 6px; color: var(--text-muted); }
-        .color-box { width: 8px; height: 8px; border-radius: 50%; }
+        .section-title { margin-bottom: 5px; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-faint); font-weight: 850; }
+
+        .view-mode-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 0; }
+        .view-btn {
+            min-height: 36px; padding: 7px 10px; border: 1px solid rgba(47,125,104,0.12); background: #f9fcfa;
+            border-radius: 11px; cursor: pointer; font-size: 0.8rem; font-weight: 760; color: var(--text-muted); transition: all 0.2s;
+        }
+        .view-btn:hover { border-color: rgba(47,125,104,0.22); background: var(--primary-soft); color: var(--primary); }
+        .view-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 8px 16px rgba(47,125,104,0.18); }
+
+        .select-group { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 8px; }
+        select {
+            width: 100%; min-height: 36px; padding: 7px 10px; border: 1px solid rgba(47,125,104,0.13);
+            border-radius: 11px; font-size: 0.84rem; background-color: #fbfdfc; color: var(--text-main); outline: none;
+        }
+        select:focus { border-color: rgba(47,125,104,0.35); box-shadow: 0 0 0 4px rgba(47,125,104,0.08); }
+
+        .btn-container { display: flex; gap: 10px; }
+        button.action-btn {
+            min-height: 40px; padding: 9px 12px; border-radius: 11px; font-size: 0.93rem;
+            cursor: pointer; font-weight: 800; border: 1px solid transparent; transition: all 0.2s;
+        }
+        button.action-btn:hover { transform: translateY(-1px); }
+        #route-btn { background: linear-gradient(135deg, var(--primary), #4a967f); color: white; flex: 2; box-shadow: 0 10px 22px rgba(47,125,104,0.2); }
+        #clear-btn { background-color: var(--danger-soft); color: var(--danger); flex: 1; border-color: transparent; }
+
+        #toggle-3d-btn { background: linear-gradient(135deg, var(--vertical-color), #62aa98); color: white; width: 100%; box-shadow: 0 10px 22px rgba(60,143,128,0.18); }
+
+        .floor-selector-list {
+            display: flex; flex-direction: column; gap: 8px; max-height: 128px; overflow-y: auto;
+            border: 1px solid rgba(47,125,104,0.12); padding: 8px; border-radius: 13px; background: #f9fcfa;
+        }
+        .bldg-group-title { font-size: 0.76rem; font-weight: 800; color: var(--primary); border-bottom: 1px solid rgba(47,125,104,0.12); padding-bottom: 3px; margin-bottom: 6px; }
+        .bldg-group-items { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 4px; }
+        .floor-checkbox-item { display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem; font-weight: 760; color: var(--text-main); cursor: pointer; background: var(--primary-soft); padding: 3px 8px; border-radius: 10px; border: 1px solid rgba(47,125,104,0.08); transition: all 0.2s; }
+        .floor-checkbox-item:hover { background: #d8ece3; }
+
+        #info-box {
+            background: linear-gradient(180deg, #f9fcfa, #f2f7f5); padding: 10px 12px; border-radius: 13px; font-size: 0.82rem;
+            white-space: pre-wrap; line-height: 1.45; border: 1px solid rgba(47,125,104,0.12); color: var(--text-main);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+        }
+
+        .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.73rem; padding: 10px 12px; background: linear-gradient(180deg, #f9fcfa, #f3f8f6); border-radius: 13px; border: 1px solid rgba(47,125,104,0.12); }
+        .legend-item { display: flex; align-items: center; gap: 8px; color: var(--text-muted); }
+        .color-box { width: 10px; height: 10px; border-radius: 50%; }
+
+        @media (max-width: 980px) {
+            .control-panel { flex-basis: 340px; padding: 18px 16px; }
+            .top-filter-bar { left: 16px; right: 76px; transform: none; overflow-x: auto; }
+            .filter-btn { white-space: nowrap; }
+            .minimap-wrapper { width: 360px; height: 330px; }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="control-panel">
-        <h1>🗺️ NTUST Pathfinder</h1>
-        
-        <button id="toggle-3d-btn" class="action-btn">🎯 返回 2D 平面視角</button>
-
-        <div class="section-title">👁️ 視圖切換</div>
-        <div class="view-mode-btns">
-            <button id="btn-view-all" class="view-btn active" onclick="setViewMode('all')">顯示全部圖資</button>
-            <button id="btn-view-main" class="view-btn" onclick="setViewMode('main_only')">單純主動線</button>
-            <button id="btn-view-vert" class="view-btn" onclick="setViewMode('vertical_only')">僅垂直動線</button>
-            <button id="btn-view-gl" class="view-btn gl-active" onclick="toggleGL()">GL 網格地坪</button>
+        <div class="panel-header">
+            <div class="app-eyebrow">SIP Navigation</div>
+            <h1 class="app-title">校園空間導航</h1>
+            <p class="app-subtitle">NTUST multi-building pathfinder</p>
         </div>
 
-        <div id="elevation-panel" style="display: none;">
-            <div class="section-title">🏢 2D 剖面基準 (Elevation)</div>
+        <button id="toggle-3d-btn" class="action-btn">返回 2D 平面視角</button>
+
+        <div class="panel-section">
+            <div class="section-title">視圖</div>
+            <div class="view-mode-btns">
+                <button id="btn-view-all" class="view-btn active" onclick="setViewMode('all')">全部圖資</button>
+                <button id="btn-view-main" class="view-btn" onclick="setViewMode('main_only')">主動線</button>
+                <button id="btn-view-vert" class="view-btn" onclick="setViewMode('vertical_only')">垂直動線</button>
+                <button id="btn-view-volume" class="view-btn" onclick="setViewMode('volume_only')">量體模式</button>
+            </div>
+        </div>
+
+        <div id="elevation-panel" class="panel-section" style="display: none;">
+            <div class="section-title">2D 剖面基準</div>
             <select id="elevation-select">
                 <option value="3160">RB 9F (約 31.6m)</option>
                 <option value="2800">RB 8F (約 28.0m)</option>
@@ -204,13 +298,13 @@
             </select>
         </div>
 
-        <div id="layer-toggle-panel">
-            <div class="section-title">🥞 3D 疊層群組控制</div>
+        <div id="layer-toggle-panel" class="panel-section">
+            <div class="section-title">3D 疊層</div>
             <div class="floor-selector-list" id="floor-checkboxes"></div>
         </div>
 
-        <div>
-            <div class="section-title">🏁 設定起點</div>
+        <div class="panel-section">
+            <div class="section-title">起點</div>
             <div class="select-group">
                 <select id="start-building"><option value="">大樓</option></select>
                 <select id="start-floor" disabled><option value="">樓層</option></select>
@@ -218,59 +312,64 @@
             </div>
         </div>
 
-        <div>
-            <div class="section-title">🎯 設定終點</div>
+        <div class="panel-section">
+            <div class="section-title">終點</div>
             <div class="select-group">
                 <select id="end-building"><option value="">大樓</option></select>
                 <select id="end-floor" disabled><option value="">樓層</option></select>
                 <select id="end-space" disabled><option value="">空間</option></select>
             </div>
         </div>
-        
+
         <div class="btn-container">
             <button id="route-btn" class="action-btn">開始尋路</button>
             <button id="clear-btn" class="action-btn">清除</button>
         </div>
 
-        <div id="info-box">💡 提示：使用滑鼠滾輪縮放；按住 <b>Alt 鍵 + 拖曳</b> 自由旋轉視角！</div>
+        <div id="info-box">選擇起點與終點後開始尋路。</div>
 
         <div class="legend">
-            <div class="legend-item"><div class="color-box" style="background: #3b82f6;"></div> 主導航路線</div>
-            <div class="legend-item"><div class="color-box" style="background: #93c5fd;"></div> 備選路線</div>
-            <div class="legend-item"><div class="color-box" style="background: #ff5555;"></div> 水平主幹道</div>
-            <div class="legend-item"><div class="color-box" style="background: #f1f5f9; border: 1px solid #ccc;"></div> POI 連線</div>
+            <div class="legend-item"><div class="color-box" style="background: #2563eb;"></div> 主導航路線</div>
+            <div class="legend-item"><div class="color-box" style="background: #60a5fa;"></div> 備選路線</div>
+            <div class="legend-item"><div class="color-box" style="background: #b75a5a;"></div> 水平主幹道</div>
+            <div class="legend-item"><div class="color-box" style="background: #f7f3ea; border: 1px solid #c4ccc3;"></div> POI 連線</div>
         </div>
     </div>
 
     <div class="map-container">
         <div class="top-filter-bar">
-            <button class="filter-btn active" onclick="setBuildingFilter('General')">全部顯示</button>
-            <button class="filter-btn" onclick="setBuildingFilter('RB')">RB綜合研究大樓</button>
-            <button class="filter-btn" onclick="setBuildingFilter('T1')">T1第一教學大樓</button>
-            <button class="filter-btn" onclick="setBuildingFilter('T4')">T4第四教學大樓</button>
-            <button class="filter-btn" onclick="setBuildingFilter('AU')">AU視聽館</button>
+            <button class="filter-btn active" onclick="setBuildingFilter('General')">全部</button>
+            <button class="filter-btn" onclick="setBuildingFilter('RB')">RB 綜研大樓</button>
+            <button class="filter-btn" onclick="setBuildingFilter('T1')">T1 一教</button>
+            <button class="filter-btn" onclick="setBuildingFilter('T4')">T4 四教</button>
+            <button class="filter-btn" onclick="setBuildingFilter('AU')">AU 視聽館</button>
         </div>
 
-        <!-- 🌟 Item 2: 單一直列 13 顆控制按鈕 (不折行) -->
+        <!-- 🌟 Item 2: 分群直列 13 顆控制按鈕 (4 / 4 / 4 / 1) -->
         <div class="camera-controls-wrapper">
-            <button onclick="changeZoom(1.2)" title="放大">➕</button>
-            <button onclick="changeZoom(0.833)" title="縮小">➖</button>
-            <div class="ctrl-divider"></div>
-            <button onclick="changeAngle(-Math.PI/12)" title="逆時針旋轉">↺</button>
-            <button onclick="changeAngle(Math.PI/12)" title="順時針旋轉">↻</button>
-            <div class="ctrl-divider"></div>
-            <button onclick="setAngle(0)" title="North">N</button>
-            <button onclick="setAngle(Math.PI)" title="South">S</button>
-            <button onclick="setAngle(-Math.PI/2)" title="East">E</button>
-            <button onclick="setAngle(Math.PI/2)" title="West">W</button>
-            <button onclick="setAngle(-Math.PI/4)" title="Northeast">NE</button>
-            <button onclick="setAngle(3*Math.PI/4)" title="Northwest">NW</button>
-            <button onclick="setAngle(-3*Math.PI/4)" title="Southeast">SE</button>
-            <button onclick="setAngle(Math.PI/4)" title="Southwest">SW</button>
-            <div class="ctrl-divider"></div>
-            <button onclick="resetCamera()" title="重置視角" style="font-size: 1.2rem;">🏠</button>
+            <div class="camera-control-group">
+                <button onclick="changeZoom(1.2)" title="放大">+</button>
+                <button onclick="changeZoom(0.833)" title="縮小">−</button>
+                <button onclick="changeAngle(-Math.PI/12)" title="逆時針旋轉">↺</button>
+                <button onclick="changeAngle(Math.PI/12)" title="順時針旋轉">↻</button>
+            </div>
+            <div class="camera-control-group">
+                <button onclick="setAngle(3*Math.PI/4)" title="North">N</button>
+                <button onclick="setAngle(-Math.PI/4)" title="South">S</button>
+                <button onclick="setAngle(Math.PI/4)" title="East">E</button>
+                <button onclick="setAngle(-3*Math.PI/4)" title="West">W</button>
+            </div>
+            <div class="camera-control-group">
+                <button onclick="setAngle(Math.PI/2)" title="Northeast">NE</button>
+                <button onclick="setAngle(Math.PI)" title="Northwest">NW</button>
+                <button onclick="setAngle(0)" title="Southeast">SE</button>
+                <button onclick="setAngle(-Math.PI/2)" title="Southwest">SW</button>
+            </div>
+            <div class="camera-control-group">
+                <button onclick="resetCamera()" title="重置視角" style="font-size: 1.1rem;">⌂</button>
+            </div>
         </div>
-        
+
         <div class="hud-bottom-left">
             <div class="compass-container">
                 <div class="compass-needle" id="compass-needle">
@@ -278,14 +377,14 @@
                 </div>
             </div>
             <div class="scale-container">
-                <div class="scale-text" id="scale-text">16 m</div>
+                <div class="scale-text" id="scale-text">8.8 m</div>
                 <div class="scale-bar" id="scale-bar" style="width: 100px;"></div>
             </div>
         </div>
 
         <!-- 🌟 Item 4: Minimap 放大為 460x420 -->
         <div id="minimap-wrapper" class="minimap-wrapper">
-            <div class="minimap-title">🏢 目前 2D 剖面空間關聯示意圖</div>
+            <div class="minimap-title">2D 剖面空間關聯示意圖</div>
             <canvas id="minimapCanvas" class="minimap-canvas" width="460" height="380"></canvas>
         </div>
 
@@ -311,7 +410,7 @@
 <script>
     const canvas = document.getElementById('mapCanvas');
     const ctx = canvas.getContext('2d');
-    
+
     const minimapCanvas = document.getElementById('minimapCanvas');
     const minimapCtx = minimapCanvas.getContext('2d');
 
@@ -325,20 +424,31 @@
     const routeSelector = document.getElementById('route-selector');
     const minimapWrapper = document.getElementById('minimap-wrapper');
 
-    let nodesData = [], edgesData = [], poisData = [], connectionsData = {}, nodeMap = {}; 
+    let nodesData = [], edgesData = [], poisData = [], connectionsData = {}, nodeMap = {};
     let currentPath = [], altPath = [];
-    let currentElevation = 1000; 
-    let is3DMode = true; 
-    
-    let currentViewMode = 'all';
-    let showGlGrid = true; 
-    let currentBuildingFilter = 'General'; 
-    let activeRoute = 'main'; 
+    let currentElevation = 1000;
+    let is3DMode = true;
 
-    let mapOffsetX = 0, mapOffsetY = 150, mapZoom = 1.0, mapRotation = 0; 
+    let currentViewMode = 'all';
+    const showGlGrid = true;
+    let currentBuildingFilter = 'General';
+    let activeRoute = 'main';
+
+    let mapOffsetX = 0, mapOffsetY = 150, mapZoom = 1.0, mapRotation = 0;
     let mouseX = -1000, mouseY = -1000;
-    const zScale = 0.2; 
+    const zScale = 0.2;
     let clickState = 0, tempStart = null, tempEnd = null;
+    const MAP_TOP_BEARING_DEG = 135; // 2D 圖面正上方為東南方。
+    const SCALE_REFERENCE_CM = 570; //比例尺設定
+    const SCALE_REFERENCE_POINTS = {
+        start: { x: 356, y: 673 }, // RB-B104
+        end: { x: 299, y: 674 }    // RB-B105
+    };
+    const SCALE_REFERENCE_PIXEL_DISTANCE = Math.hypot(
+        SCALE_REFERENCE_POINTS.start.x - SCALE_REFERENCE_POINTS.end.x,
+        SCALE_REFERENCE_POINTS.start.y - SCALE_REFERENCE_POINTS.end.y
+    );
+    const METERS_PER_MAP_UNIT = (SCALE_REFERENCE_CM / 100) / SCALE_REFERENCE_PIXEL_DISTANCE;
 
     const BLDG_FULL_NAMES = { "RB": "RB綜合研究大樓", "T1": "T1第一教學大樓", "T4": "T4第四教學大樓", "AU": "AU視聽館" };
     const BLDG_PASTEL_COLORS = { "RB": '#e0f2fe', "T4": '#dcfce7', "T1": '#fef9c3', "AU": '#ffedd5' };
@@ -372,16 +482,16 @@
 
     let BLDG_SHAPES = {
         "RB": [[230,600],[910,600],[910,900],[230,900]],
-        "RB-STACK": [[150,600],[220,600],[220,750],[150,750]], 
+        "RB-STACK": [[150,600],[220,600],[220,750],[150,750]],
         "T4": [[120,140],[950,140],[950,290],[120,290]],
         "T1": [[120,290],[230,290],[230,900],[120,900]],
         "AU": [[300, 250], [750, 250], [750, 550], [300, 550]]
     };
 
-    let active3DCheckboxes = new Set(); 
+    let active3DCheckboxes = new Set();
 
     document.addEventListener("DOMContentLoaded", () => {
-        toggle3DBtn.innerHTML = '🎯 返回 2D 平面視角'; toggle3DBtn.style.backgroundColor = '#10b981';
+        toggle3DBtn.innerHTML = '返回 2D 平面視角'; toggle3DBtn.style.backgroundColor = 'var(--vertical-color)';
     });
 
     function getNodeElevation(building, floorName) {
@@ -391,21 +501,21 @@
 
     function changeZoom(factor) { mapZoom = Math.min(Math.max(mapZoom * factor, 0.2), 5); drawMap(); }
     function setAngle(angleRadian) { mapRotation = angleRadian; drawMap(); }
-    function changeAngle(deltaRadian) { mapRotation += deltaRadian; drawMap(); } 
+    function changeAngle(deltaRadian) { mapRotation += deltaRadian; drawMap(); }
     function resetCamera() { mapZoom = 1; mapOffsetX = 0; mapOffsetY = is3DMode? 150 : 0; mapRotation = 0; drawMap(); }
-    
+
     function setViewMode(mode) {
         currentViewMode = mode;
         document.getElementById('btn-view-all').classList.remove('active');
         document.getElementById('btn-view-main').classList.remove('active');
         document.getElementById('btn-view-vert').classList.remove('active');
+        document.getElementById('btn-view-volume').classList.remove('active');
         if(mode === 'all') document.getElementById('btn-view-all').classList.add('active');
         if(mode === 'main_only') document.getElementById('btn-view-main').classList.add('active');
         if(mode === 'vertical_only') document.getElementById('btn-view-vert').classList.add('active');
+        if(mode === 'volume_only') document.getElementById('btn-view-volume').classList.add('active');
         drawMap();
     }
-
-    function toggleGL() { showGlGrid = !showGlGrid; document.getElementById('btn-view-gl').classList.toggle('gl-active'); drawMap(); }
 
     function setBuildingFilter(bldg) {
         currentBuildingFilter = bldg;
@@ -426,7 +536,7 @@
             nodesData = data.nodes || []; edgesData = data.edges || [];
             poisData = data.pois || []; connectionsData = data.connections || {};
             // 如果後端有吐出自定義 SVG 樓板邊界，則取代預設形狀
-            if (data.slabs) BLDG_SHAPES = data.slabs; 
+            if (data.slabs) BLDG_SHAPES = data.slabs;
             [...nodesData, ...poisData].forEach(n => { n.z = getNodeElevation(n.building, n.floor_name); nodeMap[n.id] = n; });
             generateGroupedFloorCheckboxes(); initThreeStageDropdowns(); drawMap();
         })
@@ -446,15 +556,15 @@
             floors.sort((a, b) => {
                 let vA = a.startsWith('B') ? -parseInt(a.substring(1)) : parseFloat(a);
                 let vB = b.startsWith('B') ? -parseInt(b.substring(1)) : parseFloat(b);
-                return vB - vA; 
+                return vB - vA;
             });
             const groupDiv = document.createElement('div');
-            groupDiv.innerHTML = `<div class="bldg-group-title">🏢 ${bldg} 大樓</div>`;
+            groupDiv.innerHTML = `<div class="bldg-group-title">${bldg} 大樓</div>`;
             const itemsContainer = document.createElement('div');
             itemsContainer.className = 'bldg-group-items';
 
             floors.forEach(f => {
-                const groupKey = `${bldg}-${f}`; active3DCheckboxes.add(groupKey); 
+                const groupKey = `${bldg}-${f}`; active3DCheckboxes.add(groupKey);
                 const itemDiv = document.createElement('div'); itemDiv.className = 'floor-checkbox-item';
                 itemDiv.innerHTML = `<input type="checkbox" value="${groupKey}" checked> <span>${f}F</span>`;
                 itemDiv.querySelector('input').addEventListener('change', (e) => {
@@ -470,11 +580,11 @@
     function isNodeVisible(node) {
         if (!node) return false;
         let isActiveByFilter = currentBuildingFilter === 'General' || node.building === currentBuildingFilter || (currentBuildingFilter === 'RB' && node.building === 'RB-STACK');
-        if (!isActiveByFilter) return true; 
+        if (!isActiveByFilter) return true;
 
         if (is3DMode) return active3DCheckboxes.has(`${node.building}-${node.floor_name}`);
         if (currentPath.includes(node.id) || altPath.includes(node.id)) return true;
-        return Math.abs(node.z - currentElevation) <= 200; 
+        return Math.abs(node.z - currentElevation) <= 200;
     }
 
     elevationSelect.addEventListener('change', (e) => { currentElevation = parseInt(e.target.value); drawMap(); });
@@ -482,11 +592,11 @@
     toggle3DBtn.addEventListener('click', () => {
         is3DMode = !is3DMode;
         if (is3DMode) {
-            toggle3DBtn.innerHTML = '🎯 返回 2D 平面視角'; toggle3DBtn.style.backgroundColor = '#10b981';
+            toggle3DBtn.innerHTML = '返回 2D 平面視角'; toggle3DBtn.style.backgroundColor = 'var(--vertical-color)';
             document.getElementById('elevation-panel').style.display = 'none'; document.getElementById('layer-toggle-panel').style.display = 'block';
             resetCamera();
         } else {
-            toggle3DBtn.innerHTML = '🏢 切換 2.5D 樓層立體爆炸圖'; toggle3DBtn.style.backgroundColor = 'var(--vertical-color)';
+            toggle3DBtn.innerHTML = '切換 2.5D 樓層視角'; toggle3DBtn.style.backgroundColor = 'var(--primary)';
             document.getElementById('elevation-panel').style.display = 'block'; document.getElementById('layer-toggle-panel').style.display = 'none';
             resetCamera();
         }
@@ -530,9 +640,9 @@
     function getProjectedCoords(node, customZ, customZoom = mapZoom, customOffsetX = mapOffsetX, customOffsetY = mapOffsetY, isMinimap = false) {
         if (!node) return {x: 0, y: 0};
         // 🌟 配合 Minimap 放大，中心點微調
-        const cx = isMinimap ? 230 : 700; 
-        const cy = isMinimap ? 200 : 450; 
-        const rot = isMinimap ? 0 : mapRotation; 
+        const cx = isMinimap ? 230 : 700;
+        const cy = isMinimap ? 200 : 450;
+        const rot = isMinimap ? 0 : mapRotation;
         const force3D = isMinimap ? true : is3DMode;
 
         const rx = (node.x - 500) * Math.cos(rot) - (node.y - 500) * Math.sin(rot);
@@ -541,7 +651,7 @@
         if (force3D) {
             let actualZ = customZ !== undefined ? customZ : node.z;
             outX = cx + (rx - ry) * COS_ISO;
-            outY = cy + (rx + ry) * SIN_ISO - (actualZ * zScale) + (isMinimap ? 130 : 150); 
+            outY = cy + (rx + ry) * SIN_ISO - (actualZ * zScale) + (isMinimap ? 130 : 150);
         } else {
             outX = cx + rx; outY = cy + ry;
         }
@@ -551,51 +661,51 @@
     function drawStartEndCapsule(ctx, text, x, y, bgColor) {
         ctx.font = `bold ${Math.max(14, 14 * mapZoom)}px sans-serif`;
         const metrics = ctx.measureText(text);
-        const padX = 14 * mapZoom, h = 30 * mapZoom, r = 6 * mapZoom; 
+        const padX = 14 * mapZoom, h = 30 * mapZoom, r = 6 * mapZoom;
         const w = metrics.width + padX * 2;
-        
+
         ctx.fillStyle = bgColor; ctx.strokeStyle = 'white'; ctx.lineWidth = 2.0 * mapZoom;
-        
+
         ctx.beginPath();
         ctx.moveTo(x + r, y - h/2); ctx.lineTo(x + w - r, y - h/2); ctx.arcTo(x + w, y - h/2, x + w, y + h/2, r);
         ctx.lineTo(x + w, y + h/2 - r); ctx.arcTo(x + w, y + h/2, x + w - r, y + h/2, r);
         ctx.lineTo(x + r, y + h/2); ctx.arcTo(x, y + h/2, x, y + h/2 - r, r);
         ctx.lineTo(x, y - h/2 + r); ctx.arcTo(x, y - h/2, x + r, y - h/2, r); ctx.closePath();
         ctx.fill(); ctx.stroke();
-        
+
         ctx.fillStyle = 'white'; ctx.fillText(text, x + padX, y + 5 * mapZoom);
     }
 
     function drawDynamicCapsule(ctx, lines, cx, cy, bgColor, textColor, isHovered) {
-        const titleFont = `900 ${Math.max(isHovered ? 20 : 16, (isHovered ? 26 : 18) * mapZoom)}px 'Segoe UI', sans-serif`; 
-        const bodyFont = `bold ${Math.max(14, 18 * mapZoom)}px 'Segoe UI', sans-serif`; 
-        const lineHeight = (isHovered ? 32 : 24) * mapZoom; 
-        
+        const titleFont = `900 ${Math.max(isHovered ? 20 : 16, (isHovered ? 26 : 18) * mapZoom)}px 'Segoe UI', sans-serif`;
+        const bodyFont = `bold ${Math.max(14, 18 * mapZoom)}px 'Segoe UI', sans-serif`;
+        const lineHeight = (isHovered ? 32 : 24) * mapZoom;
+
         ctx.font = titleFont;
         let maxW = 0;
         lines.forEach((l, i) => { ctx.font = i === 0 ? titleFont : bodyFont; let w = ctx.measureText(l).width; if(w > maxW) maxW = w; });
-        
+
         const padX = (isHovered ? 30 : 20) * mapZoom, padY = (isHovered ? 24 : 14) * mapZoom;
-        const w = maxW + padX * 2, h = lines.length * lineHeight + (isHovered ? padY * 1.2 : padY * 0.8), r = isHovered ? 24 * mapZoom : h / 2; 
+        const w = maxW + padX * 2, h = lines.length * lineHeight + (isHovered ? padY * 1.2 : padY * 0.8), r = isHovered ? 24 * mapZoom : h / 2;
         let x = cx - w / 2, y = cy - h;
 
         ctx.shadowColor = 'rgba(0,0,0,0.15)'; ctx.shadowBlur = 25; ctx.shadowOffsetY = 8;
-        ctx.fillStyle = bgColor; 
-        
+        ctx.fillStyle = bgColor;
+
         ctx.beginPath();
         ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.arcTo(x + w, y, x + w, y + h, r);
         ctx.lineTo(x + w, y + h - r); ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
         ctx.lineTo(x + r, y + h); ctx.arcTo(x, y + h, x, y + h - r, r);
         ctx.lineTo(x, y + r); ctx.arcTo(x, y, x + r, y, r); ctx.closePath();
-        ctx.fill(); 
-        
+        ctx.fill();
+
         ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.lineWidth = 2.5 * mapZoom; ctx.stroke();
         ctx.shadowColor = 'transparent';
 
         lines.forEach((l, i) => {
             if (i === 0) {
                 ctx.fillStyle = textColor; ctx.font = titleFont;
-                let textYOffset = isHovered ? (8 * mapZoom) : (h - lineHeight)/2 + 2 * mapZoom; 
+                let textYOffset = isHovered ? (8 * mapZoom) : (h - lineHeight)/2 + 2 * mapZoom;
                 ctx.fillText(l, x + padX, y + padY + i * lineHeight + textYOffset);
                 if (lines.length > 1) { ctx.fillStyle = 'rgba(0,0,0,0.06)'; ctx.fillRect(x + padX, y + padY + i * lineHeight + 22 * mapZoom, maxW, 2 * mapZoom); }
             } else {
@@ -609,7 +719,7 @@
     function drawMinimap() {
         minimapCtx.clearRect(0, 0, minimapCanvas.width, minimapCanvas.height);
         // 為了將所有建築容納進去，縮小內部畫布的 Zoom
-        let mZoom = 0.22, mOffsetX = 0, mOffsetY = 0; 
+        let mZoom = 0.22, mOffsetX = 0, mOffsetY = 0;
 
         const slabsToDraw = [];
         for (let bldg in BUILDING_HEIGHTS) {
@@ -623,10 +733,10 @@
 
         slabsToDraw.forEach(slab => {
             let isRelated = Math.abs(slab.z - currentElevation) <= 200;
-            
+
             // 只有相關樓板顯示顏色，無關樓板顯示 5% 透明度的白色 (rgba 255,255,255,0.05)
             minimapCtx.fillStyle = isRelated ? (BLDG_COLORS[slab.b] || '#cbd5e1') : 'rgba(255, 255, 255, 0.05)';
-            
+
             minimapCtx.beginPath();
             let minX = Infinity; let leftMostPt = null;
             slab.path.forEach((pt, i) => {
@@ -635,7 +745,7 @@
                 i === 0 ? minimapCtx.moveTo(proj.x, proj.y) : minimapCtx.lineTo(proj.x, proj.y);
             });
             minimapCtx.closePath(); minimapCtx.fill();
-            
+
             // 邊框也配合：相關樓板明顯白色邊框，無關樓板非常淡的灰色邊框以防完全隱形
             minimapCtx.strokeStyle = isRelated ? 'rgba(255,255,255,0.9)' : 'rgba(150,150,150,0.1)';
             minimapCtx.lineWidth = 1; minimapCtx.stroke();
@@ -652,34 +762,33 @@
     }
 
     function updateHUD() {
-        let baseNorthAngle = 135; 
-        let actualAngle = baseNorthAngle - (mapRotation * 180 / Math.PI);
+        let actualAngle = (mapRotation * 180 / Math.PI) - MAP_TOP_BEARING_DEG;
         document.getElementById('compass-needle').style.transform = `rotate(${actualAngle}deg)`;
 
-        // 🌟 Item 3: 比例尺精準修正，確保預設 100px 對應到實際的 16 公尺
-        let pixelsPerUnit = 1 * mapZoom; 
-        let realMeters = (100 / pixelsPerUnit) * 1.6; 
-        
+        const scaleBarPixels = 100;
+        let realMeters = (scaleBarPixels / mapZoom) * METERS_PER_MAP_UNIT;
+
         let displayMeters;
         if (realMeters < 1) displayMeters = (realMeters * 100).toFixed(0) + " cm";
         else if (realMeters > 50) displayMeters = (realMeters).toFixed(0) + " m";
         else displayMeters = (realMeters).toFixed(1) + " m";
-        
+
         document.getElementById('scale-text').innerText = displayMeters;
     }
 
     function drawMap() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        let topLayerCapsules = []; 
-        updateHUD(); 
+        let topLayerCapsules = [];
+        const isVolumeMode = currentViewMode === 'volume_only';
+        updateHUD();
 
         minimapWrapper.style.display = is3DMode ? 'none' : 'flex';
         if (!is3DMode) drawMinimap();
-        
+
         if (showGlGrid) {
             ctx.strokeStyle = 'rgba(150, 150, 160, 0.2)'; ctx.lineWidth = 1 * mapZoom;
             ctx.beginPath();
-            for(let i = -500; i <= 1500; i += 50) { 
+            for(let i = -500; i <= 1500; i += 50) {
                 let p1 = getProjectedCoords({x:i, y:-500, z:0}), p2 = getProjectedCoords({x:i, y:1500, z:0});
                 ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y);
                 let p3 = getProjectedCoords({x:-500, y:i, z:0}), p4 = getProjectedCoords({x:1500, y:i, z:0});
@@ -716,41 +825,41 @@
                 if (slab.b === 'RB' || slab.b === 'RB-STACK') finalColor = 'rgba(100, 160, 200, 0.45)';
                 if (slab.b === 'T4') finalColor = 'rgba(100, 190, 100, 0.45)';
             }
-            
+
             let isBldgActive = currentBuildingFilter === 'General' || slab.b === currentBuildingFilter || (currentBuildingFilter === 'RB' && slab.b === 'RB-STACK');
-            if (!isBldgActive) finalColor = 'rgba(200, 200, 200, 0.08)'; 
+            if (!isBldgActive) finalColor = 'rgba(200, 200, 200, 0.08)';
 
             ctx.fillStyle = finalColor; ctx.beginPath();
             slab.path.forEach((pt, i) => {
                 let proj = getProjectedCoords({x: pt[0], y: pt[1]}, slab.z);
                 i === 0 ? ctx.moveTo(proj.x, proj.y) : ctx.lineTo(proj.x, proj.y);
             });
-            ctx.closePath(); ctx.fill(); 
-            ctx.strokeStyle = isBldgActive ? 'rgba(255,255,255,0.7)' : 'rgba(200,200,200,0.3)'; 
+            ctx.closePath(); ctx.fill();
+            ctx.strokeStyle = isBldgActive ? 'rgba(255,255,255,0.7)' : 'rgba(200,200,200,0.3)';
             ctx.lineWidth = 1; ctx.stroke();
-            
-            if (is3DMode && isBldgActive) {
+
+            if (is3DMode && isBldgActive && !isVolumeMode) {
                 let leftMostPt = null; let minX = Infinity;
                 slab.path.forEach(pt => {
                     let proj = getProjectedCoords({x: pt[0], y: pt[1]}, slab.z);
                     if (proj.x < minX) { minX = proj.x; leftMostPt = proj; }
                 });
-                
+
                 if (leftMostPt) {
-                    ctx.fillStyle = 'rgba(100, 116, 139, 0.85)'; 
+                    ctx.fillStyle = 'rgba(100, 116, 139, 0.85)';
                     ctx.font = `bold ${Math.max(10, 11 * mapZoom)}px 'Segoe UI', Arial`;
                     ctx.textAlign = "right"; ctx.textBaseline = "middle";
                     let sign = slab.z >= 0 ? '+' : '';
                     ctx.fillText(`${slab.f}F ${sign}${slab.z}`, leftMostPt.x - 10 * mapZoom, leftMostPt.y);
-                    ctx.textAlign = "left"; 
+                    ctx.textAlign = "left";
                 }
             } else if (!is3DMode) {
-                if (slab.b === 'RB-STACK') return; 
+                if (slab.b === 'RB-STACK') return;
                 let p1 = getProjectedCoords({x: slab.path[0][0], y: slab.path[0][1]}, slab.z);
                 let textX = p1.x + 20, textY = p1.y + 35;
-                ctx.fillStyle = isBldgActive ? 'rgba(51, 65, 85, 0.4)' : 'rgba(150, 150, 150, 0.3)'; 
-                ctx.font = "bold 24px Arial"; 
-                ctx.fillText(slab.label, textX, textY);
+                ctx.fillStyle = isBldgActive ? 'rgba(51, 65, 85, 0.4)' : 'rgba(150, 150, 150, 0.3)';
+                ctx.font = "bold 24px Arial";
+                ctx.fillText(isVolumeMode ? (BLDG_FULL_NAMES[slab.b] || slab.b) : slab.label, textX, textY);
             }
         });
 
@@ -768,79 +877,80 @@
                     else {
                         let sumX = 0, sumY = 0;
                         slab.path.forEach(pt => { sumX+=pt[0]; sumY+=pt[1]; });
-                        highestPt[slab.b] = {x: sumX/slab.path.length, y: sumY/slab.path.length - 120}; 
+                        highestPt[slab.b] = {x: sumX/slab.path.length, y: sumY/slab.path.length - 120};
                     }
                 }
             });
 
             for (let b in highestPt) {
-                if (b === 'RB-STACK') continue; 
+                if (b === 'RB-STACK') continue;
                 let p = getProjectedCoords({x: highestPt[b].x, y: highestPt[b].y}, highestZ[b]);
-                p.y -= 50 * mapZoom; let cy = p.y - 30 * mapZoom; 
+                p.y -= 50 * mapZoom; let cy = p.y - 30 * mapZoom;
                 if (Math.abs(p.x - mouseX) < 140 * mapZoom && Math.abs(cy - mouseY) < 100 * mapZoom) { hoveredBldg = b; break; }
             }
 
             for (let b in highestZ) {
-                if (b === 'RB-STACK') continue; 
+                if (b === 'RB-STACK') continue;
                 let p = getProjectedCoords({x: highestPt[b].x, y: highestPt[b].y}, highestZ[b]);
-                p.y -= 50 * mapZoom; 
+                p.y -= 50 * mapZoom;
                 let isHovered = (hoveredBldg === b);
-                let lines = isHovered && BLDG_HOVER_INFO[b] ? BLDG_HOVER_INFO[b] : [BLDG_FULL_NAMES[b] || b];
-                
+                let lines = !isVolumeMode && isHovered && BLDG_HOVER_INFO[b] ? BLDG_HOVER_INFO[b] : [BLDG_FULL_NAMES[b] || b];
+
                 topLayerCapsules.push({
-                    lines: lines, x: p.x, y: p.y, 
-                    bgColor: BLDG_PASTEL_COLORS[b] || '#ffffff', textColor: BLDG_TEXT_COLORS[b] || '#1e293b', isHovered: isHovered
+                    lines: lines, x: p.x, y: p.y,
+                    bgColor: BLDG_PASTEL_COLORS[b] || '#ffffff', textColor: BLDG_TEXT_COLORS[b] || '#1e293b', isHovered: !isVolumeMode && isHovered
                 });
             }
         }
 
         const isNavigating = currentPath.length > 0;
-        const vMode = currentViewMode; 
+        const vMode = currentViewMode;
 
+        if (!isVolumeMode) {
         edgesData.forEach(edge => {
             const n1 = nodeMap[edge.from], n2 = nodeMap[edge.to];
             if (!n1 || !n2 || !isNodeVisible(n1) || !isNodeVisible(n2)) return;
-            
+
             let n1Active = currentBuildingFilter === 'General' || n1.building === currentBuildingFilter || (currentBuildingFilter === 'RB' && n1.building === 'RB-STACK');
             let n2Active = currentBuildingFilter === 'General' || n2.building === currentBuildingFilter || (currentBuildingFilter === 'RB' && n2.building === 'RB-STACK');
             let isBldgActive = n1Active && n2Active;
 
             let isVertical = ['stair', 'elevator'].includes(edge.type);
             if (vMode === 'main_only' && isVertical) return;
-            if (vMode === 'vertical_only' && !isVertical) return; 
+            if (vMode === 'vertical_only' && !isVertical) return;
 
             let onMainPath = currentPath.includes(edge.from) && currentPath.includes(edge.to);
             let onAltPath = altPath.includes(edge.from) && altPath.includes(edge.to);
             let p1 = getProjectedCoords(n1), p2 = getProjectedCoords(n2);
-            
+
             ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y);
-            
+
             if (isNavigating) {
                 if (activeRoute === 'main' && onMainPath) {
-                    ctx.strokeStyle = isVertical ? '#0ea5e9' : '#3b82f6'; ctx.lineWidth = 6.0 * mapZoom; ctx.setLineDash(isVertical ? [6,6] : []);
+                    ctx.strokeStyle = isVertical ? '#4db0c1' : '#2563eb'; ctx.lineWidth = 6.0 * mapZoom; ctx.setLineDash(isVertical ? [6,6] : []);
                 } else if (activeRoute === 'alt' && onAltPath) {
-                    ctx.strokeStyle = isVertical ? '#0ea5e9' : '#93c5fd'; ctx.lineWidth = 6.0 * mapZoom; ctx.setLineDash(isVertical ? [6,6] : []);
+                    ctx.strokeStyle = isVertical ? '#4db0c1' : '#60a5fa'; ctx.lineWidth = 6.0 * mapZoom; ctx.setLineDash(isVertical ? [6,6] : []);
                 } else if (onMainPath || onAltPath) {
                     ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 3.5 * mapZoom; ctx.setLineDash([8, 6]);
                 } else {
-                    ctx.strokeStyle = '#f1f5f9'; ctx.lineWidth = 1.0 * mapZoom; ctx.setLineDash([]);
+                    ctx.strokeStyle = 'rgba(241,245,249,0.78)'; ctx.lineWidth = 1.0 * mapZoom; ctx.setLineDash([]);
                 }
             } else {
-                ctx.setLineDash(isVertical ? [5,5] : []); 
-                ctx.strokeStyle = isBldgActive ? (isVertical ? '#0ea5e9' : (edge.type === 'bridge' ? '#10b981' : '#ff5555')) : 'rgba(200,200,200,0.3)';
+                ctx.setLineDash(isVertical ? [5,5] : []);
+                ctx.strokeStyle = isBldgActive ? (isVertical ? 'rgba(77,176,193,0.82)' : (edge.type === 'bridge' ? 'rgba(80,174,142,0.78)' : 'rgba(224,116,116,0.72)')) : 'rgba(178,194,187,0.22)';
                 ctx.lineWidth = (edge.type === 'bridge' ? 3.5 : 2.0) * mapZoom;
             }
             ctx.stroke();
         });
-        ctx.setLineDash([]); 
+        ctx.setLineDash([]);
 
         if (vMode !== 'vertical_only') {
             poisData.forEach(poi => {
                 if (isNodeVisible(poi)) {
                     let poiOnPath = currentPath.includes(poi.id) || altPath.includes(poi.id);
                     let isSelected = poi.id === tempStart || poi.id === tempEnd;
-                    if (vMode === 'main_only' && !poiOnPath && !isSelected) return; 
-                    
+                    if (vMode === 'main_only' && !poiOnPath && !isSelected) return;
+
                     (connectionsData[poi.id] || []).forEach(tid => {
                         const tn = nodeMap[tid];
                         if (tn && isNodeVisible(tn)) {
@@ -848,7 +958,7 @@
                             if (!isNavigating || onPath || (!onPath && vMode !== 'main_only')) {
                                 let p1 = getProjectedCoords(poi), p2 = getProjectedCoords(tn);
                                 ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y);
-                                ctx.strokeStyle = onPath ? '#94a3b8' : 'rgba(200,200,200,0.4)'; 
+                                ctx.strokeStyle = onPath ? '#a8b7c8' : 'rgba(206,214,210,0.32)';
                                 ctx.lineWidth = (onPath ? 3.0 : 1.5) * mapZoom; ctx.stroke();
                             }
                         }
@@ -864,7 +974,7 @@
 
         allNodes.forEach(node => {
             if (vMode === 'vertical_only' && !['stair','elevator'].includes(node.id.toLowerCase())) return;
-            
+
             let onPath = currentPath.includes(node.id) || altPath.includes(node.id);
             let onActivePath = activePathArray.includes(node.id);
             let isSelected = node.id === tempStart || node.id === tempEnd;
@@ -873,16 +983,16 @@
 
             let p = getProjectedCoords(node);
             let nodeColor = node.color || '#94a3b8';
-            if (isNavigating && !onActivePath) nodeColor = '#e2e8f0';
-            else if (!isBldgActive && !isSelected && !onPath) nodeColor = '#e2e8f0';
+            if (isNavigating && !onActivePath) nodeColor = '#dbe5e1';
+            else if (!isBldgActive && !isSelected && !onPath) nodeColor = '#dbe5e1';
 
-            let radius = node.type === 'poi' ? 5.0 : 7.0; 
+            let radius = node.type === 'poi' ? 5.0 : 7.0;
             if (onActivePath) radius = 8.5;
             if (isSelected) radius = 12.0;
-            
+
             ctx.beginPath(); ctx.arc(p.x, p.y, radius * mapZoom, 0, 2 * Math.PI);
             ctx.fillStyle = nodeColor; ctx.fill();
-            ctx.strokeStyle = (isNavigating && !onActivePath) || !isBldgActive ? 'transparent' : '#ffffff'; 
+            ctx.strokeStyle = (isNavigating && !onActivePath) || !isBldgActive ? 'transparent' : '#ffffff';
             ctx.lineWidth = 1.5 * mapZoom; ctx.stroke();
 
             if (isSelected) {
@@ -891,26 +1001,27 @@
             } else if (isNavigating && onActivePath) {
                 let pIdx = activePathArray.indexOf(node.id);
                 if (pIdx > 0 && pIdx < activePathArray.length - 1 && (pIdx % 3 === 0 || node.id.includes('Stair'))) {
-                    ctx.fillStyle = '#1e293b'; ctx.font = `bold ${Math.max(11, 11 * mapZoom)}px sans-serif`;
+                    ctx.fillStyle = '#1f3a34'; ctx.font = `bold ${Math.max(11, 11 * mapZoom)}px sans-serif`;
                     ctx.fillText(node.id, p.x + 10 * mapZoom, p.y - 4 * mapZoom);
                 }
             }
         });
+        }
 
         topLayerCapsules.forEach(cap => drawDynamicCapsule(ctx, cap.lines, cap.x, cap.y, cap.bgColor, cap.textColor, cap.isHovered));
     }
 
     function fetchRoute(start, end) {
-        infoBox.innerHTML = '⏳ 正在進行跨樓層最佳路徑解算...'; routeSelector.style.display = 'none'; 
+        infoBox.innerHTML = '正在進行跨樓層路徑解算...'; routeSelector.style.display = 'none';
         fetch(`/api/route?start=${start}&end=${end}`)
             .then(res => { if(!res.ok) throw new Error('路網無法連通。'); return res.json(); })
             .then(data => {
-                currentPath = data.path; altPath = data.alt_path || []; activeRoute = 'main'; 
+                currentPath = data.path; altPath = data.alt_path || []; activeRoute = 'main';
                 document.getElementById('btn-main-route').classList.add('active'); document.getElementById('btn-alt-route').classList.remove('active');
                 if (altPath.length > 0) routeSelector.style.display = 'flex';
-                
+
                 if (is3DMode) {
-                    active3DCheckboxes.clear(); 
+                    active3DCheckboxes.clear();
                     currentPath.forEach(nId => { if(nodeMap[nId]) active3DCheckboxes.add(`${nodeMap[nId].building}-${nodeMap[nId].floor_name}`); });
                     document.querySelectorAll('#floor-checkboxes input').forEach(cb => cb.checked = active3DCheckboxes.has(cb.value));
                 } else {
@@ -918,12 +1029,12 @@
                     if (startNode) { currentElevation = startNode.z; elevationSelect.value = String(currentElevation); }
                 }
                 drawMap();
-                let html = `<b>🎯 尋路解算成功！</b>\n預估步行距離：<span style="color:#2563eb;font-weight:bold;">${data.total_distance}</span> m`;
-                if(altPath.length > 0) html += `\n🌟 發現備用路徑！(距離: ${data.alt_distance} m，可於下方按鈕切換)`;
-                html += `\n\n<b>🚶 導航指引：</b>\n`;
+                let html = `<b>尋路解算成功</b>\n預估步行距離：<span style="color:#2563eb;font-weight:bold;">${data.total_distance}</span> m`;
+                if(altPath.length > 0) html += `\n備用路徑距離：${data.alt_distance} m`;
+                html += `\n\n<b>導航指引</b>\n`;
                 data.directions.forEach((d, idx) => html += `${idx + 1}. ${d}\n`);
                 infoBox.innerHTML = html;
-            }).catch(err => { currentPath = []; altPath = []; drawMap(); infoBox.innerHTML = `❌ 導航失敗：${err.message}`; });
+            }).catch(err => { currentPath = []; altPath = []; drawMap(); infoBox.innerHTML = `導航失敗：${err.message}`; });
     }
 
     document.getElementById('route-btn').addEventListener('click', () => {
@@ -940,12 +1051,12 @@
     });
 
     let isDragging = false, isMoved = false, dragStartX = 0, dragStartY = 0, initOffsetX = 0, initOffsetY = 0, initRot = 0;
-    
+
     canvas.addEventListener('mousedown', e => {
         isDragging = true; isMoved = false; dragStartX = e.clientX; dragStartY = e.clientY;
         initOffsetX = mapOffsetX; initOffsetY = mapOffsetY; initRot = mapRotation;
     });
-    
+
     window.addEventListener('mousemove', e => {
         const rect = canvas.getBoundingClientRect();
         mouseX = (e.clientX - rect.left) * (canvas.width / rect.width);
@@ -955,12 +1066,18 @@
             const dx = e.clientX - dragStartX, dy = e.clientY - dragStartY;
             if (Math.abs(dx) > 3 || Math.abs(dy) > 3) isMoved = true;
             if (e.altKey || e.ctrlKey || e.metaKey) {
-                mapRotation = initRot + (dx * 0.01); 
+                mapRotation = initRot + (dx * 0.01);
             } else {
-                mapOffsetX = initOffsetX + dx; mapOffsetY = initOffsetY + dy; 
+                mapOffsetX = initOffsetX + dx; mapOffsetY = initOffsetY + dy;
             }
-            hoverTooltip.style.display = 'none'; drawMap(); 
+            hoverTooltip.style.display = 'none'; drawMap();
         } else {
+            if (currentViewMode === 'volume_only') {
+                hoverTooltip.style.display = 'none';
+                drawMap();
+                return;
+            }
+
             let hoveredNode = null, minDist = Infinity;
             [...nodesData, ...poisData].filter(n=>isNodeVisible(n)).forEach(node => {
                 let p = getProjectedCoords(node);
@@ -973,21 +1090,22 @@
                 document.getElementById('tt-name').innerText = meta ? meta.name : "空間地標 (無屬性)";
                 document.getElementById('tt-id').innerText = hoveredNode.id;
                 document.getElementById('tt-dept').innerText = meta ? (meta.dept || "-") : "-";
-                
+
                 hoverTooltip.style.display = 'block';
                 hoverTooltip.style.left = (e.clientX + 15) + 'px'; hoverTooltip.style.top = (e.clientY + 15) + 'px';
             } else {
                 hoverTooltip.style.display = 'none';
             }
-            drawMap(); 
+            drawMap();
         }
     });
-    
+
     window.addEventListener('mouseup', () => isDragging = false);
     canvas.addEventListener('wheel', e => { e.preventDefault(); mapZoom = Math.min(Math.max(mapZoom + (e.deltaY * -0.001), 0.2), 5); drawMap(); });
 
     canvas.addEventListener('click', (event) => {
-        if (isMoved) return; 
+        if (isMoved) return;
+        if (currentViewMode === 'volume_only') return;
         let closestNode = null, minDist = Infinity;
         [...nodesData, ...poisData].filter(n=>isNodeVisible(n)).forEach(node => {
             let p = getProjectedCoords(node);
@@ -999,12 +1117,12 @@
             if (clickState === 0) {
                 tempStart = closestNode.id; startBuilding.value = closestNode.building;
                 updateFloors('start', closestNode.floor_name, tempStart);
-                infoBox.innerHTML = `🏁 已設定起點：<b>${tempStart}</b>\n請點擊地圖選擇終點...`;
+                infoBox.innerHTML = `已設定起點：<b>${tempStart}</b>\n請點擊地圖選擇終點。`;
                 clickState = 1; drawMap();
             } else if (clickState === 1) {
                 tempEnd = closestNode.id; endBuilding.value = closestNode.building;
                 updateFloors('end', closestNode.floor_name, tempEnd);
-                infoBox.innerHTML = `🎯 已設定終點：<b>${tempEnd}</b>\n路徑計算中...`;
+                infoBox.innerHTML = `已設定終點：<b>${tempEnd}</b>\n路徑計算中...`;
                 clickState = 0; fetchRoute(tempStart, tempEnd);
             }
         }

@@ -5,7 +5,8 @@ import re
 from bs4 import BeautifulSoup
 
 # 比例尺常數 (Pixel to Meter)
-SCALE_FACTOR = 0.05
+# RB-B104 (356, 673) 到 RB-B105 (299, 674) 校準為 500 cm。
+SCALE_FACTOR = 5.0 / math.sqrt((356 - 299)**2 + (673 - 674)**2)
 
 print("🚀 開始執行 [步驟一]: 全新多樓層 SVG 融合解析管線...")
 

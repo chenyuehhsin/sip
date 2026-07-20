@@ -1,70 +1,184 @@
-# SIP: AI-Powered Spatial Intelligence Platform for Complex Multi-Building Environments
+# SIP: Spatial Intelligence Platform
 
-SIP (Spatial Intelligence Platform) 是一個專為複雜、錯層、多建築物室內環境設計的空間智慧與垂直尋路平台。本專案以大型迷宮建築（如台北車站、台科大校園）為實驗場域，擺脫傳統 2D 地圖無法處理垂直動線與空間錯位的限制，建構出具備高度擴充性的「三維拓撲路網」與「語意化導航引擎」。
+SIP is a prototype indoor navigation platform for complex, multi-floor, multi-building environments. It builds a lightweight 3D topological routing graph from SVG floor maps, exposes routing and map data through a FastAPI backend, and renders an interactive campus navigation dashboard with HTML5 Canvas.
 
+The current demo focuses on NTUST campus buildings such as RB, T1, T4, and AU. It supports cross-building links, vertical circulation, floor filtering, route alternatives, 2D/2.5D visualization, and a Chinese/English UI toggle. The default UI language is Chinese.
 
-## 環境建置與操作說明 (Quick Start)
-```
-# 根據設定檔建立名為 indoor 的虛擬環境
+## Features
+
+- Multi-building indoor routing across floors and connected buildings.
+- Dijkstra-based shortest path search with a simple alternative route pass.
+- Semantic edge types for walkways, bridges, stairs, and elevators.
+- SVG-to-JSON data pipeline for routing nodes, POIs, floor slabs, and POI connections.
+- Interactive Canvas dashboard with zoom, rotation, compass, scale bar, minimap, building filters, and 3D layer controls.
+- Route selection between the main route and an available alternative route.
+- Bilingual frontend UI toggle, defaulting to Chinese.
+
+## Tech Stack
+
+- Backend: FastAPI, Uvicorn, Python 3.12
+- Data processing: Python, BeautifulSoup, lxml
+- Frontend: single-file HTML, CSS, JavaScript, HTML5 Canvas
+- Environment management: Conda
+
+## Quick Start
+
+Create and activate the Conda environment:
+
+```bash
 conda env create -f environment.yml
-# 啟動虛擬環境
 conda activate indoor
 ```
-## 啟動 FastAPI 後端伺服器
-```
+
+Start the FastAPI server from the repository root:
+
+```bash
 uvicorn backend.main:app --reload
 ```
 
----
-
-## 平台核心技術亮點 (Technical Wow Factors)
-
-- **3D 錯層拓撲網路 (3D Topological Topology)**：完美封裝實體世界中的「空間錯位連通」邏輯（例如：A棟 3F 透過天橋連通至 B棟 4F），解決傳統 GIS 系統在垂直動線失靈的痛點。
-- **動線語意化分類 (Semantic Graph Profiling)**：將路網分為 `backbone` (核心主幹道) 與 `walkway` (次要分支)，在圖論計算中引入環境權重。
-- **自動化圖資生產管線 (Automated Spatial Data Pipeline)**：自繪向量圖資 (SVG) 後，透過 Python 正規表達式 (RegEx) 引擎，全自動解析語意化節點代號（如 `RB-WCM3`, `T1-SA-4F`）並輸出多樓層關聯資料綱要 (Schema)。
-- **多維度路徑權重優化**：基於 Dijkstra 演算法，未來可動態擴充「時間懲罰權重」（如等待電梯時間成本、走樓梯體力消耗），實作更符合人類智慧的尋路。
-
----
-
-## 系統架構 (Architecture)
-
-本平台採用「高內聚、低耦合」的微服務平台架構設計：
-
-- **資料層 (Data Layer)**：由向量圖資動態解析而來的 `map_data.json`，將 Routing Graph（導航骨架）與 POI Layer（教室、設施）完全分離，確保圖資擴充時演算法的 $O(V \log V + E)$ 效能不受影響。
-- **後端引擎 (Backend Engine)**：基於 **FastAPI** 構建高性能非同步 API，實作拓撲圖論路徑計算。
-- **前端畫布 (Frontend Canvas)**：採用原生 HTML5 Canvas 實作高性能輕量化渲染，支援動態樓層過濾器 (Floor Filter) 與連動式二級空間搜尋選單。
-
----
-
-## 📂 專案檔案結構 (Repository Structure)
+Open the application:
 
 ```text
-sip/ (專案根目錄)
-│
-├── data/                          # 集中管理所有圖資與原始數據
-│   ├── A03_map.svg                # 視覺底圖與原始座標
-│   ├── raw_edges.json             # 手動設定的主幹道連線
-│   ├── routing_nodes.json         # (自動生成) 乾淨的主幹節點
-│   ├── pois.json                  # (自動生成) 乾淨的設施節點
-│   ├── draft_connection.json      # (自動生成) KNN 推薦的連線草稿
-│   ├── connection_overrides.json  # 人類意志補丁檔
-│   └── final_connections.json     # 最終版 POI 連線
-│
-├── backend/                 # 後端引擎模組 (高內聚設計)
-│   ├── main.py              # FastAPI 路由、Dijkstra 尋路引擎與語意導航指引生成
-│   └── utils/
-│       └── validator.py     # 未來要擴充的 Graph Validator (圖資自動驗證腳本)
-│
-├── frontend/                # 前端視覺化與互動面板 (高內聚設計)
-│   ├── index.html           # HTML5 Canvas 輕量化渲染、Floor Filter 與連動下拉選單
-│   └── assets/              # 前端網頁專用的靜態資源 (如 CSS、小圖示)
-│
-├── scripts/                       # 自動化工具/腳本資料夾
-│   ├── 1_svg_parser.py            # 解析器
-│   ├── 2_knn_recommender.py       # 推薦器
-│   └── 3_merge_connections.py     # 融合器
-│
-├── .gitignore               # Git 忽略清單 (防止暫存檔與 Mac 隱藏檔污染遠端倉庫)
-├── environment.yml          # Anaconda 虛擬環境設定檔 
-└── README.md                
+http://127.0.0.1:8000
+```
 
+## API Endpoints
+
+### `GET /`
+
+Serves the frontend dashboard from `frontend/index.html`.
+
+### `GET /api/data`
+
+Returns the map data needed by the frontend:
+
+- `nodes`: routing graph nodes
+- `edges`: routing graph edges
+- `pois`: points of interest
+- `slabs`: building slab geometry for 2.5D/3D rendering
+- `connections`: final POI-to-routing-node connections
+
+### `GET /api/route?start=<id>&end=<id>`
+
+Returns a route between two node or POI IDs.
+
+Response fields:
+
+- `path`: main route node sequence
+- `total_distance`: main route distance in meters
+- `directions`: generated turn-by-turn route instructions
+- `alt_path`: alternative route node sequence, if available
+- `alt_distance`: alternative route distance
+
+Example:
+
+```bash
+curl "http://127.0.0.1:8000/api/route?start=RB-308-3F&end=T4-402-4F"
+```
+
+## Data Pipeline
+
+The data pipeline converts source SVG maps into runtime JSON files.
+
+Run the complete pipeline:
+
+```bash
+python run_pipeline.py
+```
+
+Pipeline steps:
+
+1. `scripts/1_svg_parser.py`
+   - Reads `data/A*_map.svg`.
+   - Extracts routing nodes, POIs, floor metadata, and slab geometry.
+   - Reads `data/raw_edges.json`.
+   - Writes `data/routing_nodes.json`, `data/pois.json`, and `data/slabs.json`.
+
+2. `scripts/2_knn_recommender.py`
+   - Connects each POI to nearby valid routing nodes on the same building and floor.
+   - Writes `data/draft_connection.json`.
+
+3. `scripts/3_merge_connections.py`
+   - Applies manual add/remove overrides from `data/connection_overrides.json`.
+   - Writes `data/final_connections.json`.
+
+## Repository Structure
+
+```text
+sip/
+|-- backend/
+|   |-- main.py                  # FastAPI app, routing engine, API endpoints
+|   `-- utils/
+|       `-- validator.py         # Placeholder for graph validation utilities
+|-- data/
+|   |-- A*_map.svg               # Source SVG floor maps
+|   |-- raw_edges.json           # Manually defined routing graph edges
+|   |-- routing_nodes.json       # Generated routing nodes and edges
+|   |-- pois.json                # Generated POI nodes
+|   |-- slabs.json               # Generated building slab geometry
+|   |-- draft_connection.json    # Generated POI connection candidates
+|   |-- connection_overrides.json # Manual POI connection overrides
+|   |-- final_connections.json   # Final POI connections used by the backend
+|   `-- map_data.json            # Legacy or auxiliary map data
+|-- frontend/
+|   `-- index.html               # Canvas dashboard and interaction logic
+|-- scripts/
+|   |-- 1_svg_parser.py
+|   |-- 2_knn_recommender.py
+|   `-- 3_merge_connections.py
+|-- run_pipeline.py              # Runs all data pipeline steps
+|-- environment.yml              # Conda environment definition
+`-- README.md
+```
+
+## SVG Authoring Conventions
+
+The parser depends on naming and color conventions in the SVG files:
+
+- Floor map files should follow the `A*_map.svg` naming pattern.
+- Routing nodes and POIs are read from SVG `circle` elements.
+- Node identity comes from `inkscape:label` or `id`.
+- Floor slabs are read from `polygon` or `path` elements whose label or id starts with `floor-`.
+- Orange nodes (`#ff9955`) are treated as POIs.
+- Red, green, blue, and related route colors are mapped to routing-node categories used by the renderer and connection recommender.
+
+## Important Runtime Files
+
+The backend loads these files at startup:
+
+- `data/routing_nodes.json`
+- `data/pois.json`
+- `data/slabs.json`
+- `data/final_connections.json`
+
+If any of these files are missing, run:
+
+```bash
+python run_pipeline.py
+```
+
+Then restart Uvicorn.
+
+## Development Notes
+
+- Run commands from the repository root so relative paths such as `data/routing_nodes.json` resolve correctly.
+- The frontend is intentionally dependency-free and is served directly by FastAPI.
+- The routing graph is undirected: every edge in `routing_nodes.json` is added in both directions by the backend.
+- POIs are injected into a temporary local graph only when they are used as route endpoints.
+- Vertical movement distance is currently estimated by floor difference, while same-floor movement uses calibrated map distance.
+
+## Troubleshooting
+
+If the server cannot find data files, regenerate the pipeline outputs:
+
+```bash
+python run_pipeline.py
+```
+
+If port `8000` is already in use, start Uvicorn on another port:
+
+```bash
+uvicorn backend.main:app --reload --port 8001
+```
+
+If the frontend does not reflect recent HTML changes, refresh the browser page after Uvicorn reloads.

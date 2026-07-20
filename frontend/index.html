@@ -75,12 +75,21 @@
         }
 
         .panel-header { display: flex; flex-direction: column; gap: 5px; padding-bottom: 4px; line-height: 1.35; }
+        .panel-title-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
         .app-eyebrow {
             color: var(--primary); font-size: 0.76rem; font-weight: 800;
             letter-spacing: 0.08em; text-transform: uppercase;
         }
         .app-title { margin: 0; font-size: 1.48rem; font-weight: 850; letter-spacing: 0; color: var(--text-main); line-height: 1.28; }
         .app-subtitle { margin: 0; color: var(--text-muted); font-size: 0.87rem; line-height: 1.35; }
+        .language-toggle {
+            min-width: 52px; min-height: 30px; padding: 5px 10px;
+            border: 1px solid rgba(47,125,104,0.16); border-radius: 8px;
+            background: rgba(255,255,255,0.82); color: var(--primary);
+            font-size: 0.78rem; font-weight: 850; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .language-toggle:hover { background: var(--primary-soft); border-color: rgba(47,125,104,0.28); }
         .panel-section {
             display: flex; flex-direction: column; gap: 8px;
             padding: 10px 12px;
@@ -142,7 +151,7 @@
 
         /* 🌟 Item 2: 分群直列相機控制 (4 / 4 / 4 / 1) */
         .camera-controls-wrapper {
-            position: absolute; top: 56px; right: 18px; z-index: 20;
+            position: absolute; top: 28px; right: 18px; z-index: 20;
             display: flex; flex-direction: column; gap: 10px;
         }
         .camera-control-group {
@@ -262,49 +271,52 @@
 <div class="container">
     <div class="control-panel">
         <div class="panel-header">
-            <div class="app-eyebrow">SIP Navigation</div>
-            <h1 class="app-title">校園空間導航</h1>
-            <p class="app-subtitle">NTUST multi-building pathfinder</p>
+            <div class="panel-title-row">
+                <div class="app-eyebrow" data-i18n="appEyebrow">SIP Navigation</div>
+                <button id="language-toggle" class="language-toggle" type="button" data-i18n-title="langTitle">EN</button>
+            </div>
+            <h1 class="app-title" data-i18n="appTitle">校園空間導航</h1>
+            <p class="app-subtitle" data-i18n="appSubtitle">NTUST multi-building pathfinder</p>
         </div>
 
         <button id="toggle-3d-btn" class="action-btn">返回 2D 平面視角</button>
 
         <div class="panel-section">
-            <div class="section-title">視圖</div>
+            <div class="section-title" data-i18n="viewSection">視圖</div>
             <div class="view-mode-btns">
-                <button id="btn-view-all" class="view-btn active" onclick="setViewMode('all')">全部圖資</button>
-                <button id="btn-view-main" class="view-btn" onclick="setViewMode('main_only')">主動線</button>
-                <button id="btn-view-vert" class="view-btn" onclick="setViewMode('vertical_only')">垂直動線</button>
-                <button id="btn-view-volume" class="view-btn" onclick="setViewMode('volume_only')">量體模式</button>
+                <button id="btn-view-all" class="view-btn active" onclick="setViewMode('all')" data-i18n="viewAll">全部圖資</button>
+                <button id="btn-view-main" class="view-btn" onclick="setViewMode('main_only')" data-i18n="viewMain">主動線</button>
+                <button id="btn-view-vert" class="view-btn" onclick="setViewMode('vertical_only')" data-i18n="viewVertical">垂直動線</button>
+                <button id="btn-view-volume" class="view-btn" onclick="setViewMode('volume_only')" data-i18n="viewVolume">量體模式</button>
             </div>
         </div>
 
         <div id="elevation-panel" class="panel-section" style="display: none;">
-            <div class="section-title">2D 剖面基準</div>
+            <div class="section-title" data-i18n="elevationSection">2D 剖面基準</div>
             <select id="elevation-select">
-                <option value="3160">RB 9F (約 31.6m)</option>
-                <option value="2800">RB 8F (約 28.0m)</option>
-                <option value="2440">RB 7F (約 24.4m)</option>
-                <option value="2080">RB 6F (約 20.8m)</option>
-                <option value="1720">RB 5F (約 17.2m)</option>
-                <option value="1360">RB 4F (約 13.6m)</option>
-                <option value="1080">T4/T1 4F (約 10.8m)</option>
-                <option value="1000" selected>RB 3F (約 10.0m)</option>
-                <option value="720">T4/T1 3F (約 7.2m)</option>
-                <option value="500">RB 2F (約 5.0m)</option>
-                <option value="360">T4/T1 2F (約 3.6m)</option>
-                <option value="0">1F 平面基準 (0.0m)</option>
-                <option value="-360">B1 地下層 (-3.6m)</option>
+                <option value="3160" data-i18n="elevationRb9">RB 9F (約 31.6m)</option>
+                <option value="2800" data-i18n="elevationRb8">RB 8F (約 28.0m)</option>
+                <option value="2440" data-i18n="elevationRb7">RB 7F (約 24.4m)</option>
+                <option value="2080" data-i18n="elevationRb6">RB 6F (約 20.8m)</option>
+                <option value="1720" data-i18n="elevationRb5">RB 5F (約 17.2m)</option>
+                <option value="1360" data-i18n="elevationRb4">RB 4F (約 13.6m)</option>
+                <option value="1080" data-i18n="elevationT4T1_4">T4/T1 4F (約 10.8m)</option>
+                <option value="1000" selected data-i18n="elevationRb3">RB 3F (約 10.0m)</option>
+                <option value="720" data-i18n="elevationT4T1_3">T4/T1 3F (約 7.2m)</option>
+                <option value="500" data-i18n="elevationRb2">RB 2F (約 5.0m)</option>
+                <option value="360" data-i18n="elevationT4T1_2">T4/T1 2F (約 3.6m)</option>
+                <option value="0" data-i18n="elevationGround">1F 平面基準 (0.0m)</option>
+                <option value="-360" data-i18n="elevationBasement">B1 地下層 (-3.6m)</option>
             </select>
         </div>
 
         <div id="layer-toggle-panel" class="panel-section">
-            <div class="section-title">3D 疊層</div>
+            <div class="section-title" data-i18n="layersSection">3D 疊層</div>
             <div class="floor-selector-list" id="floor-checkboxes"></div>
         </div>
 
         <div class="panel-section">
-            <div class="section-title">起點</div>
+            <div class="section-title" data-i18n="startSection">起點</div>
             <div class="select-group">
                 <select id="start-building"><option value="">大樓</option></select>
                 <select id="start-floor" disabled><option value="">樓層</option></select>
@@ -313,7 +325,7 @@
         </div>
 
         <div class="panel-section">
-            <div class="section-title">終點</div>
+            <div class="section-title" data-i18n="endSection">終點</div>
             <div class="select-group">
                 <select id="end-building"><option value="">大樓</option></select>
                 <select id="end-floor" disabled><option value="">樓層</option></select>
@@ -322,36 +334,36 @@
         </div>
 
         <div class="btn-container">
-            <button id="route-btn" class="action-btn">開始尋路</button>
-            <button id="clear-btn" class="action-btn">清除</button>
+            <button id="route-btn" class="action-btn" data-i18n="routeButton">開始尋路</button>
+            <button id="clear-btn" class="action-btn" data-i18n="clearButton">清除</button>
         </div>
 
         <div id="info-box">選擇起點與終點後開始尋路。</div>
 
         <div class="legend">
-            <div class="legend-item"><div class="color-box" style="background: #2563eb;"></div> 主導航路線</div>
-            <div class="legend-item"><div class="color-box" style="background: #60a5fa;"></div> 備選路線</div>
-            <div class="legend-item"><div class="color-box" style="background: #b75a5a;"></div> 水平主幹道</div>
-            <div class="legend-item"><div class="color-box" style="background: #f7f3ea; border: 1px solid #c4ccc3;"></div> POI 連線</div>
+            <div class="legend-item"><div class="color-box" style="background: #2563eb;"></div><span data-i18n="legendMain">主導航路線</span></div>
+            <div class="legend-item"><div class="color-box" style="background: #60a5fa;"></div><span data-i18n="legendAlt">備選路線</span></div>
+            <div class="legend-item"><div class="color-box" style="background: #b75a5a;"></div><span data-i18n="legendHorizontal">水平主幹道</span></div>
+            <div class="legend-item"><div class="color-box" style="background: #f7f3ea; border: 1px solid #c4ccc3;"></div><span data-i18n="legendPoi">POI 連線</span></div>
         </div>
     </div>
 
     <div class="map-container">
         <div class="top-filter-bar">
-            <button class="filter-btn active" onclick="setBuildingFilter('General')">全部</button>
-            <button class="filter-btn" onclick="setBuildingFilter('RB')">RB 綜研大樓</button>
-            <button class="filter-btn" onclick="setBuildingFilter('T1')">T1 一教</button>
-            <button class="filter-btn" onclick="setBuildingFilter('T4')">T4 四教</button>
-            <button class="filter-btn" onclick="setBuildingFilter('AU')">AU 視聽館</button>
+            <button class="filter-btn active" onclick="setBuildingFilter('General')" data-i18n="filterAll">全部</button>
+            <button class="filter-btn" onclick="setBuildingFilter('RB')" data-i18n="filterRB">RB 綜研大樓</button>
+            <button class="filter-btn" onclick="setBuildingFilter('T1')" data-i18n="filterT1">T1 一教</button>
+            <button class="filter-btn" onclick="setBuildingFilter('T4')" data-i18n="filterT4">T4 四教</button>
+            <button class="filter-btn" onclick="setBuildingFilter('AU')" data-i18n="filterAU">AU 視聽館</button>
         </div>
 
         <!-- 🌟 Item 2: 分群直列 13 顆控制按鈕 (4 / 4 / 4 / 1) -->
         <div class="camera-controls-wrapper">
             <div class="camera-control-group">
-                <button onclick="changeZoom(1.2)" title="放大">+</button>
-                <button onclick="changeZoom(0.833)" title="縮小">−</button>
-                <button onclick="changeAngle(-Math.PI/12)" title="逆時針旋轉">↺</button>
-                <button onclick="changeAngle(Math.PI/12)" title="順時針旋轉">↻</button>
+                <button onclick="changeZoom(1.2)" title="放大" data-i18n-title="zoomIn">+</button>
+                <button onclick="changeZoom(0.833)" title="縮小" data-i18n-title="zoomOut">−</button>
+                <button onclick="changeAngle(-Math.PI/12)" title="逆時針旋轉" data-i18n-title="rotateCcw">↺</button>
+                <button onclick="changeAngle(Math.PI/12)" title="順時針旋轉" data-i18n-title="rotateCw">↻</button>
             </div>
             <div class="camera-control-group">
                 <button onclick="setAngle(3*Math.PI/4)" title="North">N</button>
@@ -366,7 +378,7 @@
                 <button onclick="setAngle(-Math.PI/2)" title="Southwest">SW</button>
             </div>
             <div class="camera-control-group">
-                <button onclick="resetCamera()" title="重置視角" style="font-size: 1.1rem;">⌂</button>
+                <button onclick="resetCamera()" title="重置視角" style="font-size: 1.1rem;" data-i18n-title="resetCamera">⌂</button>
             </div>
         </div>
 
@@ -384,20 +396,20 @@
 
         <!-- 🌟 Item 4: Minimap 放大為 460x420 -->
         <div id="minimap-wrapper" class="minimap-wrapper">
-            <div class="minimap-title">2D 剖面空間關聯示意圖</div>
+            <div class="minimap-title" data-i18n="minimapTitle">2D 剖面空間關聯示意圖</div>
             <canvas id="minimapCanvas" class="minimap-canvas" width="460" height="380"></canvas>
         </div>
 
         <div id="route-selector" class="route-selector">
-            <button id="btn-main-route" class="route-select-btn active" onclick="selectRoute('main')">主路線</button>
-            <button id="btn-alt-route" class="route-select-btn" onclick="selectRoute('alt')">備選路線</button>
+            <button id="btn-main-route" class="route-select-btn active" onclick="selectRoute('main')" data-i18n="mainRoute">主路線</button>
+            <button id="btn-alt-route" class="route-select-btn" onclick="selectRoute('alt')" data-i18n="altRoute">備選路線</button>
         </div>
 
         <div id="hover-tooltip" class="hover-tooltip">
             <div class="tt-title" id="tt-name">Name</div>
             <div class="tt-meta">
-                <div><span>編號: </span><span class="tt-val" id="tt-id">ID</span></div>
-                <div><span>單位: </span><span class="tt-val" id="tt-dept">Dept</span></div>
+                <div><span data-i18n="tooltipId">編號: </span><span class="tt-val" id="tt-id">ID</span></div>
+                <div><span data-i18n="tooltipDept">單位: </span><span class="tt-val" id="tt-dept">Dept</span></div>
             </div>
         </div>
 
@@ -423,6 +435,211 @@
     const hoverTooltip = document.getElementById('hover-tooltip');
     const routeSelector = document.getElementById('route-selector');
     const minimapWrapper = document.getElementById('minimap-wrapper');
+    const languageToggle = document.getElementById('language-toggle');
+
+    const I18N = {
+        zh: {
+            documentTitle: "智慧室內導航系統 (SIP) | 3D BIM Dashboard",
+            appEyebrow: "SIP Navigation",
+            appTitle: "校園空間導航",
+            appSubtitle: "NTUST multi-building pathfinder",
+            langToggle: "EN",
+            langTitle: "切換為英文",
+            toggleTo2D: "返回 2D 平面視角",
+            toggleTo25D: "切換 2.5D 樓層視角",
+            viewSection: "視圖",
+            viewAll: "全部圖資",
+            viewMain: "主動線",
+            viewVertical: "垂直動線",
+            viewVolume: "量體模式",
+            elevationSection: "2D 剖面基準",
+            elevationRb9: "RB 9F (約 31.6m)",
+            elevationRb8: "RB 8F (約 28.0m)",
+            elevationRb7: "RB 7F (約 24.4m)",
+            elevationRb6: "RB 6F (約 20.8m)",
+            elevationRb5: "RB 5F (約 17.2m)",
+            elevationRb4: "RB 4F (約 13.6m)",
+            elevationT4T1_4: "T4/T1 4F (約 10.8m)",
+            elevationRb3: "RB 3F (約 10.0m)",
+            elevationT4T1_3: "T4/T1 3F (約 7.2m)",
+            elevationRb2: "RB 2F (約 5.0m)",
+            elevationT4T1_2: "T4/T1 2F (約 3.6m)",
+            elevationGround: "1F 平面基準 (0.0m)",
+            elevationBasement: "B1 地下層 (-3.6m)",
+            layersSection: "3D 疊層",
+            startSection: "起點",
+            endSection: "終點",
+            buildingPlaceholder: "大樓",
+            floorPlaceholder: "樓層",
+            spacePlaceholder: "空間",
+            buildingSuffix: "大樓",
+            routeButton: "開始尋路",
+            clearButton: "清除",
+            infoInitial: "選擇起點與終點後開始尋路。",
+            legendMain: "主導航路線",
+            legendAlt: "備選路線",
+            legendHorizontal: "水平主幹道",
+            legendPoi: "POI 連線",
+            filterAll: "全部",
+            filterRB: "RB 綜研大樓",
+            filterT1: "T1 一教",
+            filterT4: "T4 四教",
+            filterAU: "AU 視聽館",
+            zoomIn: "放大",
+            zoomOut: "縮小",
+            rotateCcw: "逆時針旋轉",
+            rotateCw: "順時針旋轉",
+            resetCamera: "重置視角",
+            minimapTitle: "2D 剖面空間關聯示意圖",
+            mainRoute: "主路線",
+            altRoute: "備選路線",
+            tooltipId: "編號: ",
+            tooltipDept: "單位: ",
+            routeSolving: "正在進行跨樓層路徑解算...",
+            routeDisconnected: "路網無法連通。",
+            routeSuccess: "尋路解算成功",
+            mainDistance: "預估步行距離：",
+            altDistance: "備用路徑距離：",
+            directions: "導航指引",
+            routeFail: "導航失敗：",
+            startSet: "已設定起點：",
+            chooseEnd: "請點擊地圖選擇終點。",
+            endSet: "已設定終點：",
+            calculating: "路徑計算中...",
+            genericLandmark: "空間地標 (無屬性)",
+            noValue: "-",
+            groundLevel: "Ground Level (Z=0)"
+        },
+        en: {
+            documentTitle: "Smart Indoor Navigation System (SIP) | 3D BIM Dashboard",
+            appEyebrow: "SIP Navigation",
+            appTitle: "Campus Space Navigation",
+            appSubtitle: "NTUST multi-building pathfinder",
+            langToggle: "中文",
+            langTitle: "Switch to Chinese",
+            toggleTo2D: "Return to 2D Plan View",
+            toggleTo25D: "Switch to 2.5D Floor View",
+            viewSection: "View",
+            viewAll: "All Layers",
+            viewMain: "Main Route",
+            viewVertical: "Vertical Links",
+            viewVolume: "Volume Mode",
+            elevationSection: "2D Section Datum",
+            elevationRb9: "RB 9F (about 31.6m)",
+            elevationRb8: "RB 8F (about 28.0m)",
+            elevationRb7: "RB 7F (about 24.4m)",
+            elevationRb6: "RB 6F (about 20.8m)",
+            elevationRb5: "RB 5F (about 17.2m)",
+            elevationRb4: "RB 4F (about 13.6m)",
+            elevationT4T1_4: "T4/T1 4F (about 10.8m)",
+            elevationRb3: "RB 3F (about 10.0m)",
+            elevationT4T1_3: "T4/T1 3F (about 7.2m)",
+            elevationRb2: "RB 2F (about 5.0m)",
+            elevationT4T1_2: "T4/T1 2F (about 3.6m)",
+            elevationGround: "1F Plan Datum (0.0m)",
+            elevationBasement: "B1 Basement (-3.6m)",
+            layersSection: "3D Layers",
+            startSection: "Start",
+            endSection: "End",
+            buildingPlaceholder: "Building",
+            floorPlaceholder: "Floor",
+            spacePlaceholder: "Space",
+            buildingSuffix: "Building",
+            routeButton: "Find Route",
+            clearButton: "Clear",
+            infoInitial: "Select a start and destination to begin routing.",
+            legendMain: "Main navigation route",
+            legendAlt: "Alternative route",
+            legendHorizontal: "Horizontal corridor",
+            legendPoi: "POI connection",
+            filterAll: "All",
+            filterRB: "RB Research Building",
+            filterT1: "T1 First Teaching",
+            filterT4: "T4 Fourth Teaching",
+            filterAU: "AU Auditorium",
+            zoomIn: "Zoom in",
+            zoomOut: "Zoom out",
+            rotateCcw: "Rotate counterclockwise",
+            rotateCw: "Rotate clockwise",
+            resetCamera: "Reset view",
+            minimapTitle: "2D section spatial relation diagram",
+            mainRoute: "Main Route",
+            altRoute: "Alternative Route",
+            tooltipId: "ID: ",
+            tooltipDept: "Unit: ",
+            routeSolving: "Solving cross-floor route...",
+            routeDisconnected: "The route network is not connected.",
+            routeSuccess: "Route solved",
+            mainDistance: "Estimated walking distance: ",
+            altDistance: "Alternative route distance: ",
+            directions: "Directions",
+            routeFail: "Navigation failed: ",
+            startSet: "Start set: ",
+            chooseEnd: "Click the map to choose a destination.",
+            endSet: "Destination set: ",
+            calculating: "Calculating route...",
+            genericLandmark: "Space landmark (no attributes)",
+            noValue: "-",
+            groundLevel: "Ground Level (Z=0)"
+        }
+    };
+
+    let currentLang = "zh";
+    let renderInfoBox = () => t('infoInitial');
+
+    function t(key) {
+        return (I18N[currentLang] && I18N[currentLang][key]) || I18N.zh[key] || key;
+    }
+
+    function formatBuildingOption(building) {
+        return currentLang === 'zh' ? `${building} 棟` : `${building} Building`;
+    }
+
+    function updateToggle3DButtonLabel() {
+        toggle3DBtn.innerHTML = is3DMode ? t('toggleTo2D') : t('toggleTo25D');
+    }
+
+    function updateSelectPlaceholders() {
+        [
+            ['start-building', 'buildingPlaceholder'],
+            ['end-building', 'buildingPlaceholder'],
+            ['start-floor', 'floorPlaceholder'],
+            ['end-floor', 'floorPlaceholder'],
+            ['start-space', 'spacePlaceholder'],
+            ['end-space', 'spacePlaceholder']
+        ].forEach(([id, key]) => {
+            const select = document.getElementById(id);
+            if (select.options[0] && select.options[0].value === '') select.options[0].textContent = t(key);
+        });
+
+        [startBuilding, endBuilding].forEach(select => {
+            Array.from(select.options).forEach(option => {
+                if (option.value) option.textContent = formatBuildingOption(option.value);
+            });
+        });
+
+        document.querySelectorAll('.bldg-group-title[data-bldg]').forEach(title => {
+            title.textContent = `${title.dataset.bldg} ${t('buildingSuffix')}`;
+        });
+    }
+
+    function setInfoBox(renderer) {
+        renderInfoBox = renderer;
+        infoBox.innerHTML = renderInfoBox();
+    }
+
+    function applyI18n() {
+        document.documentElement.lang = currentLang === 'zh' ? 'zh-TW' : 'en';
+        document.title = t('documentTitle');
+        document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+        document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = t(el.dataset.i18nTitle); });
+        languageToggle.textContent = t('langToggle');
+        languageToggle.title = t('langTitle');
+        updateToggle3DButtonLabel();
+        updateSelectPlaceholders();
+        infoBox.innerHTML = renderInfoBox();
+        drawMap();
+    }
 
     let nodesData = [], edgesData = [], poisData = [], connectionsData = {}, nodeMap = {};
     let currentPath = [], altPath = [];
@@ -450,20 +667,42 @@
     );
     const METERS_PER_MAP_UNIT = (SCALE_REFERENCE_CM / 100) / SCALE_REFERENCE_PIXEL_DISTANCE;
 
-    const BLDG_FULL_NAMES = { "RB": "RB綜合研究大樓", "T1": "T1第一教學大樓", "T4": "T4第四教學大樓", "AU": "AU視聽館" };
+    const BLDG_FULL_NAMES = {
+        zh: { "RB": "RB綜合研究大樓", "T1": "T1第一教學大樓", "T4": "T4第四教學大樓", "AU": "AU視聽館" },
+        en: { "RB": "RB Research Building", "T1": "T1 First Teaching Building", "T4": "T4 Fourth Teaching Building", "AU": "AU Auditorium" }
+    };
     const BLDG_PASTEL_COLORS = { "RB": '#e0f2fe', "T4": '#dcfce7', "T1": '#fef9c3', "AU": '#ffedd5' };
     const BLDG_TEXT_COLORS = { "RB": '#0369a1', "T4": '#15803d', "T1": '#a16207', "AU": '#c2410c' };
     const BLDG_DARK_COLORS = { "RB": '#0284c7', "T4": '#16a34a', "T1": '#ca8a04', "AU": '#ea580c' };
 
     const BLDG_HOVER_INFO = {
-        "RB": [
-            "RB綜合研究大樓", "9F : 建築系", "8F : 建築系 / 系辦公室", "7F : 建築系", "6F : 電子計算機中心 / 中心辦公室",
-            "5F : 計中電腦教室 / 資訊工程系", "4F : 設計系 / 院辦公室", "3F : 資訊工程系 / 應用外語系", "2F : 應用外語系 / 語言教室", "1F : 演講廳"
-        ],
-        "T1": [ "T1第一教學大樓", "4F : 設計系", "3F : 全英專班及全球學程辦公室", "2F : 自動化及控制中心辦公室", "1F : 高階製造研發中心" ],
-        "T4": [ "T4第四教學大樓", "8F : 通識教育中心", "7F : 人文社會學院 / 應用外語系", "6F : 師資培育中心 / 數位所", "5F : 資訊工程系", "4F : 綜合教室", "3F : 人工智慧研究中心", "2F : 設計系教室", "1F : 活動穿堂" ],
-        "AU": [ "AU視聽館", "大型視聽展演空間" ]
+        zh: {
+            "RB": [
+                "RB綜合研究大樓", "9F : 建築系", "8F : 建築系 / 系辦公室", "7F : 建築系", "6F : 電子計算機中心 / 中心辦公室",
+                "5F : 計中電腦教室 / 資訊工程系", "4F : 設計系 / 院辦公室", "3F : 資訊工程系 / 應用外語系", "2F : 應用外語系 / 語言教室", "1F : 演講廳"
+            ],
+            "T1": [ "T1第一教學大樓", "4F : 設計系", "3F : 全英專班及全球學程辦公室", "2F : 自動化及控制中心辦公室", "1F : 高階製造研發中心" ],
+            "T4": [ "T4第四教學大樓", "8F : 通識教育中心", "7F : 人文社會學院 / 應用外語系", "6F : 師資培育中心 / 數位所", "5F : 資訊工程系", "4F : 綜合教室", "3F : 人工智慧研究中心", "2F : 設計系教室", "1F : 活動穿堂" ],
+            "AU": [ "AU視聽館", "大型視聽展演空間" ]
+        },
+        en: {
+            "RB": [
+                "RB Research Building", "9F : Architecture", "8F : Architecture / Department Office", "7F : Architecture", "6F : Computer Center / Center Office",
+                "5F : Computer Labs / Computer Science", "4F : Design / College Office", "3F : Computer Science / Applied Foreign Languages", "2F : Applied Foreign Languages / Language Classrooms", "1F : Auditorium"
+            ],
+            "T1": [ "T1 First Teaching Building", "4F : Design", "3F : English-taught Program and Global Program Office", "2F : Automation and Control Center Office", "1F : Advanced Manufacturing R&D Center" ],
+            "T4": [ "T4 Fourth Teaching Building", "8F : General Education Center", "7F : College of Humanities and Social Sciences / Applied Foreign Languages", "6F : Teacher Education Center / Graduate Institute of Digital Learning", "5F : Computer Science", "4F : General Classrooms", "3F : AI Research Center", "2F : Design Classrooms", "1F : Activity Hall" ],
+            "AU": [ "AU Auditorium", "Large audiovisual performance space" ]
+        }
     };
+
+    function getBuildingFullName(building) {
+        return (BLDG_FULL_NAMES[currentLang] && BLDG_FULL_NAMES[currentLang][building]) || BLDG_FULL_NAMES.zh[building] || building;
+    }
+
+    function getBuildingHoverInfo(building) {
+        return (BLDG_HOVER_INFO[currentLang] && BLDG_HOVER_INFO[currentLang][building]) || BLDG_HOVER_INFO.zh[building];
+    }
 
     const POI_METADATA_DB = {
         "RB-308-3F": { name: "資工系辦公室", dept: "資訊工程系", hours: "09:00 - 17:00" },
@@ -491,7 +730,13 @@
     let active3DCheckboxes = new Set();
 
     document.addEventListener("DOMContentLoaded", () => {
-        toggle3DBtn.innerHTML = '返回 2D 平面視角'; toggle3DBtn.style.backgroundColor = 'var(--vertical-color)';
+        toggle3DBtn.style.backgroundColor = 'var(--vertical-color)';
+        applyI18n();
+    });
+
+    languageToggle.addEventListener('click', () => {
+        currentLang = currentLang === 'zh' ? 'en' : 'zh';
+        applyI18n();
     });
 
     function getNodeElevation(building, floorName) {
@@ -559,7 +804,7 @@
                 return vB - vA;
             });
             const groupDiv = document.createElement('div');
-            groupDiv.innerHTML = `<div class="bldg-group-title">${bldg} 大樓</div>`;
+            groupDiv.innerHTML = `<div class="bldg-group-title" data-bldg="${bldg}">${bldg} ${t('buildingSuffix')}</div>`;
             const itemsContainer = document.createElement('div');
             itemsContainer.className = 'bldg-group-items';
 
@@ -592,11 +837,11 @@
     toggle3DBtn.addEventListener('click', () => {
         is3DMode = !is3DMode;
         if (is3DMode) {
-            toggle3DBtn.innerHTML = '返回 2D 平面視角'; toggle3DBtn.style.backgroundColor = 'var(--vertical-color)';
+            updateToggle3DButtonLabel(); toggle3DBtn.style.backgroundColor = 'var(--vertical-color)';
             document.getElementById('elevation-panel').style.display = 'none'; document.getElementById('layer-toggle-panel').style.display = 'block';
             resetCamera();
         } else {
-            toggle3DBtn.innerHTML = '切換 2.5D 樓層視角'; toggle3DBtn.style.backgroundColor = 'var(--primary)';
+            updateToggle3DButtonLabel(); toggle3DBtn.style.backgroundColor = 'var(--primary)';
             document.getElementById('elevation-panel').style.display = 'block'; document.getElementById('layer-toggle-panel').style.display = 'none';
             resetCamera();
         }
@@ -607,7 +852,7 @@
         const buildings = new Set();
         [...poisData, ...nodesData].forEach(n => { if(n.building && n.building !== "Unknown") buildings.add(n.building); });
         Array.from(buildings).sort().forEach(b => {
-            startBuilding.add(new Option(`${b} 棟`, b)); endBuilding.add(new Option(`${b} 棟`, b));
+            startBuilding.add(new Option(formatBuildingOption(b), b)); endBuilding.add(new Option(formatBuildingOption(b), b));
         });
         startBuilding.addEventListener('change', () => updateFloors('start')); document.getElementById('start-floor').addEventListener('change', () => updateSpaces('start'));
         endBuilding.addEventListener('change', () => updateFloors('end')); document.getElementById('end-floor').addEventListener('change', () => updateSpaces('end'));
@@ -616,7 +861,7 @@
     function updateFloors(type, preF = null, preS = null) {
         const bSelect = type === 'start' ? startBuilding : endBuilding;
         const fSelect = document.getElementById(`${type}-floor`); const sSelect = document.getElementById(`${type}-space`);
-        fSelect.innerHTML = '<option value="">樓層</option>'; sSelect.innerHTML = '<option value="">空間</option>'; sSelect.disabled = true;
+        fSelect.innerHTML = `<option value="">${t('floorPlaceholder')}</option>`; sSelect.innerHTML = `<option value="">${t('spacePlaceholder')}</option>`; sSelect.disabled = true;
         if (!bSelect.value) { fSelect.disabled = true; return; }
         const floors = new Set();
         [...poisData, ...nodesData].forEach(n => { if(n.building === bSelect.value) floors.add(n.floor_name); });
@@ -628,7 +873,7 @@
     function updateSpaces(type, preS = null) {
         const bSelect = type === 'start' ? startBuilding : endBuilding;
         const fSelect = document.getElementById(`${type}-floor`); const sSelect = document.getElementById(`${type}-space`);
-        sSelect.innerHTML = '<option value="">空間</option>';
+        sSelect.innerHTML = `<option value="">${t('spacePlaceholder')}</option>`;
         if (!bSelect.value || !fSelect.value) { sSelect.disabled = true; return; }
         const filtered = [...poisData, ...nodesData].filter(n => n.building === bSelect.value && n.floor_name === fSelect.value).sort((a, b) => a.id.localeCompare(b.id));
         filtered.forEach(p => sSelect.add(new Option(`${p.id}${p.type === 'poi'?' 📍':''}`, p.id)));
@@ -796,7 +1041,7 @@
             }
             ctx.stroke();
             let glL = getProjectedCoords({x:0, y:1450, z:0});
-            ctx.fillStyle = 'rgba(150,150,150,0.5)'; ctx.font = "bold 12px Arial"; ctx.fillText("Ground Level (Z=0)", glL.x, glL.y);
+            ctx.fillStyle = 'rgba(150,150,150,0.5)'; ctx.font = "bold 12px Arial"; ctx.fillText(t('groundLevel'), glL.x, glL.y);
         }
 
         const slabsToDraw = [];
@@ -859,7 +1104,7 @@
                 let textX = p1.x + 20, textY = p1.y + 35;
                 ctx.fillStyle = isBldgActive ? 'rgba(51, 65, 85, 0.4)' : 'rgba(150, 150, 150, 0.3)';
                 ctx.font = "bold 24px Arial";
-                ctx.fillText(isVolumeMode ? (BLDG_FULL_NAMES[slab.b] || slab.b) : slab.label, textX, textY);
+                ctx.fillText(isVolumeMode ? getBuildingFullName(slab.b) : slab.label, textX, textY);
             }
         });
 
@@ -894,7 +1139,8 @@
                 let p = getProjectedCoords({x: highestPt[b].x, y: highestPt[b].y}, highestZ[b]);
                 p.y -= 50 * mapZoom;
                 let isHovered = (hoveredBldg === b);
-                let lines = !isVolumeMode && isHovered && BLDG_HOVER_INFO[b] ? BLDG_HOVER_INFO[b] : [BLDG_FULL_NAMES[b] || b];
+                const hoverLines = getBuildingHoverInfo(b);
+                let lines = !isVolumeMode && isHovered && hoverLines ? hoverLines : [getBuildingFullName(b)];
 
                 topLayerCapsules.push({
                     lines: lines, x: p.x, y: p.y,
@@ -1012,9 +1258,9 @@
     }
 
     function fetchRoute(start, end) {
-        infoBox.innerHTML = '正在進行跨樓層路徑解算...'; routeSelector.style.display = 'none';
+        setInfoBox(() => t('routeSolving')); routeSelector.style.display = 'none';
         fetch(`/api/route?start=${start}&end=${end}`)
-            .then(res => { if(!res.ok) throw new Error('路網無法連通。'); return res.json(); })
+            .then(res => { if(!res.ok) throw new Error(t('routeDisconnected')); return res.json(); })
             .then(data => {
                 currentPath = data.path; altPath = data.alt_path || []; activeRoute = 'main';
                 document.getElementById('btn-main-route').classList.add('active'); document.getElementById('btn-alt-route').classList.remove('active');
@@ -1029,12 +1275,14 @@
                     if (startNode) { currentElevation = startNode.z; elevationSelect.value = String(currentElevation); }
                 }
                 drawMap();
-                let html = `<b>尋路解算成功</b>\n預估步行距離：<span style="color:#2563eb;font-weight:bold;">${data.total_distance}</span> m`;
-                if(altPath.length > 0) html += `\n備用路徑距離：${data.alt_distance} m`;
-                html += `\n\n<b>導航指引</b>\n`;
-                data.directions.forEach((d, idx) => html += `${idx + 1}. ${d}\n`);
-                infoBox.innerHTML = html;
-            }).catch(err => { currentPath = []; altPath = []; drawMap(); infoBox.innerHTML = `導航失敗：${err.message}`; });
+                setInfoBox(() => {
+                    let html = `<b>${t('routeSuccess')}</b>\n${t('mainDistance')}<span style="color:#2563eb;font-weight:bold;">${data.total_distance}</span> m`;
+                    if(altPath.length > 0) html += `\n${t('altDistance')}${data.alt_distance} m`;
+                    html += `\n\n<b>${t('directions')}</b>\n`;
+                    data.directions.forEach((d, idx) => html += `${idx + 1}. ${d}\n`);
+                    return html;
+                });
+            }).catch(err => { currentPath = []; altPath = []; drawMap(); setInfoBox(() => `${t('routeFail')}${err.message}`); });
     }
 
     document.getElementById('route-btn').addEventListener('click', () => {
@@ -1047,6 +1295,8 @@
         startBuilding.value = ""; document.getElementById('start-floor').disabled = true; document.getElementById('start-space').disabled = true;
         endBuilding.value = ""; document.getElementById('end-floor').disabled = true; document.getElementById('end-space').disabled = true;
         if (is3DMode) document.querySelectorAll('#floor-checkboxes input').forEach(cb => { cb.checked = true; active3DCheckboxes.add(cb.value); });
+        updateSelectPlaceholders();
+        setInfoBox(() => t('infoInitial'));
         drawMap();
     });
 
@@ -1087,9 +1337,9 @@
 
             if (hoveredNode && hoveredNode.type === 'poi') {
                 const meta = POI_METADATA_DB[hoveredNode.id];
-                document.getElementById('tt-name').innerText = meta ? meta.name : "空間地標 (無屬性)";
+                document.getElementById('tt-name').innerText = meta ? meta.name : t('genericLandmark');
                 document.getElementById('tt-id').innerText = hoveredNode.id;
-                document.getElementById('tt-dept').innerText = meta ? (meta.dept || "-") : "-";
+                document.getElementById('tt-dept').innerText = meta ? (meta.dept || t('noValue')) : t('noValue');
 
                 hoverTooltip.style.display = 'block';
                 hoverTooltip.style.left = (e.clientX + 15) + 'px'; hoverTooltip.style.top = (e.clientY + 15) + 'px';
@@ -1117,12 +1367,12 @@
             if (clickState === 0) {
                 tempStart = closestNode.id; startBuilding.value = closestNode.building;
                 updateFloors('start', closestNode.floor_name, tempStart);
-                infoBox.innerHTML = `已設定起點：<b>${tempStart}</b>\n請點擊地圖選擇終點。`;
+                setInfoBox(() => `${t('startSet')}<b>${tempStart}</b>\n${t('chooseEnd')}`);
                 clickState = 1; drawMap();
             } else if (clickState === 1) {
                 tempEnd = closestNode.id; endBuilding.value = closestNode.building;
                 updateFloors('end', closestNode.floor_name, tempEnd);
-                infoBox.innerHTML = `已設定終點：<b>${tempEnd}</b>\n路徑計算中...`;
+                setInfoBox(() => `${t('endSet')}<b>${tempEnd}</b>\n${t('calculating')}`);
                 clickState = 0; fetchRoute(tempStart, tempEnd);
             }
         }

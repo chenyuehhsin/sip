@@ -1,8 +1,8 @@
 {
   "remove": [
-    { "poi": "RB-308-3", "target": "RB-308" }
+    { "poi": "AU-100-1", "target": "T4-100-2" }
   ],
   "add": [
-    { "poi": "RB-308-3", "target": "RB-304" }
+    { "poi": "AU-100-1", "target": "T4-100-2" }
   ]
 }

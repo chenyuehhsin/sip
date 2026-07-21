@@ -222,11 +222,28 @@
         .view-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 8px 16px rgba(47,125,104,0.18); }
 
         .select-group { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 8px; }
-        select {
+        select, input.space-search {
             width: 100%; min-height: 36px; padding: 7px 10px; border: 1px solid rgba(47,125,104,0.13);
             border-radius: 11px; font-size: 0.84rem; background-color: #fbfdfc; color: var(--text-main); outline: none;
         }
-        select:focus { border-color: rgba(47,125,104,0.35); box-shadow: 0 0 0 4px rgba(47,125,104,0.08); }
+        select:focus, input.space-search:focus { border-color: rgba(47,125,104,0.35); box-shadow: 0 0 0 4px rgba(47,125,104,0.08); }
+        .space-picker { position: relative; }
+        .space-results {
+            display: none; position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 40;
+            max-height: 260px; overflow-y: auto; padding: 6px; border-radius: 12px;
+            background: rgba(255,255,255,0.98); border: 1px solid rgba(47,125,104,0.16);
+            box-shadow: var(--shadow-md);
+        }
+        .space-results.open { display: block; }
+        .space-result {
+            width: 100%; text-align: left; display: flex; flex-direction: column; gap: 2px;
+            padding: 8px 10px; border: 0; border-radius: 8px; background: transparent; cursor: pointer;
+        }
+        .space-result:hover, .space-result.active { background: var(--primary-soft); }
+        .space-result-title { font-size: 0.84rem; font-weight: 820; color: var(--text-main); }
+        .space-result-meta { font-size: 0.72rem; color: var(--text-muted); }
+        .space-result-group { padding: 7px 10px 4px; font-size: 0.68rem; font-weight: 850; color: var(--text-faint); letter-spacing: 0.08em; text-transform: uppercase; }
+        .space-result-empty { padding: 10px; color: var(--text-muted); font-size: 0.8rem; }
 
         .btn-container { display: flex; gap: 10px; }
         button.action-btn {
@@ -294,19 +311,6 @@
         <div id="elevation-panel" class="panel-section" style="display: none;">
             <div class="section-title" data-i18n="elevationSection">2D 剖面基準</div>
             <select id="elevation-select">
-                <option value="3160" data-i18n="elevationRb9">RB 9F (約 31.6m)</option>
-                <option value="2800" data-i18n="elevationRb8">RB 8F (約 28.0m)</option>
-                <option value="2440" data-i18n="elevationRb7">RB 7F (約 24.4m)</option>
-                <option value="2080" data-i18n="elevationRb6">RB 6F (約 20.8m)</option>
-                <option value="1720" data-i18n="elevationRb5">RB 5F (約 17.2m)</option>
-                <option value="1360" data-i18n="elevationRb4">RB 4F (約 13.6m)</option>
-                <option value="1080" data-i18n="elevationT4T1_4">T4/T1 4F (約 10.8m)</option>
-                <option value="1000" selected data-i18n="elevationRb3">RB 3F (約 10.0m)</option>
-                <option value="720" data-i18n="elevationT4T1_3">T4/T1 3F (約 7.2m)</option>
-                <option value="500" data-i18n="elevationRb2">RB 2F (約 5.0m)</option>
-                <option value="360" data-i18n="elevationT4T1_2">T4/T1 2F (約 3.6m)</option>
-                <option value="0" data-i18n="elevationGround">1F 平面基準 (0.0m)</option>
-                <option value="-360" data-i18n="elevationBasement">B1 地下層 (-3.6m)</option>
             </select>
         </div>
 
@@ -317,19 +321,17 @@
 
         <div class="panel-section">
             <div class="section-title" data-i18n="startSection">起點</div>
-            <div class="select-group">
-                <select id="start-building"><option value="">大樓</option></select>
-                <select id="start-floor" disabled><option value="">樓層</option></select>
-                <select id="start-space" disabled><option value="">空間</option></select>
+            <div class="space-picker" data-picker="start">
+                <input id="start-space-input" class="space-search" type="text" autocomplete="off" data-i18n-placeholder="spaceSearchPlaceholder" placeholder="搜尋空間名稱或編號">
+                <div id="start-space-menu" class="space-results"></div>
             </div>
         </div>
 
         <div class="panel-section">
             <div class="section-title" data-i18n="endSection">終點</div>
-            <div class="select-group">
-                <select id="end-building"><option value="">大樓</option></select>
-                <select id="end-floor" disabled><option value="">樓層</option></select>
-                <select id="end-space" disabled><option value="">空間</option></select>
+            <div class="space-picker" data-picker="end">
+                <input id="end-space-input" class="space-search" type="text" autocomplete="off" data-i18n-placeholder="spaceSearchPlaceholder" placeholder="搜尋空間名稱或編號">
+                <div id="end-space-menu" class="space-results"></div>
             </div>
         </div>
 
@@ -427,8 +429,10 @@
     const minimapCtx = minimapCanvas.getContext('2d');
 
     const infoBox = document.getElementById('info-box');
-    const startBuilding = document.getElementById('start-building');
-    const endBuilding = document.getElementById('end-building');
+    const startSpaceInput = document.getElementById('start-space-input');
+    const endSpaceInput = document.getElementById('end-space-input');
+    const startSpaceMenu = document.getElementById('start-space-menu');
+    const endSpaceMenu = document.getElementById('end-space-menu');
     const elevationSelect = document.getElementById('elevation-select');
     const toggle3DBtn = document.getElementById('toggle-3d-btn');
     const floorCheckboxesContainer = document.getElementById('floor-checkboxes');
@@ -453,25 +457,17 @@
             viewVertical: "垂直動線",
             viewVolume: "量體模式",
             elevationSection: "2D 剖面基準",
-            elevationRb9: "RB 9F (約 31.6m)",
-            elevationRb8: "RB 8F (約 28.0m)",
-            elevationRb7: "RB 7F (約 24.4m)",
-            elevationRb6: "RB 6F (約 20.8m)",
-            elevationRb5: "RB 5F (約 17.2m)",
-            elevationRb4: "RB 4F (約 13.6m)",
-            elevationT4T1_4: "T4/T1 4F (約 10.8m)",
-            elevationRb3: "RB 3F (約 10.0m)",
-            elevationT4T1_3: "T4/T1 3F (約 7.2m)",
-            elevationRb2: "RB 2F (約 5.0m)",
-            elevationT4T1_2: "T4/T1 2F (約 3.6m)",
-            elevationGround: "1F 平面基準 (0.0m)",
-            elevationBasement: "B1 地下層 (-3.6m)",
             layersSection: "3D 疊層",
             startSection: "起點",
             endSection: "終點",
             buildingPlaceholder: "大樓",
             floorPlaceholder: "樓層",
             spacePlaceholder: "空間",
+            spaceSearchPlaceholder: "搜尋空間名稱或編號",
+            spaceResultPoi: "空間",
+            spaceResultNode: "進階節點",
+            noSpaceResults: "沒有符合的空間",
+            noneFloor: "無",
             buildingSuffix: "大樓",
             routeButton: "開始尋路",
             clearButton: "清除",
@@ -502,6 +498,7 @@
             altDistance: "備用路徑距離：",
             directions: "導航指引",
             routeFail: "導航失敗：",
+            invalidSelection: "請從搜尋結果選擇有效的起點與終點。",
             startSet: "已設定起點：",
             chooseEnd: "請點擊地圖選擇終點。",
             endSet: "已設定終點：",
@@ -525,25 +522,17 @@
             viewVertical: "Vertical Links",
             viewVolume: "Volume Mode",
             elevationSection: "2D Section Datum",
-            elevationRb9: "RB 9F (about 31.6m)",
-            elevationRb8: "RB 8F (about 28.0m)",
-            elevationRb7: "RB 7F (about 24.4m)",
-            elevationRb6: "RB 6F (about 20.8m)",
-            elevationRb5: "RB 5F (about 17.2m)",
-            elevationRb4: "RB 4F (about 13.6m)",
-            elevationT4T1_4: "T4/T1 4F (about 10.8m)",
-            elevationRb3: "RB 3F (about 10.0m)",
-            elevationT4T1_3: "T4/T1 3F (about 7.2m)",
-            elevationRb2: "RB 2F (about 5.0m)",
-            elevationT4T1_2: "T4/T1 2F (about 3.6m)",
-            elevationGround: "1F Plan Datum (0.0m)",
-            elevationBasement: "B1 Basement (-3.6m)",
             layersSection: "3D Layers",
             startSection: "Start",
             endSection: "End",
             buildingPlaceholder: "Building",
             floorPlaceholder: "Floor",
             spacePlaceholder: "Space",
+            spaceSearchPlaceholder: "Search space name or ID",
+            spaceResultPoi: "Space",
+            spaceResultNode: "Advanced node",
+            noSpaceResults: "No matching spaces",
+            noneFloor: "None",
             buildingSuffix: "Building",
             routeButton: "Find Route",
             clearButton: "Clear",
@@ -574,6 +563,7 @@
             altDistance: "Alternative route distance: ",
             directions: "Directions",
             routeFail: "Navigation failed: ",
+            invalidSelection: "Choose a valid start and destination from the search results.",
             startSet: "Start set: ",
             chooseEnd: "Click the map to choose a destination.",
             endSet: "Destination set: ",
@@ -595,32 +585,23 @@
         return currentLang === 'zh' ? `${building} 棟` : `${building} Building`;
     }
 
+    function formatFloorLabel(floorName) {
+        return String(floorName).startsWith('B') ? `${floorName}F` : `${floorName}F`;
+    }
+
     function updateToggle3DButtonLabel() {
         toggle3DBtn.innerHTML = is3DMode ? t('toggleTo2D') : t('toggleTo25D');
     }
 
     function updateSelectPlaceholders() {
-        [
-            ['start-building', 'buildingPlaceholder'],
-            ['end-building', 'buildingPlaceholder'],
-            ['start-floor', 'floorPlaceholder'],
-            ['end-floor', 'floorPlaceholder'],
-            ['start-space', 'spacePlaceholder'],
-            ['end-space', 'spacePlaceholder']
-        ].forEach(([id, key]) => {
-            const select = document.getElementById(id);
-            if (select.options[0] && select.options[0].value === '') select.options[0].textContent = t(key);
-        });
-
-        [startBuilding, endBuilding].forEach(select => {
-            Array.from(select.options).forEach(option => {
-                if (option.value) option.textContent = formatBuildingOption(option.value);
-            });
-        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
 
         document.querySelectorAll('.bldg-group-title[data-bldg]').forEach(title => {
             title.textContent = `${title.dataset.bldg} ${t('buildingSuffix')}`;
         });
+
+        populateElevationSelect();
+        refreshSelectedSpaceLabels();
     }
 
     function setInfoBox(renderer) {
@@ -651,7 +632,10 @@
     let currentBuildingFilter = 'General';
     let activeRoute = 'main';
 
-    let mapOffsetX = 0, mapOffsetY = 150, mapZoom = 1.0, mapRotation = 0;
+    const DEFAULT_3D_MAP_ZOOM = 0.62;
+    const DEFAULT_2D_MAP_ZOOM = 0.74;
+    const DEFAULT_3D_OFFSET_Y = 20;
+    let mapOffsetX = 0, mapOffsetY = DEFAULT_3D_OFFSET_Y, mapZoom = DEFAULT_3D_MAP_ZOOM, mapRotation = 0;
     let mouseX = -1000, mouseY = -1000;
     const zScale = 0.2;
     let clickState = 0, tempStart = null, tempEnd = null;
@@ -719,6 +703,9 @@
         "T4": {"B1": -360, "1": 0, "2": 360, "3": 720, "4": 1080, "5": 1440, "6": 1880, "7": 2160, "8": 2520}
     };
 
+    const ELEVATION_BUILDINGS = ["RB", "RB-STACK", "T1", "T4"];
+    const ELEVATION_BUILDING_LABELS = { "RB": "RB", "RB-STACK": "Stack", "T1": "T1", "T4": "T4" };
+
     let BLDG_SHAPES = {
         "RB": [[230,600],[910,600],[910,900],[230,900]],
         "RB-STACK": [[150,600],[220,600],[220,750],[150,750]],
@@ -728,6 +715,8 @@
     };
 
     let active3DCheckboxes = new Set();
+    let spaceSearchItems = [];
+    let selectedSpaceIds = { start: null, end: null };
 
     document.addEventListener("DOMContentLoaded", () => {
         toggle3DBtn.style.backgroundColor = 'var(--vertical-color)';
@@ -744,10 +733,166 @@
         return BUILDING_HEIGHTS[b] && BUILDING_HEIGHTS[b][f] !== undefined ? BUILDING_HEIGHTS[b][f] : 0;
     }
 
+    function populateElevationSelect() {
+        if (!elevationSelect) return;
+        const previousValue = elevationSelect.value || String(currentElevation);
+        const elevations = Array.from(new Set(ELEVATION_BUILDINGS.flatMap(b => Object.values(BUILDING_HEIGHTS[b] || {})))).sort((a, b) => b - a);
+        elevationSelect.innerHTML = '';
+
+        elevations.forEach(height => {
+            const floors = ELEVATION_BUILDINGS.map(bldg => {
+                const floor = Object.entries(BUILDING_HEIGHTS[bldg] || {}).find(([, z]) => z === height);
+                const label = ELEVATION_BUILDING_LABELS[bldg] || bldg;
+                return `${label}(${floor ? formatFloorLabel(floor[0]) : t('noneFloor')})`;
+            });
+            const meters = (height / 100).toFixed(1);
+            elevationSelect.add(new Option(`${meters}m — ${floors.join(' / ')}`, String(height)));
+        });
+
+        elevationSelect.value = Array.from(elevationSelect.options).some(option => option.value === previousValue) ? previousValue : String(currentElevation);
+    }
+
+    function normalizeSearchText(value) {
+        return String(value || '').trim().toLowerCase();
+    }
+
+    function getSpaceDisplayName(node) {
+        const meta = POI_METADATA_DB[node.id];
+        return meta && meta.name ? meta.name : node.id;
+    }
+
+    function getSpaceInputLabel(node) {
+        return `${getSpaceDisplayName(node)} — ${node.id}`;
+    }
+
+    function getSpaceMetaLabel(node) {
+        const typeLabel = node.type === 'poi' ? t('spaceResultPoi') : t('spaceResultNode');
+        return `${typeLabel} · ${formatBuildingOption(node.building)} ${formatFloorLabel(node.floor_name)}`;
+    }
+
+    function rebuildSpaceSearchItems() {
+        spaceSearchItems = [...poisData, ...nodesData].map(node => ({
+            node,
+            id: node.id,
+            isPoi: node.type === 'poi',
+            searchText: normalizeSearchText(`${node.id} ${getSpaceDisplayName(node)} ${node.building} ${node.floor_name}`)
+        })).sort((a, b) => {
+            if (a.isPoi !== b.isPoi) return a.isPoi ? -1 : 1;
+            return a.id.localeCompare(b.id);
+        });
+    }
+
+    function getPickerElements(type) {
+        return type === 'start'
+            ? { input: startSpaceInput, menu: startSpaceMenu }
+            : { input: endSpaceInput, menu: endSpaceMenu };
+    }
+
+    function selectSpace(type, nodeId) {
+        const item = spaceSearchItems.find(candidate => candidate.id === nodeId);
+        if (!item) return;
+        const { input, menu } = getPickerElements(type);
+        selectedSpaceIds[type] = item.id;
+        input.value = getSpaceInputLabel(item.node);
+        menu.classList.remove('open');
+    }
+
+    function resolveSelectedSpace(type) {
+        const { input } = getPickerElements(type);
+        if (selectedSpaceIds[type] && nodeMap[selectedSpaceIds[type]]) return selectedSpaceIds[type];
+
+        const query = normalizeSearchText(input.value);
+        const exact = spaceSearchItems.find(item => {
+            const node = item.node;
+            return normalizeSearchText(item.id) === query || normalizeSearchText(getSpaceInputLabel(node)) === query;
+        });
+        if (exact) {
+            selectedSpaceIds[type] = exact.id;
+            input.value = getSpaceInputLabel(exact.node);
+            return exact.id;
+        }
+        return '';
+    }
+
+    function renderSpaceResults(type) {
+        const { input, menu } = getPickerElements(type);
+        const query = normalizeSearchText(input.value);
+        const maxResults = 30;
+        const poiMatches = spaceSearchItems.filter(item => item.isPoi && (!query || item.searchText.includes(query))).slice(0, maxResults);
+        const nodeMatches = query.length >= 2
+            ? spaceSearchItems.filter(item => !item.isPoi && item.searchText.includes(query)).slice(0, Math.max(0, maxResults - poiMatches.length))
+            : [];
+        const matches = [...poiMatches, ...nodeMatches];
+
+        menu.innerHTML = '';
+        if (matches.length === 0) {
+            const empty = document.createElement('div');
+            empty.className = 'space-result-empty';
+            empty.textContent = t('noSpaceResults');
+            menu.appendChild(empty);
+        } else {
+            let currentGroup = '';
+            matches.forEach(item => {
+                const group = item.isPoi ? t('spaceResultPoi') : t('spaceResultNode');
+                if (group !== currentGroup) {
+                    currentGroup = group;
+                    const groupEl = document.createElement('div');
+                    groupEl.className = 'space-result-group';
+                    groupEl.textContent = group;
+                    menu.appendChild(groupEl);
+                }
+
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'space-result';
+                button.dataset.nodeId = item.id;
+                button.innerHTML = `<span class="space-result-title"></span><span class="space-result-meta"></span>`;
+                button.querySelector('.space-result-title').textContent = getSpaceDisplayName(item.node);
+                button.querySelector('.space-result-meta').textContent = `${item.id} · ${getSpaceMetaLabel(item.node)}`;
+                button.addEventListener('mousedown', e => {
+                    e.preventDefault();
+                    selectSpace(type, item.id);
+                });
+                menu.appendChild(button);
+            });
+        }
+        menu.classList.add('open');
+    }
+
+    function initSpaceSearch() {
+        rebuildSpaceSearchItems();
+        ['start', 'end'].forEach(type => {
+            const { input, menu } = getPickerElements(type);
+            input.addEventListener('input', () => {
+                selectedSpaceIds[type] = null;
+                renderSpaceResults(type);
+            });
+            input.addEventListener('focus', () => renderSpaceResults(type));
+            input.addEventListener('blur', () => setTimeout(() => menu.classList.remove('open'), 120));
+            input.addEventListener('keydown', e => {
+                if (e.key !== 'Enter') return;
+                const firstResult = menu.querySelector('.space-result');
+                if (firstResult) {
+                    e.preventDefault();
+                    selectSpace(type, firstResult.dataset.nodeId);
+                }
+            });
+        });
+    }
+
+    function refreshSelectedSpaceLabels() {
+        ['start', 'end'].forEach(type => {
+            const selectedId = selectedSpaceIds[type];
+            if (!selectedId) return;
+            const item = spaceSearchItems.find(candidate => candidate.id === selectedId);
+            if (item) getPickerElements(type).input.value = getSpaceInputLabel(item.node);
+        });
+    }
+
     function changeZoom(factor) { mapZoom = Math.min(Math.max(mapZoom * factor, 0.2), 5); drawMap(); }
     function setAngle(angleRadian) { mapRotation = angleRadian; drawMap(); }
     function changeAngle(deltaRadian) { mapRotation += deltaRadian; drawMap(); }
-    function resetCamera() { mapZoom = 1; mapOffsetX = 0; mapOffsetY = is3DMode? 150 : 0; mapRotation = 0; drawMap(); }
+    function resetCamera() { mapZoom = is3DMode ? DEFAULT_3D_MAP_ZOOM : DEFAULT_2D_MAP_ZOOM; mapOffsetX = 0; mapOffsetY = is3DMode ? DEFAULT_3D_OFFSET_Y : 0; mapRotation = 0; drawMap(); }
 
     function setViewMode(mode) {
         currentViewMode = mode;
@@ -783,7 +928,7 @@
             // 如果後端有吐出自定義 SVG 樓板邊界，則取代預設形狀
             if (data.slabs) BLDG_SHAPES = data.slabs;
             [...nodesData, ...poisData].forEach(n => { n.z = getNodeElevation(n.building, n.floor_name); nodeMap[n.id] = n; });
-            generateGroupedFloorCheckboxes(); initThreeStageDropdowns(); drawMap();
+            generateGroupedFloorCheckboxes(); initSpaceSearch(); drawMap();
         })
         .catch(e => { drawMap(); });
 
@@ -843,42 +988,12 @@
         } else {
             updateToggle3DButtonLabel(); toggle3DBtn.style.backgroundColor = 'var(--primary)';
             document.getElementById('elevation-panel').style.display = 'block'; document.getElementById('layer-toggle-panel').style.display = 'none';
+            currentElevation = 0;
+            elevationSelect.value = String(currentElevation);
             resetCamera();
         }
         drawMap();
     });
-
-    function initThreeStageDropdowns() {
-        const buildings = new Set();
-        [...poisData, ...nodesData].forEach(n => { if(n.building && n.building !== "Unknown") buildings.add(n.building); });
-        Array.from(buildings).sort().forEach(b => {
-            startBuilding.add(new Option(formatBuildingOption(b), b)); endBuilding.add(new Option(formatBuildingOption(b), b));
-        });
-        startBuilding.addEventListener('change', () => updateFloors('start')); document.getElementById('start-floor').addEventListener('change', () => updateSpaces('start'));
-        endBuilding.addEventListener('change', () => updateFloors('end')); document.getElementById('end-floor').addEventListener('change', () => updateSpaces('end'));
-    }
-
-    function updateFloors(type, preF = null, preS = null) {
-        const bSelect = type === 'start' ? startBuilding : endBuilding;
-        const fSelect = document.getElementById(`${type}-floor`); const sSelect = document.getElementById(`${type}-space`);
-        fSelect.innerHTML = `<option value="">${t('floorPlaceholder')}</option>`; sSelect.innerHTML = `<option value="">${t('spacePlaceholder')}</option>`; sSelect.disabled = true;
-        if (!bSelect.value) { fSelect.disabled = true; return; }
-        const floors = new Set();
-        [...poisData, ...nodesData].forEach(n => { if(n.building === bSelect.value) floors.add(n.floor_name); });
-        Array.from(floors).sort((a,b) => (b.startsWith('B')?-parseInt(b.substring(1)):parseFloat(b)) - (a.startsWith('B')?-parseInt(a.substring(1)):parseFloat(a))).forEach(f => fSelect.add(new Option(`${f}F`, f)));
-        fSelect.disabled = false;
-        if(preF) { fSelect.value = preF; updateSpaces(type, preS); }
-    }
-
-    function updateSpaces(type, preS = null) {
-        const bSelect = type === 'start' ? startBuilding : endBuilding;
-        const fSelect = document.getElementById(`${type}-floor`); const sSelect = document.getElementById(`${type}-space`);
-        sSelect.innerHTML = `<option value="">${t('spacePlaceholder')}</option>`;
-        if (!bSelect.value || !fSelect.value) { sSelect.disabled = true; return; }
-        const filtered = [...poisData, ...nodesData].filter(n => n.building === bSelect.value && n.floor_name === fSelect.value).sort((a, b) => a.id.localeCompare(b.id));
-        filtered.forEach(p => sSelect.add(new Option(`${p.id}${p.type === 'poi'?' 📍':''}`, p.id)));
-        sSelect.disabled = false; if(preS) sSelect.value = preS;
-    }
 
     const COS_ISO = Math.cos(Math.PI / 6), SIN_ISO = Math.sin(Math.PI / 6);
 
@@ -1066,9 +1181,14 @@
 
         slabsToDraw.forEach(slab => {
             let finalColor = slab.color;
-            if (slab.f && slab.f.includes('B')) {
-                if (slab.b === 'RB' || slab.b === 'RB-STACK') finalColor = 'rgba(100, 160, 200, 0.45)';
-                if (slab.b === 'T4') finalColor = 'rgba(100, 190, 100, 0.45)';
+            if (slab.f === '1') {
+                if (slab.b === 'RB' || slab.b === 'RB-STACK') finalColor = 'rgba(100, 160, 200, 0.40)';
+                if (slab.b === 'T4') finalColor = 'rgba(100, 190, 100, 0.40)';
+                if (slab.b === 'T1') finalColor = 'rgba(255, 210, 90, 0.40)';
+                if (slab.b === 'AU') finalColor = 'rgba(251, 146, 60, 0.40)';
+            } else if (slab.f && slab.f.includes('B')) {
+                if (slab.b === 'RB' || slab.b === 'RB-STACK') finalColor = 'rgba(100, 160, 200, 0.40)';
+                if (slab.b === 'T4') finalColor = 'rgba(100, 190, 100, 0.40)';
             }
 
             let isBldgActive = currentBuildingFilter === 'General' || slab.b === currentBuildingFilter || (currentBuildingFilter === 'RB' && slab.b === 'RB-STACK');
@@ -1286,14 +1406,20 @@
     }
 
     document.getElementById('route-btn').addEventListener('click', () => {
-        const s = document.getElementById('start-space').value, e = document.getElementById('end-space').value;
+        const s = resolveSelectedSpace('start'), e = resolveSelectedSpace('end');
         if(s && e) { tempStart = s; tempEnd = e; fetchRoute(s, e); }
+        else {
+            if (!s) renderSpaceResults('start');
+            if (!e) renderSpaceResults('end');
+            setInfoBox(() => t('invalidSelection'));
+        }
     });
 
     document.getElementById('clear-btn').addEventListener('click', () => {
         currentPath = []; altPath = []; tempStart = null; tempEnd = null; clickState = 0; routeSelector.style.display = 'none';
-        startBuilding.value = ""; document.getElementById('start-floor').disabled = true; document.getElementById('start-space').disabled = true;
-        endBuilding.value = ""; document.getElementById('end-floor').disabled = true; document.getElementById('end-space').disabled = true;
+        selectedSpaceIds = { start: null, end: null };
+        startSpaceInput.value = ""; endSpaceInput.value = "";
+        startSpaceMenu.classList.remove('open'); endSpaceMenu.classList.remove('open');
         if (is3DMode) document.querySelectorAll('#floor-checkboxes input').forEach(cb => { cb.checked = true; active3DCheckboxes.add(cb.value); });
         updateSelectPlaceholders();
         setInfoBox(() => t('infoInitial'));
@@ -1365,13 +1491,13 @@
 
         if (closestNode) {
             if (clickState === 0) {
-                tempStart = closestNode.id; startBuilding.value = closestNode.building;
-                updateFloors('start', closestNode.floor_name, tempStart);
+                tempStart = closestNode.id;
+                selectSpace('start', tempStart);
                 setInfoBox(() => `${t('startSet')}<b>${tempStart}</b>\n${t('chooseEnd')}`);
                 clickState = 1; drawMap();
             } else if (clickState === 1) {
-                tempEnd = closestNode.id; endBuilding.value = closestNode.building;
-                updateFloors('end', closestNode.floor_name, tempEnd);
+                tempEnd = closestNode.id;
+                selectSpace('end', tempEnd);
                 setInfoBox(() => `${t('endSet')}<b>${tempEnd}</b>\n${t('calculating')}`);
                 clickState = 0; fetchRoute(tempStart, tempEnd);
             }

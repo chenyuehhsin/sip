@@ -282,13 +282,36 @@
 
     "RB-Stack書庫-B1F水平動線": [
       ["RB-Stack-B100-1", "RB-Stack-SD-B1F", "backbone"]
-      
+    ],
+    "RB-Stack書庫-1F水平動線": [
+      ["RB-Stack-B100-1", "RB-Stack-SD-1F", "backbone"],
+      ["RB-Stack-B100-1", "RB-Stack-E2-1F", "backbone"]
+    ],
+    "RB-Stack書庫-2F水平動線": [
+      ["RB-Stack-B200-1", "RB-Stack-SD-2F", "backbone"],
+      ["RB-Stack-B200-1", "RB-Stack-E2-2F", "backbone"]
+    ],
+    "RB-Stack書庫-3F水平動線": [
+      ["RB-Stack-B300-1", "RB-Stack-SD-3F", "backbone"],
+      ["RB-Stack-B300-1", "RB-Stack-E2-3F", "backbone"]
     ],
     "RB-Stack書庫-4F水平動線": [
       ["RB-SA-3F", "RB-Stack-400-2", "backbone"],
       ["RB-Stack-400-1", "RB-Stack-400-2", "backbone"],
       ["RB-Stack-SD-4F", "RB-Stack-400-1", "backbone"],
       ["RB-Stack-E2-4F", "RB-Stack-400-1", "backbone"]
+    ],
+    "RB-Stack書庫-5F水平動線": [
+      ["RB-Stack-B500-1", "RB-Stack-SD-5F", "backbone"],
+      ["RB-Stack-B500-1", "RB-Stack-E2-5F", "backbone"]
+    ],
+    "RB-Stack書庫-6F水平動線": [
+      ["RB-Stack-B600-1", "RB-Stack-SD-6F", "backbone"],
+      ["RB-Stack-B600-1", "RB-Stack-E2-6F", "backbone"]
+    ],
+    "RB-Stack書庫-7F水平動線": [
+      ["RB-Stack-B700-1", "RB-Stack-SD-7F", "backbone"],
+      ["RB-Stack-B700-1", "RB-Stack-E2-7F", "backbone"]
     ],
 
     "RB-Stack書庫-8F水平動線": [
@@ -369,7 +392,6 @@
       ["T4-100-1", "T4-100-5", "backbone"],
       ["T4-100-1", "T4-100-6", "backbone"],
       ["T4-100-1", "T4-100-2", "backbone"],
-      ["T4-100-2", "T4-100-4", "backbone"],
       ["T4-100-2", "T4-100-5", "backbone"],
       ["T4-100-2", "T4-100-6", "backbone"],
       ["T4-100-2", "T4-100-3", "backbone"],

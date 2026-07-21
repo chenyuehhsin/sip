@@ -37,10 +37,19 @@ def extract_building_and_floor(node_id, default_building, default_floor, default
     floor_name = default_floor_name
 
     # 🌟 A. 優先檢查跨棟傳送門命名 (例如 C-T1-4F-to-RB-3F)
-    match_bridge = re.match(r'^C-(.+?)-([A-Z0-9\-]+?)F-to-', node_id, re.IGNORECASE)
+    # 只用 "-to-" 前面的端點判斷，並從端點尾端取樓層，避免 RB-Stack-7F
+    # 被拆成 building=RB / floor=Stack-7 之後退回 1F。
+    match_bridge = re.match(r'^C-(.+?)-to-', node_id, re.IGNORECASE)
     if match_bridge:
-        building = match_bridge.group(1).upper()
-        floor_str = match_bridge.group(2).upper()
+        from_endpoint = match_bridge.group(1)
+        match_from_floor = re.match(r'^(.+)-([B]?\d+(?:-\d+)?)F$', from_endpoint, re.IGNORECASE)
+        if not match_from_floor:
+            return building, floor, floor_name
+
+        parsed_building = match_from_floor.group(1).upper()
+        floor_str = match_from_floor.group(2).upper()
+
+        building = parsed_building
 
         if floor_str == "B1" or floor_str == "-1":
             floor = -1.0

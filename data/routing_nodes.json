@@ -2,9 +2,9 @@
   "nodes": [
     {
       "id": "C-RB-Stack-B1F-to-RB-B1F",
-      "building": "RB",
-      "floor": 1.0,
-      "floor_name": "1",
+      "building": "RB-STACK",
+      "floor": -1.0,
+      "floor_name": "B1",
       "x": 780,
       "y": 749,
       "color": "#10b981",
@@ -105,7 +105,7 @@
       "building": "RB-STACK",
       "floor": -1.0,
       "floor_name": "B1",
-      "x": 884,
+      "x": 882,
       "y": 745,
       "color": "#0ea5e9",
       "type": "routing_node"
@@ -255,8 +255,8 @@
       "building": "RB-STACK",
       "floor": -1.0,
       "floor_name": "B1",
-      "x": 903,
-      "y": 785,
+      "x": 884,
+      "y": 789,
       "color": "#ff5555",
       "type": "routing_node"
     },
@@ -2082,9 +2082,9 @@
     },
     {
       "id": "C-RB-Stack-7F-to-RB-5F",
-      "building": "RB",
-      "floor": 1.0,
-      "floor_name": "1",
+      "building": "RB-STACK",
+      "floor": 7.0,
+      "floor_name": "7",
       "x": 784,
       "y": 723,
       "color": "#10b981",
@@ -2621,16 +2621,6 @@
       "type": "routing_node"
     },
     {
-      "id": "RB-Stack-SD-9F",
-      "building": "RB-STACK",
-      "floor": 9.0,
-      "floor_name": "9",
-      "x": 876,
-      "y": 776,
-      "color": "#0ea5e9",
-      "type": "routing_node"
-    },
-    {
       "id": "RB-SA-7F",
       "building": "RB",
       "floor": 7.0,
@@ -2757,16 +2747,6 @@
       "floor_name": "8",
       "x": 742,
       "y": 730,
-      "color": "#0ea5e9",
-      "type": "routing_node"
-    },
-    {
-      "id": "RB-Stack-SD-10F",
-      "building": "RB-STACK",
-      "floor": 10.0,
-      "floor_name": "10",
-      "x": 852,
-      "y": 744,
       "color": "#0ea5e9",
       "type": "routing_node"
     },
@@ -3157,7 +3137,7 @@
     {
       "from": "C-RB-Stack-B1F-to-RB-B1F",
       "to": "RB-Stack-B100-1",
-      "distance": 11.24,
+      "distance": 9.77,
       "type": "bridge"
     },
     {
@@ -4181,21 +4161,21 @@
       "type": "stair"
     },
     {
-      "from": "RB-Stack-SD-8F",
-      "to": "RB-Stack-SD-9F",
-      "distance": 10.0,
-      "type": "stair"
-    },
-    {
-      "from": "RB-Stack-SD-9F",
-      "to": "RB-Stack-SD-10F",
-      "distance": 10.0,
-      "type": "stair"
+      "from": "RB-Stack-B100-1",
+      "to": "RB-Stack-SD-B1F",
+      "distance": 3.86,
+      "type": "backbone"
     },
     {
       "from": "RB-Stack-B100-1",
-      "to": "RB-Stack-SD-B1F",
-      "distance": 3.88,
+      "to": "RB-Stack-SD-1F",
+      "distance": 3.68,
+      "type": "backbone"
+    },
+    {
+      "from": "RB-Stack-B100-1",
+      "to": "RB-Stack-E2-1F",
+      "distance": 2.82,
       "type": "backbone"
     },
     {
@@ -4568,12 +4548,6 @@
       "from": "T4-100-1",
       "to": "T4-100-2",
       "distance": 42.1,
-      "type": "backbone"
-    },
-    {
-      "from": "T4-100-2",
-      "to": "T4-100-4",
-      "distance": 40.79,
       "type": "backbone"
     },
     {

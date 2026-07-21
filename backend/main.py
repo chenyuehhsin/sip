@@ -128,6 +128,7 @@ def get_shortest_path(start: str, end: str):
         # 如果備選路線太繞路(超過 1.5 倍)或是跟主路線一樣，就作廢
         if alt_dist > main_dist * 1.5 or alt_path == main_path:
             alt_path = []
+            alt_dist = None
 
     # 3. 產生文字導航
     directions = [f"🚶 從 {start} 出發"]
@@ -141,6 +142,9 @@ def get_shortest_path(start: str, end: str):
             if node_floors.get(curr) != node_floors.get(prev):
                 directions.append(f"🪜 經由 {curr} 轉換樓層")
     directions.append(f"🎯 抵達終點 {end}")
+
+    if not alt_path:
+        alt_dist = None
 
     return {
         "path": main_path,

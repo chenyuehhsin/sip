@@ -1,0 +1,55 @@
+id,name_zh,name_en,category,department,faculty_leads,occupants,aliases,description,public_access,source,status
+RB-505,圖像暨視訊多媒體實驗室,,laboratory,資訊工程系,鍾國亮,,RB505,數位影像處理,restricted,official_website,active
+RB-306-2,無線通訊與網路工程實驗室,,laboratory,資訊工程系,馮輝文,,RB306-2,,restricted,official_website,active
+RB-308-1,高效能計算實驗室,,laboratory,資訊工程系,黃元欣,,RB308-1,編譯器、平行處理、程式語言,restricted,official_website,active
+RB-506,GAME Lab,GAME Lab,laboratory,資訊工程系,戴文凱,,RB-506,,restricted,official_website,active
+RB-306-1,即時暨嵌入式系統實驗室,RTES Lab,laboratory,資訊工程系,謝仁偉,,RB306-1,,restricted,official_website,active
+RB-304-3,機器學習實驗室,,laboratory,資訊工程系,鮑興國,,RB304-3,,restricted,official_website,active
+RB-304-2,系統操控與網路安全實驗室,,laboratory,資訊工程系,鄧惟中,,RB304-2,,restricted,official_website,active
+RB-308-2,多媒體暨視覺運算實驗室,,laboratory,資訊工程系,花凱龍,,RB308-2,,restricted,official_website,active
+IA-504,電腦遊戲動畫圖學實驗室,,laboratory,資訊工程系,賴祐吉,,IA504,,restricted,official_website,active
+RB-507,連結性實驗室,,laboratory,資訊工程系,鄭欣明,,RB507,,restricted,official_website,active
+E1-201-3,行動計算與網路實驗室,,laboratory,資訊工程系,金台齡,,E1-201-3,,restricted,official_website,active
+RB-303,空間計算實驗室,,laboratory,資訊工程系,項天瑞,,RB303,,restricted,official_website,active
+TR-520,知識探索暨資料探勘實驗室,,laboratory,資訊工程系,戴碧如,,TR520,,restricted,official_website,active
+RB-306-3,智慧型資料庫實驗室,,laboratory,資訊工程系,吳怡樂,,RB306-3,,restricted,official_website,active
+LB-002,電腦輔助設計實驗室,,laboratory,資訊工程系,劉一宇,,LB-002,,restricted,official_website,active
+RB-307-1,雲端計算暨網路實驗室,,laboratory,資訊工程系,沈上翔,,RB307-1,,restricted,official_website,active
+E1-222-3,自然語言處理實驗室,NLPLab,laboratory,資訊工程系,陳冠宇,,E1-222-3,,restricted,official_website,active
+RB-308-3,資料探勘與社群網路分析實驗室,DSLab,laboratory,資訊工程系,陳怡伶,,RB308-3,社群網路分析、資料探勘,restricted,official_website,active
+E1-201-1,下世代通訊與網路實驗室,,laboratory,資訊工程系,周詩梵,,E1-201-1,,restricted,official_website,active
+E1-201-5,資訊安全與人工智慧實驗室,,laboratory,資訊工程系,王紹睿,,E1-201-5,,restricted,official_website,active
+RB-307-3,unknown,,laboratory,資訊工程系,林佳志,,RB307-3,,restricted,official_website,unknown
+RB-307-2,儲存暨系統設計實驗室,,laboratory,資訊工程系,連翊涵,,RB307-2,,restricted,official_website,active
+E1-201-6,電腦圖學實驗室,,laboratory,資訊工程系,蕭凱文,,E1-201-6,,restricted,official_website,active
+RB-507-1,現代網路實驗室,,laboratory,資訊工程系,賓拿雅,,RB507-1,,restricted,official_website,active
+T4-501,鍾國亮老師辦公室,,office,資訊工程系,,鍾國亮,T4-501,klchung01@gmail.com; 深度學習理論與應用、影像處理與視訊壓縮、彩色影像處理與應用,restricted,official_website,active
+T4-506,馮輝文老師辦公室,,office,資訊工程系,,馮輝文,T4-506,hwferng@csie.ntust.edu.tw; 深度強化學習、元學習、資訊安全、網路安全,restricted,official_website,active
+T4-512,黃元欣老師辦公室,,office,資訊工程系,,黃元欣,T4-512,shin@csie.ntust.edu.tw,restricted,official_website,active
+RB-500,戴文凱老師辦公室,,office,資訊工程系,,戴文凱,RB500,wktai@mail.ntust.edu.tw ,restricted,official_website,active
+T4-509,謝仁偉老師辦公室,,office,資訊工程系,,謝仁偉,T4-509,jenwei@mail.ntust.edu.tw,restricted,official_website,active
+T4-505,鮑興國老師辦公室,,office,資訊工程系,,鮑興國,T4-505,pao@mail.ntust.edu.tw,restricted,official_website,active
+T4-502,鄧惟中老師辦公室,,office,資訊工程系,,鄧惟中,T4-502,weichung@mail.ntust.edu.tw,restricted,official_website,active
+T4-511,花凱龍老師辦公室,,office,資訊工程系,,花凱龍,T4-511,hua@mail.ntust.edu.tw,restricted,official_website,active
+T4-305-1,賴祐吉老師辦公室,,office,資訊工程系,,賴祐吉,T4-305-1,yu-chi@mail.ntust.edu.tw,restricted,official_website,active
+T4-510,鄭欣明老師辦公室,,office,資訊工程系,,鄭欣明,T4-510,smcheng@mail.ntust.edu.tw,restricted,official_website,active
+T4-504,金台齡老師辦公室,,office,資訊工程系,,金台齡,T4-504,tchin@mail.ntust.edu.tw,restricted,official_website,active
+T4-513,項天瑞老師辦公室,,office,資訊工程系,,項天瑞,T4-513,trhsiang@mail.ntust.edu.tw,restricted,official_website,active
+T4-514,戴碧如老師辦公室,,office,資訊工程系,,戴碧如,T4-514,brdai@csie.ntust.edu.tw,restricted,official_website,active
+RB-503-1,吳怡樂老師辦公室,,office,資訊工程系,,吳怡樂,RB503-1,ywu@csie.ntust.edu.tw,restricted,official_website,active
+T4-305-3,姚智原老師辦公室,,office,資訊工程系,,姚智原,T4-305-3,cy.yao@mail.ntust.edu.tw,restricted,official_website,active
+T4-305-2,劉一宇老師辦公室,,office,資訊工程系,,劉一宇,T4-305-2,yyliu@mail.ntust.edu.tw  ,restricted,official_website,active
+RB-503,沈上翔老師辦公室,,office,資訊工程系,,沈上翔,RB-503,sshen@csie.ntust.edu.tw,restricted,official_website,active
+T4-508,陳冠宇老師辦公室,,office,資訊工程系,,陳冠宇,T4-508,kychen@mail.ntust.edu.tw ,restricted,official_website,active
+T4-503,陳怡伶老師辦公室,,office,資訊工程系,,陳怡伶,T4-503,yiling@mail.ntust.edu.tw,restricted,official_website,active
+T4-515,周詩梵老師辦公室,,office,資訊工程系,,周詩梵,T4-515,sfchou@mail.ntust.edu.tw ,restricted,official_website,active
+E1-222-4,王紹睿老師辦公室,,office,資訊工程系,,王紹睿,E1-222-4,shaojuiwang@mail.ntust.edu.tw,restricted,official_website,active
+RB-501,林佳志老師辦公室,,office,資訊工程系,,林佳志,RB501,cclin@mail.ntust.edu.tw,restricted,official_website,active
+RB-502,連翊涵老師辦公室,,office,資訊工程系,,連翊涵,RB502,yhlien@mail.ntust.edu.tw,restricted,official_website,active
+T4-507,蕭凱文老師辦公室,,office,資訊工程系,,蕭凱文,T4-507,kevinhsiao@mail.ntust.edu.tw,restricted,official_website,active
+RB-309,辦公室,,office,資訊工程系,,賓拿雅,RB309; 賓拿雅老師辦公室,bkar@mail.ntust.edu.tw ,restricted,official_website,active
+T4-518,資訊工程系系辦公室,,department_office,資訊工程系,,陳美怡; 邵美玲,T4-518,服務時間 : 08:20-17:00,public,official_website,active
+T4-516,資工系研討室,,meeting_room,資訊工程系,,,T4-516,需登入系統借用,restricted,official_website,closed
+T4-517,資工系研討室,,meeting_room,資訊工程系,,,T4-517,需登入系統借用,restricted,official_website,closed
+T4-306,資工系研討室,,meeting_room,資訊工程系,,,T4-306,需登入系統借用,restricted,official_website,closed
+RB-305,資工系研討室,,meeting_room,資訊工程系,,,RB305,需登入系統借用,restricted,official_website,closed

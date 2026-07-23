@@ -14,7 +14,7 @@ print("🚀 啟動 SIP 跨樓層雙向尋路引擎 (含備選路徑)...")
 try:
     with open('data/routing_nodes.json', 'r', encoding='utf-8') as f:
         routing_data = json.load(f)
-    with open('data/pois.json', 'r', encoding='utf-8') as f:
+    with open('data/pois_enriched.json', 'r', encoding='utf-8') as f:
         pois_data = json.load(f)
     with open('data/slabs.json', 'r', encoding='utf-8') as f:
         slabs_data = json.load(f)

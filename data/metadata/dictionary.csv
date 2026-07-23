@@ -1,0 +1,16 @@
+category,display_zh,department,public_access,source,status
+classroom,教室,資訊工程系,public,floor_plan,active
+laboratory,實驗室,設計系,restricted,official_website,planned
+office,辦公室,建築系,unknown,field_observation,closed
+department_office,系所辦公室,應用外語系,,temporary_assumption,unknown
+meeting_room,會議室,,,,
+restroom,廁所,,,,
+accessible_restroom,無障礙廁所,,,,
+elevator,電梯,,,,
+stair,樓梯,,,,
+entrance,出入口,,,,
+water_fountain,飲水機,,,,
+library,圖書館,,,,
+bridge,跨棟通道,,,,
+service,公共服務設施,,,,
+other,其他,,,,

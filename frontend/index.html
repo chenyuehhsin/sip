@@ -149,6 +149,37 @@
         .hover-tooltip .tt-meta { display: flex; flex-direction: column; gap: 6px; color: var(--text-muted); }
         .hover-tooltip .tt-meta span.tt-val { color: var(--text-main); font-weight: 700; }
 
+        .poi-detail-card {
+            position: absolute; left: 18px; top: 18px; z-index: 35;
+            width: min(360px, calc(100% - 124px)); max-height: calc(100% - 36px);
+            display: flex; flex-direction: column; gap: 12px;
+            padding: 14px; border-radius: 14px;
+            background: rgba(255,255,255,0.96); border: 1px solid rgba(47,125,104,0.16);
+            box-shadow: var(--shadow-md); backdrop-filter: blur(14px);
+            overflow: auto;
+        }
+        .poi-detail-card.hidden { display: none; }
+        .poi-detail-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+        .poi-detail-title { margin: 0; color: var(--text-main); font-size: 1.02rem; font-weight: 880; line-height: 1.3; }
+        .poi-detail-close {
+            flex: 0 0 auto; width: 32px; height: 32px; border-radius: 9px;
+            border: 1px solid rgba(47,125,104,0.12); background: rgba(244,249,246,0.9);
+            color: var(--text-muted); cursor: pointer; font-size: 1.1rem; line-height: 1;
+        }
+        .poi-detail-close:hover { color: var(--primary); background: var(--primary-soft); }
+        .poi-detail-fields { display: grid; gap: 8px; }
+        .poi-detail-row { display: grid; gap: 2px; }
+        .poi-detail-label { color: var(--text-faint); font-size: 0.68rem; font-weight: 850; letter-spacing: 0.08em; text-transform: uppercase; }
+        .poi-detail-value { color: var(--text-main); font-size: 0.84rem; font-weight: 700; line-height: 1.35; overflow-wrap: anywhere; }
+        .poi-detail-description { font-weight: 620; color: var(--text-muted); }
+        .poi-detail-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .poi-detail-action {
+            min-height: 36px; border: 1px solid rgba(47,125,104,0.13); border-radius: 10px;
+            background: #f9fcfa; color: var(--primary); font-size: 0.82rem; font-weight: 820;
+            cursor: pointer;
+        }
+        .poi-detail-action:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
         /* 🌟 Item 2: 分群直列相機控制 (4 / 4 / 4 / 1) */
         .camera-controls-wrapper {
             position: absolute; top: 28px; right: 18px; z-index: 20;
@@ -409,9 +440,18 @@
 
         <div id="hover-tooltip" class="hover-tooltip">
             <div class="tt-title" id="tt-name">Name</div>
-            <div class="tt-meta">
-                <div><span data-i18n="tooltipId">編號: </span><span class="tt-val" id="tt-id">ID</span></div>
-                <div><span data-i18n="tooltipDept">單位: </span><span class="tt-val" id="tt-dept">Dept</span></div>
+            <div class="tt-meta" id="tt-meta"></div>
+        </div>
+
+        <div id="poi-detail-card" class="poi-detail-card hidden">
+            <div class="poi-detail-header">
+                <h2 id="poi-detail-title" class="poi-detail-title"></h2>
+                <button id="poi-detail-close" class="poi-detail-close" type="button" aria-label="Close">×</button>
+            </div>
+            <div id="poi-detail-fields" class="poi-detail-fields"></div>
+            <div class="poi-detail-actions">
+                <button id="poi-set-start" class="poi-detail-action" type="button" data-i18n="poiSetStart">設為起點</button>
+                <button id="poi-set-end" class="poi-detail-action" type="button" data-i18n="poiSetEnd">設為終點</button>
             </div>
         </div>
 
@@ -437,9 +477,16 @@
     const toggle3DBtn = document.getElementById('toggle-3d-btn');
     const floorCheckboxesContainer = document.getElementById('floor-checkboxes');
     const hoverTooltip = document.getElementById('hover-tooltip');
+    const hoverTooltipMeta = document.getElementById('tt-meta');
     const routeSelector = document.getElementById('route-selector');
     const minimapWrapper = document.getElementById('minimap-wrapper');
     const languageToggle = document.getElementById('language-toggle');
+    const poiDetailCard = document.getElementById('poi-detail-card');
+    const poiDetailTitle = document.getElementById('poi-detail-title');
+    const poiDetailFields = document.getElementById('poi-detail-fields');
+    const poiDetailClose = document.getElementById('poi-detail-close');
+    const poiSetStartBtn = document.getElementById('poi-set-start');
+    const poiSetEndBtn = document.getElementById('poi-set-end');
 
     const I18N = {
         zh: {
@@ -490,7 +537,8 @@
             mainRoute: "主路線",
             altRoute: "備選路線",
             tooltipId: "編號: ",
-            tooltipDept: "單位: ",
+            tooltipCategory: "分類: ",
+            tooltipLocation: "位置: ",
             routeSolving: "正在進行跨樓層路徑解算...",
             routeDisconnected: "路網無法連通。",
             routeSuccess: "尋路解算成功",
@@ -503,9 +551,18 @@
             chooseEnd: "請點擊地圖選擇終點。",
             endSet: "已設定終點：",
             calculating: "路徑計算中...",
-            genericLandmark: "空間地標 (無屬性)",
             noValue: "-",
-            groundLevel: "Ground Level (Z=0)"
+            groundLevel: "Ground Level (Z=0)",
+            poiSetStart: "設為起點",
+            poiSetEnd: "設為終點",
+            poiId: "編號",
+            poiLocation: "位置",
+            poiCategory: "分類",
+            poiDepartment: "單位",
+            poiFacultyLeads: "負責教師",
+            poiOccupants: "使用者",
+            poiDescription: "說明",
+            poiPublicAccess: "開放狀態"
         },
         en: {
             documentTitle: "Smart Indoor Navigation System (SIP) | 3D BIM Dashboard",
@@ -555,7 +612,8 @@
             mainRoute: "Main Route",
             altRoute: "Alternative Route",
             tooltipId: "ID: ",
-            tooltipDept: "Unit: ",
+            tooltipCategory: "Category: ",
+            tooltipLocation: "Location: ",
             routeSolving: "Solving cross-floor route...",
             routeDisconnected: "The route network is not connected.",
             routeSuccess: "Route solved",
@@ -568,9 +626,18 @@
             chooseEnd: "Click the map to choose a destination.",
             endSet: "Destination set: ",
             calculating: "Calculating route...",
-            genericLandmark: "Space landmark (no attributes)",
             noValue: "-",
-            groundLevel: "Ground Level (Z=0)"
+            groundLevel: "Ground Level (Z=0)",
+            poiSetStart: "Set Start",
+            poiSetEnd: "Set Destination",
+            poiId: "ID",
+            poiLocation: "Location",
+            poiCategory: "Category",
+            poiDepartment: "Department",
+            poiFacultyLeads: "Faculty Leads",
+            poiOccupants: "Occupants",
+            poiDescription: "Description",
+            poiPublicAccess: "Public Access"
         }
     };
 
@@ -619,6 +686,7 @@
         updateToggle3DButtonLabel();
         updateSelectPlaceholders();
         infoBox.innerHTML = renderInfoBox();
+        renderPoiDetailCard();
         drawMap();
     }
 
@@ -717,6 +785,7 @@
     let active3DCheckboxes = new Set();
     let spaceSearchItems = [];
     let selectedSpaceIds = { start: null, end: null };
+    let selectedPoiForCard = null;
 
     document.addEventListener("DOMContentLoaded", () => {
         toggle3DBtn.style.backgroundColor = 'var(--vertical-color)';
@@ -887,6 +956,121 @@
             const item = spaceSearchItems.find(candidate => candidate.id === selectedId);
             if (item) getPickerElements(type).input.value = getSpaceInputLabel(item.node);
         });
+    }
+
+    function escapeHtml(value) {
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function isBlankPoiValue(value) {
+        if (value === null || value === undefined) return true;
+        if (Array.isArray(value)) return value.filter(item => String(item || '').trim()).length === 0;
+        return String(value).trim() === '';
+    }
+
+    function formatPoiValue(value) {
+        if (Array.isArray(value)) return value.map(item => String(item || '').trim()).filter(Boolean).join('、');
+        return String(value || '').trim();
+    }
+
+    function buildPoiDetailRow(labelKey, value, extraClass = '') {
+        if (isBlankPoiValue(value)) return '';
+        return `
+            <div class="poi-detail-row">
+                <div class="poi-detail-label">${escapeHtml(t(labelKey))}</div>
+                <div class="poi-detail-value ${extraClass}">${escapeHtml(formatPoiValue(value))}</div>
+            </div>
+        `;
+    }
+
+    function getPoiDetailTitle(poi) {
+        const nameZh = String(poi && poi.name_zh || '').trim();
+        return nameZh || (poi && poi.id) || '';
+    }
+
+    function renderPoiDetailCard() {
+        if (!selectedPoiForCard) return;
+        const poi = selectedPoiForCard;
+        const location = [
+            poi.building,
+            isBlankPoiValue(poi.floor_name) ? '' : formatFloorLabel(poi.floor_name)
+        ].filter(value => !isBlankPoiValue(value)).join(' ');
+        poiDetailTitle.textContent = getPoiDetailTitle(poi);
+        poiDetailFields.innerHTML = [
+            buildPoiDetailRow('poiId', poi.id),
+            buildPoiDetailRow('poiLocation', location),
+            buildPoiDetailRow('poiCategory', poi.category),
+            buildPoiDetailRow('poiDepartment', poi.department),
+            buildPoiDetailRow('poiFacultyLeads', poi.faculty_leads),
+            buildPoiDetailRow('poiOccupants', poi.occupants),
+            buildPoiDetailRow('poiDescription', poi.description, 'poi-detail-description'),
+            buildPoiDetailRow('poiPublicAccess', poi.public_access)
+        ].join('');
+        poiDetailCard.classList.remove('hidden');
+    }
+
+    function showPoiDetailCard(poi) {
+        selectedPoiForCard = poi;
+        renderPoiDetailCard();
+    }
+
+    function closePoiDetailCard() {
+        selectedPoiForCard = null;
+        poiDetailCard.classList.add('hidden');
+    }
+
+    function setPoiEndpoint(type) {
+        if (!selectedPoiForCard) return;
+        const poiId = selectedPoiForCard.id;
+        if (type === 'start') {
+            tempStart = poiId;
+            selectSpace('start', tempStart);
+            setInfoBox(() => `${t('startSet')}<b>${tempStart}</b>\n${t('chooseEnd')}`);
+            clickState = 1;
+            drawMap();
+            return;
+        }
+
+        tempEnd = poiId;
+        selectSpace('end', tempEnd);
+        clickState = 0;
+        if (tempStart && tempStart !== tempEnd) {
+            setInfoBox(() => `${t('endSet')}<b>${tempEnd}</b>\n${t('calculating')}`);
+            fetchRoute(tempStart, tempEnd);
+        } else {
+            setInfoBox(() => t('invalidSelection'));
+            drawMap();
+        }
+    }
+
+    function buildTooltipRow(labelKey, value) {
+        if (isBlankPoiValue(value)) return '';
+        return `<div><span>${escapeHtml(t(labelKey))}</span><span class="tt-val">${escapeHtml(formatPoiValue(value))}</span></div>`;
+    }
+
+    function getPoiLocationLabel(poi) {
+        return [
+            poi.building,
+            isBlankPoiValue(poi.floor_name) ? '' : formatFloorLabel(poi.floor_name)
+        ].filter(value => !isBlankPoiValue(value)).join(' ');
+    }
+
+    function renderHoverTooltip(poi, event) {
+        document.getElementById('tt-name').innerText = getPoiDetailTitle(poi);
+        hoverTooltipMeta.innerHTML = [
+            buildTooltipRow('tooltipId', poi.id),
+            buildTooltipRow('tooltipCategory', poi.category),
+            buildTooltipRow('tooltipLocation', getPoiLocationLabel(poi))
+        ].join('');
+
+        hoverTooltip.style.display = 'block';
+        hoverTooltip.style.left = (event.clientX + 15) + 'px';
+        hoverTooltip.style.top = (event.clientY + 15) + 'px';
     }
 
     function changeZoom(factor) { mapZoom = Math.min(Math.max(mapZoom * factor, 0.2), 5); drawMap(); }
@@ -1415,6 +1599,10 @@
         }
     });
 
+    poiDetailClose.addEventListener('click', closePoiDetailCard);
+    poiSetStartBtn.addEventListener('click', () => setPoiEndpoint('start'));
+    poiSetEndBtn.addEventListener('click', () => setPoiEndpoint('end'));
+
     document.getElementById('clear-btn').addEventListener('click', () => {
         currentPath = []; altPath = []; tempStart = null; tempEnd = null; clickState = 0; routeSelector.style.display = 'none';
         selectedSpaceIds = { start: null, end: null };
@@ -1422,6 +1610,7 @@
         startSpaceMenu.classList.remove('open'); endSpaceMenu.classList.remove('open');
         if (is3DMode) document.querySelectorAll('#floor-checkboxes input').forEach(cb => { cb.checked = true; active3DCheckboxes.add(cb.value); });
         updateSelectPlaceholders();
+        closePoiDetailCard();
         setInfoBox(() => t('infoInitial'));
         drawMap();
     });
@@ -1462,13 +1651,7 @@
             });
 
             if (hoveredNode && hoveredNode.type === 'poi') {
-                const meta = POI_METADATA_DB[hoveredNode.id];
-                document.getElementById('tt-name').innerText = meta ? meta.name : t('genericLandmark');
-                document.getElementById('tt-id').innerText = hoveredNode.id;
-                document.getElementById('tt-dept').innerText = meta ? (meta.dept || t('noValue')) : t('noValue');
-
-                hoverTooltip.style.display = 'block';
-                hoverTooltip.style.left = (e.clientX + 15) + 'px'; hoverTooltip.style.top = (e.clientY + 15) + 'px';
+                renderHoverTooltip(hoveredNode, e);
             } else {
                 hoverTooltip.style.display = 'none';
             }
@@ -1482,6 +1665,10 @@
     canvas.addEventListener('click', (event) => {
         if (isMoved) return;
         if (currentViewMode === 'volume_only') return;
+        const rect = canvas.getBoundingClientRect();
+        mouseX = (event.clientX - rect.left) * (canvas.width / rect.width);
+        mouseY = (event.clientY - rect.top) * (canvas.height / rect.height);
+
         let closestNode = null, minDist = Infinity;
         [...nodesData, ...poisData].filter(n=>isNodeVisible(n)).forEach(node => {
             let p = getProjectedCoords(node);
@@ -1490,6 +1677,12 @@
         });
 
         if (closestNode) {
+            if (closestNode.type === 'poi') {
+                showPoiDetailCard(closestNode);
+                hoverTooltip.style.display = 'none';
+                return;
+            }
+
             if (clickState === 0) {
                 tempStart = closestNode.id;
                 selectSpace('start', tempStart);

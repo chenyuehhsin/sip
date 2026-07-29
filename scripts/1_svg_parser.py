@@ -240,6 +240,10 @@ for svg_file in sorted(svg_files):
     for circle in soup.find_all('circle'):
         label = circle.get('inkscape:label') or circle.get('id')
         if label:
+            label = label.strip()
+            if label.startswith('Building-'):
+                continue
+
             cx = round(float(circle.get('cx')))
             cy = round(float(circle.get('cy')))
 

@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "default_floor_height_m": 3.8,
+  "notes": "height_m can be left null; when height_m is null and floors is filled, future massing can estimate height_m = floors * floor_height_m.",
+  "buildings": {
+    "floor-Library": {
+      "display_name": "Library",
+      "floors": 2,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-AD": {
+      "display_name": "AD",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-IB": {
+      "display_name": "IB",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-E2": {
+      "display_name": "E2",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-MA": {
+      "display_name": "MA",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-EE": {
+      "display_name": "EE",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-T2": {
+      "display_name": "T2",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-Dorm-2": {
+      "display_name": "Dorm-2",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-Dorm-3": {
+      "display_name": "Dorm-3",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-Dorm-1": {
+      "display_name": "Dorm-1",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-E1": {
+      "display_name": "E1",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-S": {
+      "display_name": "S",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-T3": {
+      "display_name": "T3",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-IH2": {
+      "display_name": "IH2",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-SwimmingPool": {
+      "display_name": "SwimmingPool",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-Gym": {
+      "display_name": "Gym",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-IA": {
+      "display_name": "IA",
+      "floors": 11,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-TR": {
+      "display_name": "TR",
+      "floors": 11,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-Cafeteria-T2": {
+      "display_name": "Cafeteria-T2",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-Haoyang": {
+      "display_name": "Haoyang",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-Security-SW": {
+      "display_name": "Security-SW",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-PostOffice": {
+      "display_name": "PostOffice",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-Cafeteria-2": {
+      "display_name": "Cafeteria-2",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-Cafeteria-1": {
+      "display_name": "Cafeteria-1",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-Cafteria-IA": {
+      "display_name": "Cafteria-IA",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-Security-NE": {
+      "display_name": "Security-NE",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-Security-W": {
+      "display_name": "Security-W",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    },
+    "floor-Stand": {
+      "display_name": "Stand",
+      "floors": null,
+      "floor_height_m": 3.8,
+      "height_m": null,
+      "status": "footprint_only"
+    }
+  }
+}

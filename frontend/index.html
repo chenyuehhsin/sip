@@ -690,7 +690,7 @@
         drawMap();
     }
 
-    let nodesData = [], edgesData = [], poisData = [], connectionsData = {}, nodeMap = {};
+    let nodesData = [], edgesData = [], poisData = [], connectionsData = {}, campusFeaturesData = [], nodeMap = {};
     let currentPath = [], altPath = [];
     let currentElevation = 1000;
     let is3DMode = true;
@@ -1109,6 +1109,7 @@
         .then(data => {
             nodesData = data.nodes || []; edgesData = data.edges || [];
             poisData = data.pois || []; connectionsData = data.connections || {};
+            campusFeaturesData = (data.campus_features && data.campus_features.features) || [];
             // 如果後端有吐出自定義 SVG 樓板邊界，則取代預設形狀
             if (data.slabs) BLDG_SHAPES = data.slabs;
             [...nodesData, ...poisData].forEach(n => { n.z = getNodeElevation(n.building, n.floor_name); nodeMap[n.id] = n; });
@@ -1320,6 +1321,183 @@
         document.getElementById('scale-text').innerText = displayMeters;
     }
 
+    function getFeatureCentroid(points) {
+        if (!points || points.length === 0) return null;
+        let area = 0, cx = 0, cy = 0;
+        for (let i = 0; i < points.length; i++) {
+            const p1 = points[i], p2 = points[(i + 1) % points.length];
+            const cross = p1[0] * p2[1] - p2[0] * p1[1];
+            area += cross;
+            cx += (p1[0] + p2[0]) * cross;
+            cy += (p1[1] + p2[1]) * cross;
+        }
+        area *= 0.5;
+        if (Math.abs(area) < 0.0001) {
+            const sum = points.reduce((acc, p) => ({x: acc.x + p[0], y: acc.y + p[1]}), {x: 0, y: 0});
+            return {x: sum.x / points.length, y: sum.y / points.length};
+        }
+        return {x: cx / (6 * area), y: cy / (6 * area)};
+    }
+
+    function isLawnFeature(feature) {
+        const name = `${feature.name || feature.label || feature.id || ''}`.toLowerCase();
+        return name.startsWith('lawn-') || name.startsWith('court-') || name === 'lawn';
+    }
+
+    function isWhiteOutdoorFeature(feature) {
+        const name = `${feature.name || feature.label || feature.id || ''}`.toLowerCase();
+        return name === 'athletic-field';
+    }
+
+    function getCampusFeatureHeight(feature) {
+        const massing = feature.massing || {};
+        const heightZ = Number(massing.height_z);
+        if (Number.isFinite(heightZ) && heightZ > 0) return heightZ;
+        const heightM = Number(massing.height_m);
+        return Number.isFinite(heightM) && heightM > 0 ? heightM * 100 : 0;
+    }
+
+    function getCampusFeatureStyle(feature) {
+        if (feature.category === 'outdoor') {
+            if (isWhiteOutdoorFeature(feature)) {
+                return {
+                    fill: feature.fill || 'rgba(255, 255, 255, 0.34)',
+                    stroke: feature.stroke || 'rgba(203, 213, 225, 0.48)',
+                    labelFill: feature.label_fill || 'rgba(71, 85, 105, 0.76)'
+                };
+            }
+            if (isLawnFeature(feature)) {
+                return {
+                    fill: feature.fill || 'rgba(187, 247, 208, 0.20)',
+                    stroke: feature.stroke || 'rgba(74, 222, 128, 0.22)',
+                    labelFill: feature.label_fill || 'rgba(22, 101, 52, 0.56)'
+                };
+            }
+            return {
+                fill: feature.fill || 'rgba(186, 230, 253, 0.26)',
+                stroke: feature.stroke || 'rgba(56, 189, 248, 0.28)',
+                labelFill: feature.label_fill || 'rgba(3, 105, 161, 0.60)'
+            };
+        }
+        return {
+            fill: feature.fill || 'rgba(255, 255, 255, 0.34)',
+            stroke: feature.stroke || 'rgba(203, 213, 225, 0.48)',
+            labelFill: feature.label_fill || 'rgba(71, 85, 105, 0.76)'
+        };
+    }
+
+    function projectFeaturePath(points, z) {
+        return points.map(pt => getProjectedCoords({x: pt[0], y: pt[1]}, z));
+    }
+
+    function traceProjectedPath(projectedPoints) {
+        projectedPoints.forEach((pt, idx) => {
+            idx === 0 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y);
+        });
+        ctx.closePath();
+    }
+
+    function drawCampusFootprint(feature, points, style) {
+        ctx.beginPath();
+        traceProjectedPath(projectFeaturePath(points, 0));
+        ctx.fillStyle = style.fill;
+        ctx.fill();
+        ctx.strokeStyle = style.stroke;
+        ctx.lineWidth = Math.max(0.7, 1.2 * mapZoom);
+        ctx.stroke();
+    }
+
+    function drawCampusMassing(feature, points, style) {
+        const heightZ = getCampusFeatureHeight(feature);
+        if (!is3DMode || feature.category !== 'building' || heightZ <= 0) {
+            drawCampusFootprint(feature, points, style);
+            return;
+        }
+
+        const base = projectFeaturePath(points, 0);
+        const top = projectFeaturePath(points, heightZ);
+        const faces = [];
+
+        for (let i = 0; i < points.length; i++) {
+            const next = (i + 1) % points.length;
+            faces.push({
+                depth: Math.max(base[i].y, base[next].y),
+                baseA: base[i],
+                baseB: base[next],
+                topA: top[i],
+                topB: top[next]
+            });
+        }
+
+        faces.sort((a, b) => a.depth - b.depth);
+        faces.forEach(face => {
+            ctx.beginPath();
+            ctx.moveTo(face.baseA.x, face.baseA.y);
+            ctx.lineTo(face.baseB.x, face.baseB.y);
+            ctx.lineTo(face.topB.x, face.topB.y);
+            ctx.lineTo(face.topA.x, face.topA.y);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(226, 232, 240, 0.30)';
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.30)';
+            ctx.lineWidth = Math.max(0.5, 0.9 * mapZoom);
+            ctx.stroke();
+        });
+
+        ctx.beginPath();
+        traceProjectedPath(top);
+        ctx.fillStyle = style.fill;
+        ctx.fill();
+        ctx.strokeStyle = style.stroke;
+        ctx.lineWidth = Math.max(0.8, 1.25 * mapZoom);
+        ctx.stroke();
+
+        if (mapZoom >= 0.32) {
+            const centroid = getFeatureCentroid(points);
+            if (centroid) {
+                const labelPoint = getProjectedCoords({x: centroid.x, y: centroid.y}, heightZ);
+                const floors = feature.massing && feature.massing.floors ? `${feature.massing.floors}F` : '';
+                ctx.fillStyle = style.labelFill;
+                ctx.font = `700 ${Math.max(9, 11 * mapZoom)}px 'Segoe UI', Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(floors || feature.name || feature.label, labelPoint.x, labelPoint.y);
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'alphabetic';
+            }
+        }
+    }
+
+    function drawCampusFeatures() {
+        if (!campusFeaturesData.length) return;
+
+        const orderedFeatures = [...campusFeaturesData].sort((a, b) => {
+            if (a.category === b.category) return 0;
+            return a.category === 'outdoor' ? -1 : 1;
+        });
+
+        orderedFeatures.forEach(feature => {
+            const points = feature.points || [];
+            if (points.length < 3) return;
+            const style = getCampusFeatureStyle(feature);
+
+            drawCampusMassing(feature, points, style);
+
+            if (!is3DMode && mapZoom >= 0.35 && feature.category === 'building') {
+                const centroid = getFeatureCentroid(points);
+                if (!centroid) return;
+                const labelPoint = getProjectedCoords({x: centroid.x, y: centroid.y}, 0);
+                ctx.fillStyle = style.labelFill;
+                ctx.font = `700 ${Math.max(9, 11 * mapZoom)}px 'Segoe UI', Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(feature.name || feature.label, labelPoint.x, labelPoint.y);
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'alphabetic';
+            }
+        });
+    }
+
     function drawMap() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         let topLayerCapsules = [];
@@ -1342,6 +1520,8 @@
             let glL = getProjectedCoords({x:0, y:1450, z:0});
             ctx.fillStyle = 'rgba(150,150,150,0.5)'; ctx.font = "bold 12px Arial"; ctx.fillText(t('groundLevel'), glL.x, glL.y);
         }
+
+        drawCampusFeatures();
 
         const slabsToDraw = [];
         const BLDG_COLORS = { "RB": 'rgba(173, 216, 230, 0.22)', "RB-STACK": 'rgba(173, 216, 230, 0.15)', "T4": 'rgba(144, 238, 144, 0.22)', "T1": 'rgba(255, 235, 153, 0.22)', "AU": 'rgba(251, 146, 60, 0.3)' };
@@ -1407,8 +1587,8 @@
                 let p1 = getProjectedCoords({x: slab.path[0][0], y: slab.path[0][1]}, slab.z);
                 let textX = p1.x + 20, textY = p1.y + 35;
                 ctx.fillStyle = isBldgActive ? 'rgba(51, 65, 85, 0.4)' : 'rgba(150, 150, 150, 0.3)';
-                ctx.font = "bold 24px Arial";
-                ctx.fillText(isVolumeMode ? getBuildingFullName(slab.b) : slab.label, textX, textY);
+                ctx.font = `700 ${Math.max(9, 11 * mapZoom)}px 'Segoe UI', Arial`;
+                ctx.fillText(getBuildingFullName(slab.b), textX, textY);
             }
         });
 

@@ -18,6 +18,11 @@ try:
         pois_data = json.load(f)
     with open('data/slabs.json', 'r', encoding='utf-8') as f:
         slabs_data = json.load(f)
+    try:
+        with open('data/campus_features.json', 'r', encoding='utf-8') as f:
+            campus_features_data = json.load(f)
+    except FileNotFoundError:
+        campus_features_data = {"features": []}
     with open('data/final_connections.json', 'r', encoding='utf-8') as f:
         connections_data = json.load(f)
 except FileNotFoundError as e:
@@ -161,6 +166,7 @@ def get_map_data():
         "edges": routing_data['edges'],
         "pois": pois_data,
         "slabs": slabs_data,
+        "campus_features": campus_features_data,
         "connections": connections_data 
     }
 

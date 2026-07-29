@@ -10,6 +10,7 @@ The current demo focuses on NTUST campus buildings such as RB, T1, T4, and AU. I
 - Dijkstra-based shortest path search with a simple alternative route pass.
 - Semantic edge types for walkways, bridges, stairs, and elevators.
 - SVG-to-JSON data pipeline for routing nodes, POIs, floor slabs, and POI connections.
+- Campus footprint and outdoor-area overlays parsed from the L01 campus layout SVG.
 - Interactive Canvas dashboard with zoom, rotation, compass, scale bar, minimap, building filters, and 3D layer controls.
 - Route selection between the main route and an available alternative route.
 - Bilingual frontend UI toggle, defaulting to Chinese.
@@ -57,6 +58,7 @@ Returns the map data needed by the frontend:
 - `pois`: points of interest
 - `slabs`: building slab geometry for 2.5D/3D rendering
 - `connections`: final POI-to-routing-node connections
+- `campus_features`: aligned campus building footprints and outdoor areas
 
 ### `GET /api/route?start=<id>&end=<id>`
 
@@ -102,6 +104,11 @@ Pipeline steps:
    - Applies manual add/remove overrides from `data/connection_overrides.json`.
    - Writes `data/final_connections.json`.
 
+4. `scripts/4_campus_features_parser.py`
+   - Reads `data/L01_CampusLayout.svg` and `data/A01_map.svg`.
+   - Uses shared `Building-*` anchors to align campus-scale features into the A01 coordinate space.
+   - Writes `data/campus_features.json`.
+
 ## Repository Structure
 
 ```text
@@ -119,6 +126,8 @@ sip/
 |   |-- draft_connection.json    # Generated POI connection candidates
 |   |-- connection_overrides.json # Manual POI connection overrides
 |   |-- final_connections.json   # Final POI connections used by the backend
+|   |-- campus_features.json     # Generated campus footprints and outdoor overlays
+|   |-- L01_CampusLayout.svg     # Campus-scale source SVG layout
 |   `-- map_data.json            # Legacy or auxiliary map data
 |-- frontend/
 |   `-- index.html               # Canvas dashboard and interaction logic
@@ -139,6 +148,8 @@ The parser depends on naming and color conventions in the SVG files:
 - Routing nodes and POIs are read from SVG `circle` elements.
 - Node identity comes from `inkscape:label` or `id`.
 - Floor slabs are read from `polygon` or `path` elements whose label or id starts with `floor-`.
+- Campus-scale footprints and outdoor areas are read from `data/L01_CampusLayout.svg`.
+- Shared `Building-*` anchor circles are used for L01-to-A01 alignment and are ignored by the routing graph parser.
 - Orange nodes (`#ff9955`) are treated as POIs.
 - Red, green, blue, and related route colors are mapped to routing-node categories used by the renderer and connection recommender.
 
@@ -149,6 +160,7 @@ The backend loads these files at startup:
 - `data/routing_nodes.json`
 - `data/pois.json`
 - `data/slabs.json`
+- `data/campus_features.json`
 - `data/final_connections.json`
 
 If any of these files are missing, run:

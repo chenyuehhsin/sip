@@ -1,0 +1,1924 @@
+{
+  "source": "data/L01_CampusLayout.svg",
+  "target_coordinate_space": "A01_map.svg",
+  "matched_anchors": [
+    "Building-RB-1",
+    "Building-T4-1",
+    "Building-T4-2",
+    "Building-T4-3"
+  ],
+  "transform": {
+    "a": 1.02873886,
+    "b": -0.00416522,
+    "tx": -1963.10725171,
+    "ty": -2868.74153715,
+    "scale": 1.02874729,
+    "rotation_degrees": -0.2319812
+  },
+  "features": [
+    {
+      "id": "floor-Library",
+      "label": "floor-Library",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "Library",
+      "massing": {
+        "display_name": "Library",
+        "floors": 2,
+        "floor_height_m": 3.8,
+        "height_m": 7.6,
+        "height_z": 760.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          797.186,
+          341.202
+        ],
+        [
+          799.651,
+          678.695
+        ],
+        [
+          966.476,
+          683.085
+        ],
+        [
+          969.426,
+          868.627
+        ],
+        [
+          1125.844,
+          871.96
+        ],
+        [
+          1129.204,
+          344.255
+        ],
+        [
+          955.503,
+          343.859
+        ],
+        [
+          957.271,
+          508.755
+        ],
+        [
+          909.999,
+          508.947
+        ],
+        [
+          907.124,
+          341.856
+        ]
+      ]
+    },
+    {
+      "id": "floor-AD",
+      "label": "floor-AD",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "AD",
+      "massing": {
+        "display_name": "AD",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          1288.875,
+          138.029
+        ],
+        [
+          1290.255,
+          207.282
+        ],
+        [
+          1245.177,
+          206.366
+        ],
+        [
+          1245.369,
+          253.637
+        ],
+        [
+          1287.144,
+          253.468
+        ],
+        [
+          1289.582,
+          312.824
+        ],
+        [
+          1798.578,
+          310.763
+        ],
+        [
+          1798.337,
+          251.399
+        ],
+        [
+          1823.622,
+          251.296
+        ],
+        [
+          1823.448,
+          208.421
+        ],
+        [
+          1798.164,
+          208.524
+        ],
+        [
+          1797.888,
+          140.365
+        ]
+      ]
+    },
+    {
+      "id": "floor-IB",
+      "label": "floor-IB",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "IB",
+      "massing": {
+        "display_name": "IB",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          1922.024,
+          554.584
+        ],
+        [
+          1898.452,
+          876.509
+        ],
+        [
+          2512.521,
+          864.694
+        ],
+        [
+          2509.028,
+          769.87
+        ],
+        [
+          2582.092,
+          768.02
+        ],
+        [
+          2574.747,
+          105.735
+        ],
+        [
+          2423.934,
+          104.791
+        ],
+        [
+          2433.571,
+          564.951
+        ],
+        [
+          2357.404,
+          568.369
+        ],
+        [
+          2358.725,
+          510.839
+        ],
+        [
+          2294.945,
+          501.768
+        ],
+        [
+          2223.403,
+          495.839
+        ],
+        [
+          2142.565,
+          497.722
+        ],
+        [
+          2071.074,
+          504.23
+        ],
+        [
+          1998.072,
+          521.628
+        ],
+        [
+          2001.308,
+          552.709
+        ]
+      ]
+    },
+    {
+      "id": "floor-E2",
+      "label": "floor-E2",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "E2",
+      "massing": {
+        "display_name": "E2",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          1920.311,
+          -252.312
+        ],
+        [
+          1921.023,
+          -76.63
+        ],
+        [
+          2735.687,
+          -79.929
+        ],
+        [
+          2734.988,
+          -252.501
+        ]
+      ]
+    },
+    {
+      "id": "floor-MA",
+      "label": "floor-MA",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "MA",
+      "massing": {
+        "display_name": "MA",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          1914.137,
+          -1015.531
+        ],
+        [
+          1921.195,
+          -358.144
+        ],
+        [
+          2156.464,
+          -356.897
+        ],
+        [
+          2153.802,
+          -1014.303
+        ]
+      ]
+    },
+    {
+      "id": "floor-EE",
+      "label": "floor-EE",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "EE",
+      "massing": {
+        "display_name": "EE",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          1915.267,
+          -1279.382
+        ],
+        [
+          1918.204,
+          -1096.9
+        ],
+        [
+          2727.337,
+          -1095.779
+        ],
+        [
+          2730.987,
+          -1280.486
+        ]
+      ]
+    },
+    {
+      "id": "floor-T2",
+      "label": "floor-T2",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "T2",
+      "massing": {
+        "display_name": "T2",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          2345.879,
+          -276.312
+        ],
+        [
+          2730.657,
+          -275.671
+        ],
+        [
+          2727.345,
+          -1093.58
+        ],
+        [
+          2342.568,
+          -1094.221
+        ]
+      ]
+    },
+    {
+      "id": "floor-Dorm-2",
+      "label": "floor-Dorm-2",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "Dorm-2",
+      "massing": {
+        "display_name": "Dorm-2",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          1394.81,
+          -1405.347
+        ],
+        [
+          1396.735,
+          -1313.625
+        ],
+        [
+          1301.893,
+          -1314.796
+        ],
+        [
+          1304.335,
+          -1095.589
+        ],
+        [
+          1686.773,
+          -1101.802
+        ],
+        [
+          1684.355,
+          -1314.79
+        ],
+        [
+          1578.636,
+          -1314.362
+        ],
+        [
+          1576.716,
+          -1404.529
+        ]
+      ]
+    },
+    {
+      "id": "floor-Dorm-3",
+      "label": "floor-Dorm-3",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "Dorm-3",
+      "massing": {
+        "display_name": "Dorm-3",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          988.907,
+          -1434.797
+        ],
+        [
+          996.51,
+          -1092.788
+        ],
+        [
+          1197.067,
+          -1093.6
+        ],
+        [
+          1198.149,
+          -1210.209
+        ],
+        [
+          1288.322,
+          -1210.574
+        ],
+        [
+          1287.938,
+          -1305.412
+        ],
+        [
+          1196.224,
+          -1301.93
+        ],
+        [
+          1195.689,
+          -1434.08
+        ]
+      ]
+    },
+    {
+      "id": "floor-Dorm-1",
+      "label": "floor-Dorm-1",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "Dorm-1",
+      "massing": {
+        "display_name": "Dorm-1",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          258.94,
+          -1450.772
+        ],
+        [
+          260.422,
+          -1084.691
+        ],
+        [
+          529.76,
+          -1085.781
+        ],
+        [
+          529.547,
+          -1138.55
+        ],
+        [
+          614.205,
+          -1136.694
+        ],
+        [
+          614.41,
+          -1086.124
+        ],
+        [
+          925.527,
+          -1086.285
+        ],
+        [
+          922.193,
+          -1366.608
+        ],
+        [
+          692.441,
+          -1363.479
+        ],
+        [
+          692.734,
+          -1290.922
+        ],
+        [
+          611.387,
+          -1289.494
+        ],
+        [
+          611.588,
+          -1240.023
+        ],
+        [
+          525.844,
+          -1238.577
+        ],
+        [
+          525.639,
+          -1289.147
+        ],
+        [
+          447.585,
+          -1288.831
+        ],
+        [
+          446.927,
+          -1451.533
+        ]
+      ]
+    },
+    {
+      "id": "floor-E1",
+      "label": "floor-E1",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "E1",
+      "massing": {
+        "display_name": "E1",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          264.919,
+          -923.47
+        ],
+        [
+          271.623,
+          -35.748
+        ],
+        [
+          1080.075,
+          -37.467
+        ],
+        [
+          1081.156,
+          -922.111
+        ],
+        [
+          821.502,
+          -925.724
+        ],
+        [
+          819.464,
+          -277.395
+        ],
+        [
+          517.845,
+          -277.728
+        ],
+        [
+          516.781,
+          -924.49
+        ]
+      ]
+    },
+    {
+      "id": "floor-S",
+      "label": "floor-S",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "S",
+      "massing": {
+        "display_name": "S",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          -340.42,
+          -675.373
+        ],
+        [
+          -338.563,
+          -600.754
+        ],
+        [
+          -392.977,
+          -600.533
+        ],
+        [
+          -392.581,
+          -502.587
+        ],
+        [
+          -339.721,
+          -502.801
+        ],
+        [
+          -333.716,
+          -171.668
+        ],
+        [
+          -195.335,
+          -169.119
+        ],
+        [
+          -193.617,
+          -128.703
+        ],
+        [
+          -109.657,
+          -127.489
+        ],
+        [
+          -109.833,
+          -171.02
+        ],
+        [
+          30.097,
+          -170.032
+        ],
+        [
+          28.838,
+          -480.972
+        ],
+        [
+          49.042,
+          -482.609
+        ],
+        [
+          47.161,
+          -563.447
+        ],
+        [
+          23.834,
+          -564.907
+        ],
+        [
+          24.935,
+          -676.852
+        ]
+      ]
+    },
+    {
+      "id": "floor-T3",
+      "label": "floor-T3",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "T3",
+      "massing": {
+        "display_name": "T3",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          -206.495,
+          -1005.517
+        ],
+        [
+          -207.339,
+          -829.829
+        ],
+        [
+          -3.66,
+          -827.545
+        ],
+        [
+          -3.27,
+          -731.153
+        ],
+        [
+          102.45,
+          -731.581
+        ],
+        [
+          101.922,
+          -862.176
+        ],
+        [
+          178.108,
+          -860.929
+        ],
+        [
+          176.08,
+          -977.527
+        ],
+        [
+          123.221,
+          -977.313
+        ],
+        [
+          123.101,
+          -1006.852
+        ]
+      ]
+    },
+    {
+      "id": "floor-IH2",
+      "label": "floor-IH2",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "IH2",
+      "massing": {
+        "display_name": "IH2",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          -485.032,
+          -1065.023
+        ],
+        [
+          -483.515,
+          -690.34
+        ],
+        [
+          -209.882,
+          -689.894
+        ],
+        [
+          -209.787,
+          -1050.591
+        ]
+      ]
+    },
+    {
+      "id": "floor-SwimmingPool",
+      "label": "floor-SwimmingPool",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "SwimmingPool",
+      "massing": {
+        "display_name": "SwimmingPool",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          -1038.185,
+          -983.492
+        ],
+        [
+          -1040.395,
+          -761.158
+        ],
+        [
+          -552.206,
+          -760.025
+        ],
+        [
+          -553.106,
+          -982.347
+        ]
+      ]
+    },
+    {
+      "id": "floor-Gym",
+      "label": "floor-Gym",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "Gym",
+      "massing": {
+        "display_name": "Gym",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          -487.748,
+          -691.39
+        ],
+        [
+          -481.846,
+          -319.83
+        ],
+        [
+          -984.584,
+          -319.994
+        ],
+        [
+          -991.374,
+          -691.785
+        ]
+      ]
+    },
+    {
+      "id": "floor-IA",
+      "label": "floor-IA",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "IA",
+      "massing": {
+        "display_name": "IA",
+        "floors": 11,
+        "floor_height_m": 3.8,
+        "height_m": 41.8,
+        "height_z": 4180.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          -1062.569,
+          -465.055
+        ],
+        [
+          -1194.824,
+          -466.457
+        ],
+        [
+          -1249.889,
+          52.663
+        ],
+        [
+          -1069.588,
+          54.132
+        ],
+        [
+          -1069.226,
+          -10.822
+        ],
+        [
+          -1068.954,
+          -75.743
+        ],
+        [
+          -1068.654,
+          -140.64
+        ],
+        [
+          -1068.206,
+          -205.52
+        ],
+        [
+          -1067.494,
+          -270.394
+        ],
+        [
+          -1066.395,
+          -335.267
+        ],
+        [
+          -1064.794,
+          -400.152
+        ]
+      ]
+    },
+    {
+      "id": "floor-TR",
+      "label": "floor-TR",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "TR",
+      "massing": {
+        "display_name": "TR",
+        "floors": 11,
+        "floor_height_m": 3.8,
+        "height_m": 41.8,
+        "height_z": 4180.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          -1218.804,
+          127.294
+        ],
+        [
+          -1218.314,
+          248.221
+        ],
+        [
+          -1187.534,
+          248.097
+        ],
+        [
+          -1184.854,
+          909.9
+        ],
+        [
+          -971.573,
+          911.235
+        ],
+        [
+          -968.573,
+          566.024
+        ],
+        [
+          -1014.745,
+          566.211
+        ],
+        [
+          -1014.309,
+          130.863
+        ]
+      ]
+    },
+    {
+      "id": "floor-Cafeteria-T2",
+      "label": "floor-Cafeteria-T2",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "Cafeteria-T2",
+      "massing": {
+        "display_name": "Cafeteria-T2",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          2158.328,
+          -710.898
+        ],
+        [
+          2157.518,
+          -639.437
+        ],
+        [
+          2252.07,
+          -637.621
+        ],
+        [
+          2253.584,
+          -535.386
+        ],
+        [
+          2341.531,
+          -535.742
+        ],
+        [
+          2340.819,
+          -711.637
+        ]
+      ]
+    },
+    {
+      "id": "floor-Haoyang",
+      "label": "floor-Haoyang",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "Haoyang",
+      "massing": {
+        "display_name": "Haoyang",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          1914.011,
+          -1424.551
+        ],
+        [
+          1917.656,
+          -1292.414
+        ],
+        [
+          2158.634,
+          -1293.389
+        ],
+        [
+          2159.673,
+          -1420.881
+        ]
+      ]
+    },
+    {
+      "id": "floor-Security-SW",
+      "label": "floor-Security-SW",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "Security-SW",
+      "massing": {
+        "display_name": "Security-SW",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          2639.746,
+          -57.081
+        ],
+        [
+          2639.989,
+          2.833
+        ],
+        [
+          2742.78,
+          2.967
+        ],
+        [
+          2742.541,
+          -55.848
+        ]
+      ]
+    },
+    {
+      "id": "floor-PostOffice",
+      "label": "floor-PostOffice",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "PostOffice",
+      "massing": {
+        "display_name": "PostOffice",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          42.23,
+          -262.587
+        ],
+        [
+          42.581,
+          -175.74
+        ],
+        [
+          110.741,
+          -176.016
+        ],
+        [
+          111.486,
+          -263.418
+        ]
+      ]
+    },
+    {
+      "id": "floor-Cafeteria-2",
+      "label": "floor-Cafeteria-2",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "Cafeteria-2",
+      "massing": {
+        "display_name": "Cafeteria-2",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          41.963,
+          -464.319
+        ],
+        [
+          43.792,
+          -284.031
+        ],
+        [
+          148.781,
+          -283.906
+        ],
+        [
+          147.504,
+          -463.646
+        ]
+      ]
+    },
+    {
+      "id": "floor-Cafeteria-1",
+      "label": "floor-Cafeteria-1",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "Cafeteria-1",
+      "massing": {
+        "display_name": "Cafeteria-1",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          -39.277,
+          -164.964
+        ],
+        [
+          -39.046,
+          -107.798
+        ],
+        [
+          32.416,
+          -106.988
+        ],
+        [
+          31.633,
+          -164.701
+        ]
+      ]
+    },
+    {
+      "id": "floor-Cafteria-IA",
+      "label": "floor-Cafteria-IA",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "Cafteria-IA",
+      "massing": {
+        "display_name": "Cafteria-IA",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          -1063.951,
+          -318.573
+        ],
+        [
+          -1064.587,
+          -204.238
+        ],
+        [
+          -982.693,
+          -206.217
+        ],
+        [
+          -982.593,
+          -317.253
+        ]
+      ]
+    },
+    {
+      "id": "floor-Security-NE",
+      "label": "floor-Security-NE",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "Security-NE",
+      "massing": {
+        "display_name": "Security-NE",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          -1223.377,
+          124.222
+        ],
+        [
+          -1221.596,
+          180.186
+        ],
+        [
+          -1111.218,
+          178.184
+        ],
+        [
+          -1111.438,
+          123.769
+        ]
+      ]
+    },
+    {
+      "id": "floor-Security-W",
+      "label": "floor-Security-W",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "Security-W",
+      "massing": {
+        "display_name": "Security-W",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          1299.084,
+          894.345
+        ],
+        [
+          1300.42,
+          953.156
+        ],
+        [
+          1395.514,
+          952.771
+        ],
+        [
+          1395.285,
+          896.155
+        ]
+      ]
+    },
+    {
+      "id": "floor-Stand",
+      "label": "floor-Stand",
+      "source": "L01_CampusLayout.svg",
+      "category": "building",
+      "name": "Stand",
+      "massing": {
+        "display_name": "Stand",
+        "floors": null,
+        "floor_height_m": 3.8,
+        "height_m": 0.0,
+        "height_z": 0.0,
+        "status": "footprint_only"
+      },
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          -548.089,
+          400.873
+        ],
+        [
+          -546.846,
+          449.926
+        ],
+        [
+          -438.292,
+          450.53
+        ],
+        [
+          -437.447,
+          401.47
+        ]
+      ]
+    },
+    {
+      "id": "Court-Basketball",
+      "label": "Court-Basketball",
+      "source": "L01_CampusLayout.svg",
+      "category": "outdoor",
+      "name": "Court-Basketball",
+      "fill": "rgba(187, 247, 208, 0.20)",
+      "stroke": "rgba(74, 222, 128, 0.22)",
+      "label_fill": "rgba(22, 101, 52, 0.56)",
+      "points": [
+        [
+          -980.233,
+          128.966
+        ],
+        [
+          -975.79,
+          392.314
+        ],
+        [
+          -530.116,
+          387.133
+        ],
+        [
+          -532.85,
+          128.843
+        ]
+      ]
+    },
+    {
+      "id": "Landmark-1",
+      "label": "Landmark-1",
+      "source": "L01_CampusLayout.svg",
+      "category": "outdoor",
+      "name": "Landmark-1",
+      "fill": "rgba(186, 230, 253, 0.26)",
+      "stroke": "rgba(56, 189, 248, 0.28)",
+      "label_fill": "rgba(3, 105, 161, 0.60)",
+      "points": [
+        [
+          1434.941,
+          644.242
+        ],
+        [
+          1391.212,
+          704.883
+        ],
+        [
+          1419.857,
+          720.158
+        ],
+        [
+          1463.897,
+          736.471
+        ],
+        [
+          1515.602,
+          745.056
+        ],
+        [
+          1566.167,
+          743.752
+        ],
+        [
+          1624.388,
+          732.523
+        ],
+        [
+          1683.65,
+          706.997
+        ],
+        [
+          1636.129,
+          645.625
+        ],
+        [
+          1610.889,
+          656.721
+        ],
+        [
+          1584.535,
+          664.524
+        ],
+        [
+          1553.776,
+          670.145
+        ],
+        [
+          1518.598,
+          670.287
+        ],
+        [
+          1483.397,
+          664.933
+        ],
+        [
+          1451.479,
+          656.267
+        ]
+      ]
+    },
+    {
+      "id": "Court-Tennis",
+      "label": "Court-Tennis",
+      "source": "L01_CampusLayout.svg",
+      "category": "outdoor",
+      "name": "Court-Tennis",
+      "fill": "rgba(187, 247, 208, 0.20)",
+      "stroke": "rgba(74, 222, 128, 0.22)",
+      "label_fill": "rgba(22, 101, 52, 0.56)",
+      "points": [
+        [
+          -468.698,
+          128.583
+        ],
+        [
+          -469.334,
+          388.575
+        ],
+        [
+          -23.647,
+          386.77
+        ],
+        [
+          -26.381,
+          128.48
+        ]
+      ]
+    },
+    {
+      "id": "Court-Volleyball",
+      "label": "Court-Volleyball",
+      "source": "L01_CampusLayout.svg",
+      "category": "outdoor",
+      "name": "Court-Volleyball",
+      "fill": "rgba(187, 247, 208, 0.20)",
+      "stroke": "rgba(74, 222, 128, 0.22)",
+      "label_fill": "rgba(22, 101, 52, 0.56)",
+      "points": [
+        [
+          -829.942,
+          -278.507
+        ],
+        [
+          -827.119,
+          1.729
+        ],
+        [
+          -384.828,
+          -5.127
+        ],
+        [
+          -387.617,
+          -276.922
+        ]
+      ]
+    },
+    {
+      "id": "Athletic-Field",
+      "label": "Athletic-Field",
+      "source": "L01_CampusLayout.svg",
+      "category": "outdoor",
+      "name": "Athletic-Field",
+      "fill": "rgba(255, 255, 255, 0.34)",
+      "stroke": "rgba(203, 213, 225, 0.48)",
+      "label_fill": "rgba(71, 85, 105, 0.76)",
+      "points": [
+        [
+          -944.177,
+          899.164
+        ],
+        [
+          9.023,
+          899.187
+        ],
+        [
+          6.791,
+          827.367
+        ],
+        [
+          -51.44,
+          829.544
+        ],
+        [
+          -28.231,
+          808.095
+        ],
+        [
+          -12.827,
+          776.971
+        ],
+        [
+          -3.261,
+          741.988
+        ],
+        [
+          2.429,
+          708.963
+        ],
+        [
+          -1.642,
+          662.387
+        ],
+        [
+          -7.593,
+          631.348
+        ],
+        [
+          -27.267,
+          590.955
+        ],
+        [
+          -49.362,
+          558.786
+        ],
+        [
+          -76.23,
+          534.185
+        ],
+        [
+          -103.058,
+          519.193
+        ],
+        [
+          -137.421,
+          508.35
+        ],
+        [
+          -154.594,
+          504.988
+        ],
+        [
+          -773.685,
+          508.181
+        ],
+        [
+          -790.843,
+          508.25
+        ],
+        [
+          -810.73,
+          512.793
+        ],
+        [
+          -843.755,
+          528.932
+        ],
+        [
+          -873.757,
+          550.893
+        ],
+        [
+          -897.419,
+          580.594
+        ],
+        [
+          -913.792,
+          612.207
+        ],
+        [
+          -925.327,
+          639.918
+        ],
+        [
+          -928.863,
+          663.243
+        ],
+        [
+          -931.514,
+          686.59
+        ],
+        [
+          -932.792,
+          709.931
+        ],
+        [
+          -931.319,
+          734.635
+        ],
+        [
+          -925.037,
+          760.692
+        ],
+        [
+          -916.706,
+          783.994
+        ],
+        [
+          -908.391,
+          803.179
+        ],
+        [
+          -893.894,
+          823.711
+        ],
+        [
+          -886.998,
+          831.92
+        ],
+        [
+          -941.909,
+          831.455
+        ]
+      ]
+    },
+    {
+      "id": "Court-Soccer",
+      "label": "Court-Soccer",
+      "source": "L01_CampusLayout.svg",
+      "category": "outdoor",
+      "name": "Court-Soccer",
+      "fill": "rgba(187, 247, 208, 0.20)",
+      "stroke": "rgba(74, 222, 128, 0.22)",
+      "label_fill": "rgba(22, 101, 52, 0.56)",
+      "points": [
+        [
+          -781.544,
+          566.83
+        ],
+        [
+          -155.481,
+          570.119
+        ],
+        [
+          -117.587,
+          580.156
+        ],
+        [
+          -94.204,
+          601.901
+        ],
+        [
+          -76.645,
+          623.669
+        ],
+        [
+          -66.359,
+          646.922
+        ],
+        [
+          -57.5,
+          677.461
+        ],
+        [
+          -54.47,
+          706.566
+        ],
+        [
+          -60.134,
+          745.9
+        ],
+        [
+          -71.664,
+          775.065
+        ],
+        [
+          -90.49,
+          799.892
+        ],
+        [
+          -112.259,
+          817.451
+        ],
+        [
+          -131.132,
+          830.631
+        ],
+        [
+          -157.339,
+          830.737
+        ],
+        [
+          -783.377,
+          833.272
+        ],
+        [
+          -830.049,
+          813.078
+        ],
+        [
+          -847.589,
+          795.678
+        ],
+        [
+          -865.167,
+          769.542
+        ],
+        [
+          -875.476,
+          740.465
+        ],
+        [
+          -881.494,
+          692.445
+        ],
+        [
+          -874.379,
+          651.649
+        ],
+        [
+          -855.611,
+          612.264
+        ],
+        [
+          -823.688,
+          585.928
+        ]
+      ]
+    },
+    {
+      "id": "Lawn-Large",
+      "label": "Lawn-Large",
+      "source": "L01_CampusLayout.svg",
+      "category": "outdoor",
+      "name": "Lawn-Large",
+      "fill": "rgba(187, 247, 208, 0.20)",
+      "stroke": "rgba(74, 222, 128, 0.22)",
+      "label_fill": "rgba(22, 101, 52, 0.56)",
+      "points": [
+        [
+          1264.667,
+          -950.831
+        ],
+        [
+          1236.602,
+          -919.964
+        ],
+        [
+          1240.015,
+          -76.856
+        ],
+        [
+          1263.24,
+          -37.229
+        ],
+        [
+          1791.149,
+          -38.085
+        ],
+        [
+          1820.479,
+          -72.801
+        ],
+        [
+          1817.066,
+          -915.909
+        ],
+        [
+          1784.888,
+          -951.655
+        ]
+      ]
+    },
+    {
+      "id": "Pool-E1",
+      "label": "Pool-E1",
+      "source": "L01_CampusLayout.svg",
+      "category": "outdoor",
+      "name": "Pool-E1",
+      "fill": "rgba(186, 230, 253, 0.26)",
+      "stroke": "rgba(56, 189, 248, 0.28)",
+      "label_fill": "rgba(3, 105, 161, 0.60)",
+      "points": [
+        [
+          575.58,
+          -866.696
+        ],
+        [
+          577.015,
+          -512.438
+        ],
+        [
+          764.574,
+          -510.48
+        ],
+        [
+          764.945,
+          -866.556
+        ]
+      ]
+    },
+    {
+      "id": "Lawn-IB",
+      "label": "Lawn-IB",
+      "source": "L01_CampusLayout.svg",
+      "category": "outdoor",
+      "name": "Lawn-IB",
+      "fill": "rgba(187, 247, 208, 0.20)",
+      "stroke": "rgba(74, 222, 128, 0.22)",
+      "label_fill": "rgba(22, 101, 52, 0.56)",
+      "points": [
+        [
+          2042.831,
+          128.309
+        ],
+        [
+          2050.335,
+          372.598
+        ],
+        [
+          2314.222,
+          378.044
+        ],
+        [
+          2307.43,
+          309.663
+        ],
+        [
+          2242.293,
+          313.183
+        ],
+        [
+          2238.797,
+          254.561
+        ],
+        [
+          2170.416,
+          261.353
+        ],
+        [
+          2173.397,
+          192.931
+        ],
+        [
+          2108.246,
+          193.195
+        ],
+        [
+          2104.724,
+          128.058
+        ]
+      ]
+    },
+    {
+      "id": "Pool-RB",
+      "label": "Pool-RB",
+      "source": "L01_CampusLayout.svg",
+      "category": "outdoor",
+      "name": "Pool-RB",
+      "fill": "rgba(186, 230, 253, 0.26)",
+      "stroke": "rgba(56, 189, 248, 0.28)",
+      "label_fill": "rgba(3, 105, 161, 0.60)",
+      "points": [
+        [
+          259.281,
+          297.047
+        ],
+        [
+          244.304,
+          335.783
+        ],
+        [
+          271.338,
+          367.623
+        ],
+        [
+          296.463,
+          395.162
+        ],
+        [
+          333.47,
+          398.481
+        ],
+        [
+          374.664,
+          329.106
+        ],
+        [
+          369.079,
+          302.563
+        ]
+      ]
+    }
+  ]
+}

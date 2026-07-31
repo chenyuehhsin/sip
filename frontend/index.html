@@ -1296,16 +1296,21 @@
     }
 
     function drawDynamicCapsule(ctx, lines, cx, cy, bgColor, textColor, isHovered) {
-        const titleFont = `900 ${Math.max(isHovered ? 20 : 16, (isHovered ? 26 : 18) * mapZoom)}px 'Segoe UI', sans-serif`;
-        const bodyFont = `bold ${Math.max(14, 18 * mapZoom)}px 'Segoe UI', sans-serif`;
-        const lineHeight = (isHovered ? 32 : 24) * mapZoom;
+        const showDetails = isHovered && mapZoom >= 0.48;
+        const displayLines = showDetails ? lines : [lines[0]];
+        const titleSize = Math.max(showDetails ? 18 : 14, (showDetails ? 24 : 18) * mapZoom);
+        const bodySize = Math.max(12, 18 * mapZoom);
+        const titleFont = `900 ${titleSize}px 'Segoe UI', sans-serif`;
+        const bodyFont = `bold ${bodySize}px 'Segoe UI', sans-serif`;
+        const lineHeight = showDetails ? Math.max(bodySize + 8, 32 * mapZoom) : Math.max(titleSize + 8, 24 * mapZoom);
 
         ctx.font = titleFont;
         let maxW = 0;
-        lines.forEach((l, i) => { ctx.font = i === 0 ? titleFont : bodyFont; let w = ctx.measureText(l).width; if(w > maxW) maxW = w; });
+        displayLines.forEach((l, i) => { ctx.font = i === 0 ? titleFont : bodyFont; let w = ctx.measureText(l).width; if(w > maxW) maxW = w; });
 
-        const padX = (isHovered ? 30 : 20) * mapZoom, padY = (isHovered ? 24 : 14) * mapZoom;
-        const w = maxW + padX * 2, h = lines.length * lineHeight + (isHovered ? padY * 1.2 : padY * 0.8), r = isHovered ? 24 * mapZoom : h / 2;
+        const padX = Math.max(12, (showDetails ? 30 : 20) * mapZoom);
+        const padY = Math.max(8, (showDetails ? 24 : 14) * mapZoom);
+        const w = maxW + padX * 2, h = displayLines.length * lineHeight + (showDetails ? padY * 1.2 : padY * 0.8), r = showDetails ? Math.max(12, 24 * mapZoom) : h / 2;
         let x = cx - w / 2, y = cy - h;
 
         ctx.shadowColor = 'rgba(0,0,0,0.15)'; ctx.shadowBlur = 25; ctx.shadowOffsetY = 8;
@@ -1321,15 +1326,15 @@
         ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.lineWidth = 2.5 * mapZoom; ctx.stroke();
         ctx.shadowColor = 'transparent';
 
-        lines.forEach((l, i) => {
+        displayLines.forEach((l, i) => {
             if (i === 0) {
                 ctx.fillStyle = textColor; ctx.font = titleFont;
-                let textYOffset = isHovered ? (8 * mapZoom) : (h - lineHeight)/2 + 2 * mapZoom;
+                let textYOffset = showDetails ? (8 * mapZoom) : (h - lineHeight)/2 + 2 * mapZoom;
                 ctx.fillText(l, x + padX, y + padY + i * lineHeight + textYOffset);
-                if (lines.length > 1) { ctx.fillStyle = 'rgba(0,0,0,0.06)'; ctx.fillRect(x + padX, y + padY + i * lineHeight + 22 * mapZoom, maxW, 2 * mapZoom); }
+                if (displayLines.length > 1) { ctx.fillStyle = 'rgba(0,0,0,0.06)'; ctx.fillRect(x + padX, y + padY + i * lineHeight + 22 * mapZoom, maxW, 2 * mapZoom); }
             } else {
                 ctx.fillStyle = '#475569'; ctx.font = bodyFont;
-                ctx.fillText(l, x + padX, y + padY + i * lineHeight + 16 * mapZoom);
+                ctx.fillText(l, x + padX, y + padY + i * lineHeight + Math.max(11, 16 * mapZoom));
             }
         });
     }
@@ -1642,19 +1647,23 @@
             ctx.strokeStyle = isBldgActive ? 'rgba(255,255,255,0.7)' : 'rgba(200,200,200,0.3)';
             ctx.lineWidth = 1; ctx.stroke();
 
-            if (is3DMode && isBldgActive && !isVolumeMode) {
-                let leftMostPt = null; let minX = Infinity;
+            if (is3DMode && isBldgActive && !isVolumeMode && mapZoom >= 0.48) {
+                const labelOnRight = slab.b === 'T4';
+                let labelPt = null; let labelX = labelOnRight ? -Infinity : Infinity;
                 slab.path.forEach(pt => {
                     let proj = getProjectedCoords({x: pt[0], y: pt[1]}, slab.z);
-                    if (proj.x < minX) { minX = proj.x; leftMostPt = proj; }
+                    if ((!labelOnRight && proj.x < labelX) || (labelOnRight && proj.x > labelX)) {
+                        labelX = proj.x;
+                        labelPt = proj;
+                    }
                 });
 
-                if (leftMostPt) {
+                if (labelPt) {
                     ctx.fillStyle = 'rgba(100, 116, 139, 0.85)';
                     ctx.font = `bold ${Math.max(10, 11 * mapZoom)}px 'Segoe UI', Arial`;
-                    ctx.textAlign = "right"; ctx.textBaseline = "middle";
+                    ctx.textAlign = labelOnRight ? "left" : "right"; ctx.textBaseline = "middle";
                     let sign = slab.z >= 0 ? '+' : '';
-                    ctx.fillText(`${slab.f}F ${sign}${slab.z}`, leftMostPt.x - 10 * mapZoom, leftMostPt.y);
+                    ctx.fillText(`${slab.f}F ${sign}${slab.z}`, labelPt.x + (labelOnRight ? 10 : -10) * mapZoom, labelPt.y);
                     ctx.textAlign = "left";
                 }
             } else if (!is3DMode) {

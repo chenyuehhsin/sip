@@ -1357,7 +1357,7 @@
     }
 
     function drawDynamicCapsule(ctx, lines, cx, cy, bgColor, textColor, isHovered) {
-        const showDetails = isHovered && mapZoom >= 0.48;
+        const showDetails = isHovered;
         const displayLines = showDetails ? lines : [lines[0]];
         const titleSize = Math.max(showDetails ? 18 : 14, (showDetails ? 24 : 18) * mapZoom);
         const bodySize = Math.max(12, 18 * mapZoom);

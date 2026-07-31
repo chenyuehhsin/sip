@@ -54,22 +54,22 @@
     },
     "floor-Dorm-2": {
       "display_name": "Dorm-2",
-      "floors": null,
-      "floor_height_m": 3.8,
+      "floors": 15,
+      "floor_height_m": 3.6,
       "height_m": null,
       "status": "footprint_only"
     },
     "floor-Dorm-3": {
       "display_name": "Dorm-3",
-      "floors": null,
-      "floor_height_m": 3.8,
+      "floors": 11,
+      "floor_height_m": 3.6,
       "height_m": null,
       "status": "footprint_only"
     },
     "floor-Dorm-1": {
       "display_name": "Dorm-1",
-      "floors": null,
-      "floor_height_m": 3.8,
+      "floors": 14,
+      "floor_height_m": 3.6,
       "height_m": null,
       "status": "footprint_only"
     },
@@ -145,8 +145,8 @@
     },
     "floor-Security-SW": {
       "display_name": "Security-SW",
-      "floors": null,
-      "floor_height_m": 3.8,
+      "floors": 1,
+      "floor_height_m": 2.8,
       "height_m": null,
       "status": "footprint_only"
     },
@@ -180,15 +180,15 @@
     },
     "floor-Security-NE": {
       "display_name": "Security-NE",
-      "floors": null,
-      "floor_height_m": 3.8,
+      "floors": 1,
+      "floor_height_m": 2.8,
       "height_m": null,
       "status": "footprint_only"
     },
     "floor-Security-W": {
       "display_name": "Security-W",
-      "floors": null,
-      "floor_height_m": 3.8,
+      "floors": 1,
+      "floor_height_m": 2.8,
       "height_m": null,
       "status": "footprint_only"
     },

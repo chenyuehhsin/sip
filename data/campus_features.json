@@ -380,10 +380,10 @@
       "name": "Dorm-2",
       "massing": {
         "display_name": "Dorm-2",
-        "floors": null,
-        "floor_height_m": 3.8,
-        "height_m": 0.0,
-        "height_z": 0.0,
+        "floors": 15,
+        "floor_height_m": 3.6,
+        "height_m": 54.0,
+        "height_z": 5400.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",
@@ -432,10 +432,10 @@
       "name": "Dorm-3",
       "massing": {
         "display_name": "Dorm-3",
-        "floors": null,
-        "floor_height_m": 3.8,
-        "height_m": 0.0,
-        "height_z": 0.0,
+        "floors": 11,
+        "floor_height_m": 3.6,
+        "height_m": 39.6,
+        "height_z": 3960.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",
@@ -484,10 +484,10 @@
       "name": "Dorm-1",
       "massing": {
         "display_name": "Dorm-1",
-        "floors": null,
-        "floor_height_m": 3.8,
-        "height_m": 0.0,
-        "height_z": 0.0,
+        "floors": 14,
+        "floor_height_m": 3.6,
+        "height_m": 50.4,
+        "height_z": 5040.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",
@@ -1068,10 +1068,10 @@
       "name": "Security-SW",
       "massing": {
         "display_name": "Security-SW",
-        "floors": null,
-        "floor_height_m": 3.8,
-        "height_m": 0.0,
-        "height_z": 0.0,
+        "floors": 1,
+        "floor_height_m": 2.8,
+        "height_m": 2.8,
+        "height_z": 280.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",
@@ -1248,10 +1248,10 @@
       "name": "Security-NE",
       "massing": {
         "display_name": "Security-NE",
-        "floors": null,
-        "floor_height_m": 3.8,
-        "height_m": 0.0,
-        "height_z": 0.0,
+        "floors": 1,
+        "floor_height_m": 2.8,
+        "height_m": 2.8,
+        "height_z": 280.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",
@@ -1284,10 +1284,10 @@
       "name": "Security-W",
       "massing": {
         "display_name": "Security-W",
-        "floors": null,
-        "floor_height_m": 3.8,
-        "height_m": 0.0,
-        "height_z": 0.0,
+        "floors": 1,
+        "floor_height_m": 2.8,
+        "height_m": 2.8,
+        "height_z": 280.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",

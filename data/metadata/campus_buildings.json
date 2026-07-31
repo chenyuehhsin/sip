@@ -5,50 +5,50 @@
   "buildings": {
     "floor-Library": {
       "display_name": "Library",
-      "floors": 2,
-      "floor_height_m": 3.8,
+      "floors": 4,
+      "floor_height_m": 3.6,
       "height_m": null,
       "status": "footprint_only"
     },
     "floor-AD": {
       "display_name": "AD",
-      "floors": null,
-      "floor_height_m": 3.8,
+      "floors": 4,
+      "floor_height_m": 3.6,
       "height_m": null,
       "status": "footprint_only"
     },
     "floor-IB": {
       "display_name": "IB",
-      "floors": null,
-      "floor_height_m": 3.8,
+      "floors": 12,
+      "floor_height_m": 3.6,
       "height_m": null,
       "status": "footprint_only"
     },
     "floor-E2": {
       "display_name": "E2",
-      "floors": null,
+      "floors": 3,
       "floor_height_m": 3.8,
       "height_m": null,
       "status": "footprint_only"
     },
     "floor-MA": {
       "display_name": "MA",
-      "floors": null,
-      "floor_height_m": 3.8,
+      "floors": 5,
+      "floor_height_m": 3.6,
       "height_m": null,
       "status": "footprint_only"
     },
     "floor-EE": {
       "display_name": "EE",
-      "floors": null,
-      "floor_height_m": 3.8,
+      "floors": 8,
+      "floor_height_m": 3.6,
       "height_m": null,
       "status": "footprint_only"
     },
     "floor-T2": {
       "display_name": "T2",
-      "floors": null,
-      "floor_height_m": 3.8,
+      "floors": 5,
+      "floor_height_m": 3.6,
       "height_m": null,
       "status": "footprint_only"
     },
@@ -75,22 +75,22 @@
     },
     "floor-E1": {
       "display_name": "E1",
-      "floors": null,
+      "floors": 4,
       "floor_height_m": 3.8,
       "height_m": null,
       "status": "footprint_only"
     },
     "floor-S": {
       "display_name": "S",
-      "floors": null,
+      "floors": 3,
       "floor_height_m": 3.8,
       "height_m": null,
       "status": "footprint_only"
     },
     "floor-T3": {
       "display_name": "T3",
-      "floors": null,
-      "floor_height_m": 3.8,
+      "floors": 7,
+      "floor_height_m": 3.6,
       "height_m": null,
       "status": "footprint_only"
     },
@@ -105,14 +105,14 @@
       "display_name": "SwimmingPool",
       "floors": null,
       "floor_height_m": 3.8,
-      "height_m": null,
+      "height_m": 12,
       "status": "footprint_only"
     },
     "floor-Gym": {
       "display_name": "Gym",
-      "floors": null,
+      "floors": 2,
       "floor_height_m": 3.8,
-      "height_m": null,
+      "height_m": 14,
       "status": "footprint_only"
     },
     "floor-IA": {

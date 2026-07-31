@@ -24,10 +24,10 @@
       "name": "Library",
       "massing": {
         "display_name": "Library",
-        "floors": 2,
-        "floor_height_m": 3.8,
-        "height_m": 7.6,
-        "height_z": 760.0,
+        "floors": 4,
+        "floor_height_m": 3.6,
+        "height_m": 14.4,
+        "height_z": 1440.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",
@@ -84,10 +84,10 @@
       "name": "AD",
       "massing": {
         "display_name": "AD",
-        "floors": null,
-        "floor_height_m": 3.8,
-        "height_m": 0.0,
-        "height_z": 0.0,
+        "floors": 4,
+        "floor_height_m": 3.6,
+        "height_m": 14.4,
+        "height_z": 1440.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",
@@ -152,10 +152,10 @@
       "name": "IB",
       "massing": {
         "display_name": "IB",
-        "floors": null,
-        "floor_height_m": 3.8,
-        "height_m": 0.0,
-        "height_z": 0.0,
+        "floors": 12,
+        "floor_height_m": 3.6,
+        "height_m": 43.2,
+        "height_z": 4320.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",
@@ -236,10 +236,10 @@
       "name": "E2",
       "massing": {
         "display_name": "E2",
-        "floors": null,
+        "floors": 3,
         "floor_height_m": 3.8,
-        "height_m": 0.0,
-        "height_z": 0.0,
+        "height_m": 11.4,
+        "height_z": 1140.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",
@@ -272,10 +272,10 @@
       "name": "MA",
       "massing": {
         "display_name": "MA",
-        "floors": null,
-        "floor_height_m": 3.8,
-        "height_m": 0.0,
-        "height_z": 0.0,
+        "floors": 5,
+        "floor_height_m": 3.6,
+        "height_m": 18.0,
+        "height_z": 1800.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",
@@ -308,10 +308,10 @@
       "name": "EE",
       "massing": {
         "display_name": "EE",
-        "floors": null,
-        "floor_height_m": 3.8,
-        "height_m": 0.0,
-        "height_z": 0.0,
+        "floors": 8,
+        "floor_height_m": 3.6,
+        "height_m": 28.8,
+        "height_z": 2880.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",
@@ -344,10 +344,10 @@
       "name": "T2",
       "massing": {
         "display_name": "T2",
-        "floors": null,
-        "floor_height_m": 3.8,
-        "height_m": 0.0,
-        "height_z": 0.0,
+        "floors": 5,
+        "floor_height_m": 3.6,
+        "height_m": 18.0,
+        "height_z": 1800.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",
@@ -568,10 +568,10 @@
       "name": "E1",
       "massing": {
         "display_name": "E1",
-        "floors": null,
+        "floors": 4,
         "floor_height_m": 3.8,
-        "height_m": 0.0,
-        "height_z": 0.0,
+        "height_m": 15.2,
+        "height_z": 1520.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",
@@ -620,10 +620,10 @@
       "name": "S",
       "massing": {
         "display_name": "S",
-        "floors": null,
+        "floors": 3,
         "floor_height_m": 3.8,
-        "height_m": 0.0,
-        "height_z": 0.0,
+        "height_m": 11.4,
+        "height_z": 1140.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",
@@ -704,10 +704,10 @@
       "name": "T3",
       "massing": {
         "display_name": "T3",
-        "floors": null,
-        "floor_height_m": 3.8,
-        "height_m": 0.0,
-        "height_z": 0.0,
+        "floors": 7,
+        "floor_height_m": 3.6,
+        "height_m": 25.2,
+        "height_z": 2520.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",
@@ -802,8 +802,8 @@
         "display_name": "SwimmingPool",
         "floors": null,
         "floor_height_m": 3.8,
-        "height_m": 0.0,
-        "height_z": 0.0,
+        "height_m": 12.0,
+        "height_z": 1200.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",
@@ -836,10 +836,10 @@
       "name": "Gym",
       "massing": {
         "display_name": "Gym",
-        "floors": null,
+        "floors": 2,
         "floor_height_m": 3.8,
-        "height_m": 0.0,
-        "height_z": 0.0,
+        "height_m": 14.0,
+        "height_z": 1400.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",

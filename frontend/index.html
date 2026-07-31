@@ -226,6 +226,20 @@
             box-shadow: var(--shadow-sm); color: var(--text-muted); font-size: 0.76rem; font-weight: 760;
             display: none;
         }
+        .route-summary {
+            position: absolute; left: 50%; bottom: 86px; transform: translateX(-50%); z-index: 35;
+            display: none; pointer-events: none; text-align: center; align-items: center; gap: 10px;
+        }
+        .route-summary-mode, .route-summary-sub {
+            color: #1d4ed8; font-size: 0.9rem; font-weight: 850;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.95), 0 4px 12px rgba(255,255,255,0.72);
+            white-space: nowrap;
+        }
+        .route-summary-main {
+            color: #1d4ed8; font-size: 1.05rem; font-weight: 900; line-height: 1.2;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.95), 0 4px 12px rgba(255,255,255,0.72);
+            white-space: nowrap;
+        }
 
         /* 🌟 Item 4: Minimap 放大版 (460x420)，讓正方形區域更大 */
         .minimap-wrapper {
@@ -447,6 +461,12 @@
 
         <div id="angle-hint" class="angle-hint" data-i18n="angleHint">Windows：Ctrl + 滑鼠拖曳；Mac：Option + 滑鼠拖曳，可自由變換角度。</div>
 
+        <div id="route-summary" class="route-summary">
+            <div id="route-summary-mode" class="route-summary-mode"></div>
+            <div id="route-summary-main" class="route-summary-main"></div>
+            <div id="route-summary-sub" class="route-summary-sub"></div>
+        </div>
+
         <div id="hover-tooltip" class="hover-tooltip">
             <div class="tt-title" id="tt-name">Name</div>
             <div class="tt-meta" id="tt-meta"></div>
@@ -489,6 +509,10 @@
     const hoverTooltipMeta = document.getElementById('tt-meta');
     const minimapWrapper = document.getElementById('minimap-wrapper');
     const angleHint = document.getElementById('angle-hint');
+    const routeSummary = document.getElementById('route-summary');
+    const routeSummaryMode = document.getElementById('route-summary-mode');
+    const routeSummaryMain = document.getElementById('route-summary-main');
+    const routeSummarySub = document.getElementById('route-summary-sub');
     const languageToggle = document.getElementById('language-toggle');
     const poiDetailCard = document.getElementById('poi-detail-card');
     const poiDetailTitle = document.getElementById('poi-detail-title');
@@ -553,6 +577,8 @@
             routeDisconnected: "路網無法連通。",
             routeSuccess: "尋路解算成功",
             routeModeLabel: "路線模式：",
+            routeEta: "預計 {minutes} 分鐘可達",
+            routeSummaryDistance: "總距離 {distance} m",
             mainDistance: "預估步行距離：",
             directions: "導航指引",
             routeFail: "導航失敗：",
@@ -630,6 +656,8 @@
             routeDisconnected: "The route network is not connected.",
             routeSuccess: "Route solved",
             routeModeLabel: "Route mode: ",
+            routeEta: "About {minutes} min",
+            routeSummaryDistance: "Total {distance} m",
             mainDistance: "Estimated walking distance: ",
             directions: "Directions",
             routeFail: "Navigation failed: ",
@@ -699,6 +727,7 @@
         updateToggle3DButtonLabel();
         updateSelectPlaceholders();
         infoBox.innerHTML = renderInfoBox();
+        updateRouteSummary();
         renderPoiDetailCard();
         drawMap();
     }
@@ -706,6 +735,7 @@
     let nodesData = [], edgesData = [], poisData = [], connectionsData = {}, campusFeaturesData = [], nodeMap = {};
     let verticalNodeIds = new Set();
     let currentPath = [], altPath = [];
+    let currentRouteDistance = null;
     let currentElevation = 1000;
     let is3DMode = true;
 
@@ -733,6 +763,7 @@
         SCALE_REFERENCE_POINTS.start.y - SCALE_REFERENCE_POINTS.end.y
     );
     const METERS_PER_MAP_UNIT = (SCALE_REFERENCE_CM / 100) / SCALE_REFERENCE_PIXEL_DISTANCE;
+    const WALKING_METERS_PER_MIN = 72;
 
     const BLDG_FULL_NAMES = {
         zh: { "RB": "RB綜合研究大樓", "T1": "T1第一教學大樓", "T4": "T4第四教學大樓", "AU": "AU視聽館" },
@@ -1185,7 +1216,12 @@
         return isBlueNode(node);
     }
 
+    function isRouteNode(node) {
+        return currentPath.includes(node.id) || altPath.includes(node.id) || node.id === tempStart || node.id === tempEnd;
+    }
+
     function isNodeDrawableForMode(node) {
+        if (isRouteNode(node)) return true;
         if (currentViewMode === 'vertical_only') return isVerticalNode(node);
         if (currentViewMode === 'point_select') return isPointSelectNode(node);
         return true;
@@ -1293,6 +1329,31 @@
         ctx.fill(); ctx.stroke();
 
         ctx.fillStyle = 'white'; ctx.fillText(text, x + padX, y + 5 * mapZoom);
+    }
+
+    function estimateWalkingMinutes(distanceMeters) {
+        const distance = Number(distanceMeters);
+        if (!Number.isFinite(distance) || distance <= 0) return null;
+        return Math.max(1, Math.ceil(distance / WALKING_METERS_PER_MIN));
+    }
+
+    function getRouteEtaText(distanceMeters) {
+        const minutes = estimateWalkingMinutes(distanceMeters);
+        if (!minutes) return '';
+        return t('routeEta').replace('{minutes}', minutes);
+    }
+
+    function updateRouteSummary() {
+        const eta = getRouteEtaText(currentRouteDistance);
+        if (!currentPath.length || !eta) {
+            routeSummary.style.display = 'none';
+            return;
+        }
+
+        routeSummary.style.display = 'flex';
+        routeSummaryMode.textContent = getRouteModeLabel(currentRouteMode);
+        routeSummaryMain.textContent = eta;
+        routeSummarySub.textContent = t('routeSummaryDistance').replace('{distance}', currentRouteDistance);
     }
 
     function drawDynamicCapsule(ctx, lines, cx, cy, bgColor, textColor, isHovered) {
@@ -1732,10 +1793,10 @@
             let isVertical = isVerticalEdge(edge);
             if (vMode === 'main_only' && isVertical) return;
             if (vMode === 'vertical_only' && !isVertical) return;
-            if (vMode === 'point_select') return;
 
             let onMainPath = currentPath.includes(edge.from) && currentPath.includes(edge.to);
             let onAltPath = altPath.includes(edge.from) && altPath.includes(edge.to);
+            if (vMode === 'point_select' && !onMainPath && !onAltPath) return;
             let p1 = getProjectedCoords(n1), p2 = getProjectedCoords(n2);
 
             ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y);
@@ -1759,7 +1820,7 @@
         });
         ctx.setLineDash([]);
 
-        if (!['vertical_only', 'point_select'].includes(vMode)) {
+        if (vMode !== 'vertical_only') {
             poisData.forEach(poi => {
                 if (isNodeVisible(poi)) {
                     let poiOnPath = currentPath.includes(poi.id) || altPath.includes(poi.id);
@@ -1770,6 +1831,7 @@
                         const tn = nodeMap[tid];
                         if (tn && isNodeVisible(tn)) {
                             let onPath = currentPath.includes(poi.id) && currentPath.includes(tid);
+                            if (vMode === 'point_select' && !onPath) return;
                             if (!isNavigating || onPath || (!onPath && vMode !== 'main_only')) {
                                 let p1 = getProjectedCoords(poi), p2 = getProjectedCoords(tn);
                                 ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y);
@@ -1819,6 +1881,7 @@
                 }
             }
         });
+
         }
 
         topLayerCapsules.forEach(cap => drawDynamicCapsule(ctx, cap.lines, cap.x, cap.y, cap.bgColor, cap.textColor, cap.isHovered));
@@ -1840,6 +1903,7 @@
             })
             .then(data => {
                 currentPath = data.path; altPath = data.alt_path || []; activeRoute = 'main';
+                currentRouteDistance = Number(data.total_distance);
 
                 if (is3DMode) {
                     active3DCheckboxes.clear();
@@ -1849,6 +1913,7 @@
                     const startNode = nodeMap[start];
                     if (startNode) { currentElevation = startNode.z; elevationSelect.value = String(currentElevation); }
                 }
+                updateRouteSummary();
                 drawMap();
                 setInfoBox(() => {
                     let html = `<b>${t('routeSuccess')}</b>\n${t('routeModeLabel')}<b>${getRouteModeLabel(data.mode || currentRouteMode)}</b>\n${t('mainDistance')}<span style="color:#2563eb;font-weight:bold;">${data.total_distance}</span> m`;
@@ -1857,7 +1922,7 @@
                     return html;
                 });
             }).catch(err => {
-                currentPath = []; altPath = []; activeRoute = 'main'; drawMap();
+                currentPath = []; altPath = []; activeRoute = 'main'; currentRouteDistance = null; updateRouteSummary(); drawMap();
                 setInfoBox(() => err.reason === 'no_stair_free_route' ? t('noStairFreeRoute') : `${t('routeFail')}${err.message}`);
             });
     }
@@ -1877,7 +1942,8 @@
     poiSetEndBtn.addEventListener('click', () => setPoiEndpoint('end'));
 
     document.getElementById('clear-btn').addEventListener('click', () => {
-        currentPath = []; altPath = []; tempStart = null; tempEnd = null; clickState = 0;
+        currentPath = []; altPath = []; currentRouteDistance = null; tempStart = null; tempEnd = null; clickState = 0;
+        updateRouteSummary();
         selectedSpaceIds = { start: null, end: null };
         startSpaceInput.value = ""; endSpaceInput.value = "";
         startSpaceMenu.classList.remove('open'); endSpaceMenu.classList.remove('open');

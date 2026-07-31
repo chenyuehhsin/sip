@@ -9,7 +9,7 @@ app = FastAPI(title="SIP Multi-floor Navigation Engine")
 # RB-B104 (356, 673) 到 RB-B105 (299, 674) 校準為 500 cm。
 SCALE_FACTOR = 5.0 / math.sqrt((356 - 299)**2 + (673 - 674)**2)
 
-print("🚀 啟動 SIP 跨樓層雙向尋路引擎 (含備選路徑)...")
+print("🚀 啟動 SIP 跨樓層雙向尋路引擎...")
 
 try:
     with open('data/routing_nodes.json', 'r', encoding='utf-8') as f:
@@ -88,12 +88,37 @@ def run_dijkstra(graph, start, end):
     path.reverse()
     return path, round(distances[end], 2)
 
+def build_route_graph(mode):
+    if mode == "shortest":
+        return {node: neighbors.copy() for node, neighbors in base_graph.items()}
+
+    graph = {node: {} for node in base_graph}
+    for edge in routing_data['edges']:
+        if edge.get('type') == "stair":
+            continue
+        u, v, w = edge['from'], edge['to'], edge['distance']
+        if u in graph and v in graph:
+            graph[u][v] = w
+            graph[v][u] = w
+    return graph
+
 @app.get("/api/route")
-def get_shortest_path(start: str, end: str):
+def get_shortest_path(start: str, end: str, mode: str = "shortest"):
+    if mode not in {"shortest", "elevator_preferred"}:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "invalid_route_mode",
+                "message": "Unsupported route mode",
+                "mode": mode,
+                "supported_modes": ["shortest", "elevator_preferred"]
+            }
+        )
+
     if start not in node_coords or end not in node_coords:
         raise HTTPException(status_code=404, detail=f"找不到起點或終點")
 
-    local_graph = {node: neighbors.copy() for node, neighbors in base_graph.items()}
+    local_graph = build_route_graph(mode)
 
     def inject_virtual_node(poi_id):
         if poi_id not in local_graph:
@@ -108,34 +133,20 @@ def get_shortest_path(start: str, end: str):
     if start in poi_dict: inject_virtual_node(start)
     if end in poi_dict: inject_virtual_node(end)
 
-    # 1. 計算主路線
     main_path, main_dist = run_dijkstra(local_graph, start, end)
     if not main_path:
+        if mode == "elevator_preferred":
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": "route_unavailable",
+                    "reason": "no_stair_free_route",
+                    "message": "目前圖資中找不到避免樓梯的可達路線。",
+                    "mode": mode
+                }
+            )
         raise HTTPException(status_code=400, detail="這兩個點之間無法連通")
 
-    # 2. 計算備選路線 (移除主路線中間的骨幹邊)
-    alt_path, alt_dist = [], float('inf')
-    if len(main_path) > 4:
-        # 找中間的一條邊切斷
-        idx = len(main_path) // 2
-        u, v = main_path[idx], main_path[idx+1]
-        
-        # 暫時移除該邊
-        w_uv = local_graph[u].pop(v, None)
-        w_vu = local_graph[v].pop(u, None)
-        
-        alt_path, alt_dist = run_dijkstra(local_graph, start, end)
-        
-        # 恢復該邊 (若有其他用途)
-        if w_uv: local_graph[u][v] = w_uv
-        if w_vu: local_graph[v][u] = w_vu
-
-        # 如果備選路線太繞路(超過 1.5 倍)或是跟主路線一樣，就作廢
-        if alt_dist > main_dist * 1.5 or alt_path == main_path:
-            alt_path = []
-            alt_dist = None
-
-    # 3. 產生文字導航
     directions = [f"🚶 從 {start} 出發"]
     for i in range(1, len(main_path) - 1):
         curr = main_path[i]
@@ -148,15 +159,13 @@ def get_shortest_path(start: str, end: str):
                 directions.append(f"🪜 經由 {curr} 轉換樓層")
     directions.append(f"🎯 抵達終點 {end}")
 
-    if not alt_path:
-        alt_dist = None
-
     return {
+        "mode": mode,
         "path": main_path,
         "total_distance": main_dist,
         "directions": directions,
-        "alt_path": alt_path,
-        "alt_distance": alt_dist
+        "alt_path": [],
+        "alt_distance": None
     }
 
 @app.get("/api/data")

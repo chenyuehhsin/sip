@@ -128,7 +128,7 @@
 
         .route-selector {
             position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            display: none; background: rgba(255,255,255,0.92); padding: 6px; border-radius: 16px;
+            display: flex; background: rgba(255,255,255,0.92); padding: 6px; border-radius: 16px;
             box-shadow: var(--shadow-md); z-index: 30; border: 1px solid rgba(47,125,104,0.14);
             backdrop-filter: blur(12px);
         }
@@ -219,6 +219,13 @@
         }
         .scale-text { font-size: 0.8rem; font-weight: 800; color: var(--text-main); text-align: center; margin-bottom: 4px; }
         .scale-bar { height: 4px; border-left: 2px solid var(--text-main); border-right: 2px solid var(--text-main); border-bottom: 2px solid var(--text-main); transition: width 0.1s; }
+        .angle-hint {
+            position: absolute; right: 18px; bottom: 18px; z-index: 25;
+            max-width: 320px; padding: 9px 12px; border-radius: 12px;
+            background: rgba(255,255,255,0.88); border: 1px solid rgba(47,125,104,0.14);
+            box-shadow: var(--shadow-sm); color: var(--text-muted); font-size: 0.76rem; font-weight: 760;
+            display: none;
+        }
 
         /* 🌟 Item 4: Minimap 放大版 (460x420)，讓正方形區域更大 */
         .minimap-wrapper {
@@ -336,6 +343,7 @@
                 <button id="btn-view-main" class="view-btn" onclick="setViewMode('main_only')" data-i18n="viewMain">主動線</button>
                 <button id="btn-view-vert" class="view-btn" onclick="setViewMode('vertical_only')" data-i18n="viewVertical">垂直動線</button>
                 <button id="btn-view-volume" class="view-btn" onclick="setViewMode('volume_only')" data-i18n="viewVolume">量體模式</button>
+                <button id="btn-view-points" class="view-btn" onclick="setViewMode('point_select')" data-i18n="viewPointSelect">點選輔助</button>
             </div>
         </div>
 
@@ -374,8 +382,7 @@
         <div id="info-box">選擇起點與終點後開始尋路。</div>
 
         <div class="legend">
-            <div class="legend-item"><div class="color-box" style="background: #2563eb;"></div><span data-i18n="legendMain">主導航路線</span></div>
-            <div class="legend-item"><div class="color-box" style="background: #60a5fa;"></div><span data-i18n="legendAlt">備選路線</span></div>
+            <div class="legend-item"><div class="color-box" style="background: #2563eb;"></div><span data-i18n="legendMain">目前路線</span></div>
             <div class="legend-item"><div class="color-box" style="background: #b75a5a;"></div><span data-i18n="legendHorizontal">水平主幹道</span></div>
             <div class="legend-item"><div class="color-box" style="background: #f7f3ea; border: 1px solid #c4ccc3;"></div><span data-i18n="legendPoi">POI 連線</span></div>
         </div>
@@ -434,9 +441,11 @@
         </div>
 
         <div id="route-selector" class="route-selector">
-            <button id="btn-main-route" class="route-select-btn active" onclick="selectRoute('main')" data-i18n="mainRoute">主路線</button>
-            <button id="btn-alt-route" class="route-select-btn" onclick="selectRoute('alt')" data-i18n="altRoute">備選路線</button>
+            <button id="btn-mode-shortest" class="route-select-btn active" onclick="setRouteMode('shortest')" data-i18n="modeShortest">最短距離</button>
+            <button id="btn-mode-elevator" class="route-select-btn" onclick="setRouteMode('elevator_preferred')" data-i18n="modeElevatorPreferred">電梯優先</button>
         </div>
+
+        <div id="angle-hint" class="angle-hint" data-i18n="angleHint">Windows：Ctrl + 滑鼠拖曳；Mac：Option + 滑鼠拖曳，可自由變換角度。</div>
 
         <div id="hover-tooltip" class="hover-tooltip">
             <div class="tt-title" id="tt-name">Name</div>
@@ -478,8 +487,8 @@
     const floorCheckboxesContainer = document.getElementById('floor-checkboxes');
     const hoverTooltip = document.getElementById('hover-tooltip');
     const hoverTooltipMeta = document.getElementById('tt-meta');
-    const routeSelector = document.getElementById('route-selector');
     const minimapWrapper = document.getElementById('minimap-wrapper');
+    const angleHint = document.getElementById('angle-hint');
     const languageToggle = document.getElementById('language-toggle');
     const poiDetailCard = document.getElementById('poi-detail-card');
     const poiDetailTitle = document.getElementById('poi-detail-title');
@@ -503,6 +512,7 @@
             viewMain: "主動線",
             viewVertical: "垂直動線",
             viewVolume: "量體模式",
+            viewPointSelect: "點選輔助",
             elevationSection: "2D 剖面基準",
             layersSection: "3D 疊層",
             startSection: "起點",
@@ -518,9 +528,10 @@
             buildingSuffix: "大樓",
             routeButton: "開始尋路",
             clearButton: "清除",
+            modeShortest: "最短距離",
+            modeElevatorPreferred: "電梯優先",
             infoInitial: "選擇起點與終點後開始尋路。",
-            legendMain: "主導航路線",
-            legendAlt: "備選路線",
+            legendMain: "目前路線",
             legendHorizontal: "水平主幹道",
             legendPoi: "POI 連線",
             filterAll: "全部",
@@ -534,18 +545,18 @@
             rotateCw: "順時針旋轉",
             resetCamera: "重置視角",
             minimapTitle: "2D 剖面空間關聯示意圖",
-            mainRoute: "主路線",
-            altRoute: "備選路線",
+            angleHint: "Windows：Ctrl + 滑鼠拖曳；Mac：Option + 滑鼠拖曳，可自由變換角度。",
             tooltipId: "編號: ",
             tooltipCategory: "分類: ",
             tooltipLocation: "位置: ",
             routeSolving: "正在進行跨樓層路徑解算...",
             routeDisconnected: "路網無法連通。",
             routeSuccess: "尋路解算成功",
+            routeModeLabel: "路線模式：",
             mainDistance: "預估步行距離：",
-            altDistance: "備用路徑距離：",
             directions: "導航指引",
             routeFail: "導航失敗：",
+            noStairFreeRoute: "目前圖資中找不到避免樓梯的可達路線。",
             invalidSelection: "請從搜尋結果選擇有效的起點與終點。",
             startSet: "已設定起點：",
             chooseEnd: "請點擊地圖選擇終點。",
@@ -578,6 +589,7 @@
             viewMain: "Main Route",
             viewVertical: "Vertical Links",
             viewVolume: "Volume Mode",
+            viewPointSelect: "Point Select",
             elevationSection: "2D Section Datum",
             layersSection: "3D Layers",
             startSection: "Start",
@@ -593,9 +605,10 @@
             buildingSuffix: "Building",
             routeButton: "Find Route",
             clearButton: "Clear",
+            modeShortest: "Shortest Distance",
+            modeElevatorPreferred: "Elevator Preferred",
             infoInitial: "Select a start and destination to begin routing.",
-            legendMain: "Main navigation route",
-            legendAlt: "Alternative route",
+            legendMain: "Current route",
             legendHorizontal: "Horizontal corridor",
             legendPoi: "POI connection",
             filterAll: "All",
@@ -609,18 +622,18 @@
             rotateCw: "Rotate clockwise",
             resetCamera: "Reset view",
             minimapTitle: "2D section spatial relation diagram",
-            mainRoute: "Main Route",
-            altRoute: "Alternative Route",
+            angleHint: "Windows: Ctrl + drag; Mac: Option + drag to freely change the viewing angle.",
             tooltipId: "ID: ",
             tooltipCategory: "Category: ",
             tooltipLocation: "Location: ",
             routeSolving: "Solving cross-floor route...",
             routeDisconnected: "The route network is not connected.",
             routeSuccess: "Route solved",
+            routeModeLabel: "Route mode: ",
             mainDistance: "Estimated walking distance: ",
-            altDistance: "Alternative route distance: ",
             directions: "Directions",
             routeFail: "Navigation failed: ",
+            noStairFreeRoute: "No stair-free reachable route is available in the current map data.",
             invalidSelection: "Choose a valid start and destination from the search results.",
             startSet: "Start set: ",
             chooseEnd: "Click the map to choose a destination.",
@@ -691,6 +704,7 @@
     }
 
     let nodesData = [], edgesData = [], poisData = [], connectionsData = {}, campusFeaturesData = [], nodeMap = {};
+    let verticalNodeIds = new Set();
     let currentPath = [], altPath = [];
     let currentElevation = 1000;
     let is3DMode = true;
@@ -699,6 +713,7 @@
     const showGlGrid = true;
     let currentBuildingFilter = 'General';
     let activeRoute = 'main';
+    let currentRouteMode = 'shortest';
 
     const DEFAULT_3D_MAP_ZOOM = 0.62;
     const DEFAULT_2D_MAP_ZOOM = 0.74;
@@ -1084,10 +1099,12 @@
         document.getElementById('btn-view-main').classList.remove('active');
         document.getElementById('btn-view-vert').classList.remove('active');
         document.getElementById('btn-view-volume').classList.remove('active');
+        document.getElementById('btn-view-points').classList.remove('active');
         if(mode === 'all') document.getElementById('btn-view-all').classList.add('active');
         if(mode === 'main_only') document.getElementById('btn-view-main').classList.add('active');
         if(mode === 'vertical_only') document.getElementById('btn-view-vert').classList.add('active');
         if(mode === 'volume_only') document.getElementById('btn-view-volume').classList.add('active');
+        if(mode === 'point_select') document.getElementById('btn-view-points').classList.add('active');
         drawMap();
     }
 
@@ -1097,11 +1114,27 @@
         event.target.classList.add('active'); drawMap();
     }
 
-    function selectRoute(type) {
-        activeRoute = type;
-        document.getElementById('btn-main-route').classList.toggle('active', type === 'main');
-        document.getElementById('btn-alt-route').classList.toggle('active', type === 'alt');
-        drawMap();
+    function getRouteModeLabel(mode) {
+        return mode === 'elevator_preferred' ? t('modeElevatorPreferred') : t('modeShortest');
+    }
+
+    function updateRouteModeButtons() {
+        document.getElementById('btn-mode-shortest').classList.toggle('active', currentRouteMode === 'shortest');
+        document.getElementById('btn-mode-elevator').classList.toggle('active', currentRouteMode === 'elevator_preferred');
+    }
+
+    function setRouteMode(mode) {
+        if (!['shortest', 'elevator_preferred'].includes(mode)) return;
+        currentRouteMode = mode;
+        updateRouteModeButtons();
+
+        const s = resolveSelectedSpace('start') || tempStart;
+        const e = resolveSelectedSpace('end') || tempEnd;
+        if (s && e) {
+            tempStart = s;
+            tempEnd = e;
+            fetchRoute(s, e);
+        }
     }
 
     fetch('/api/data')
@@ -1110,12 +1143,53 @@
             nodesData = data.nodes || []; edgesData = data.edges || [];
             poisData = data.pois || []; connectionsData = data.connections || {};
             campusFeaturesData = (data.campus_features && data.campus_features.features) || [];
+            rebuildDerivedRouteSets();
             // 如果後端有吐出自定義 SVG 樓板邊界，則取代預設形狀
             if (data.slabs) BLDG_SHAPES = data.slabs;
             [...nodesData, ...poisData].forEach(n => { n.z = getNodeElevation(n.building, n.floor_name); nodeMap[n.id] = n; });
             generateGroupedFloorCheckboxes(); initSpaceSearch(); drawMap();
         })
         .catch(e => { drawMap(); });
+
+    function isVerticalEdge(edge) {
+        return ['stair', 'elevator'].includes(edge.type);
+    }
+
+    function normalizeColor(value) {
+        return String(value || '').trim().toLowerCase();
+    }
+
+    function rebuildDerivedRouteSets() {
+        verticalNodeIds = new Set();
+        edgesData.forEach(edge => {
+            if (isVerticalEdge(edge)) {
+                verticalNodeIds.add(edge.from);
+                verticalNodeIds.add(edge.to);
+            }
+        });
+    }
+
+    function isBlueNode(node) {
+        return normalizeColor(node.color) === '#0ea5e9' || verticalNodeIds.has(node.id);
+    }
+
+    function isOrangeNode(node) {
+        return node.type === 'poi' || normalizeColor(node.color) === '#ff9955';
+    }
+
+    function isPointSelectNode(node) {
+        return isOrangeNode(node) || isBlueNode(node);
+    }
+
+    function isVerticalNode(node) {
+        return isBlueNode(node);
+    }
+
+    function isNodeDrawableForMode(node) {
+        if (currentViewMode === 'vertical_only') return isVerticalNode(node);
+        if (currentViewMode === 'point_select') return isPointSelectNode(node);
+        return true;
+    }
 
     function generateGroupedFloorCheckboxes() {
         floorCheckboxesContainer.innerHTML = '';
@@ -1505,6 +1579,7 @@
         updateHUD();
 
         minimapWrapper.style.display = is3DMode ? 'none' : 'flex';
+        angleHint.style.display = is3DMode ? 'block' : 'none';
         if (!is3DMode) drawMinimap();
 
         if (showGlGrid) {
@@ -1645,9 +1720,10 @@
             let n2Active = currentBuildingFilter === 'General' || n2.building === currentBuildingFilter || (currentBuildingFilter === 'RB' && n2.building === 'RB-STACK');
             let isBldgActive = n1Active && n2Active;
 
-            let isVertical = ['stair', 'elevator'].includes(edge.type);
+            let isVertical = isVerticalEdge(edge);
             if (vMode === 'main_only' && isVertical) return;
             if (vMode === 'vertical_only' && !isVertical) return;
+            if (vMode === 'point_select') return;
 
             let onMainPath = currentPath.includes(edge.from) && currentPath.includes(edge.to);
             let onAltPath = altPath.includes(edge.from) && altPath.includes(edge.to);
@@ -1674,7 +1750,7 @@
         });
         ctx.setLineDash([]);
 
-        if (vMode !== 'vertical_only') {
+        if (!['vertical_only', 'point_select'].includes(vMode)) {
             poisData.forEach(poi => {
                 if (isNodeVisible(poi)) {
                     let poiOnPath = currentPath.includes(poi.id) || altPath.includes(poi.id);
@@ -1697,14 +1773,12 @@
             });
         }
 
-        const allNodes = [...nodesData, ...poisData].filter(n => isNodeVisible(n));
+        const allNodes = [...nodesData, ...poisData].filter(n => isNodeVisible(n) && isNodeDrawableForMode(n));
         allNodes.sort((a, b) => getProjectedCoords(a).y - getProjectedCoords(b).y);
 
         let activePathArray = activeRoute === 'main' ? currentPath : altPath;
 
         allNodes.forEach(node => {
-            if (vMode === 'vertical_only' && !['stair','elevator'].includes(node.id.toLowerCase())) return;
-
             let onPath = currentPath.includes(node.id) || altPath.includes(node.id);
             let onActivePath = activePathArray.includes(node.id);
             let isSelected = node.id === tempStart || node.id === tempEnd;
@@ -1713,7 +1787,7 @@
 
             let p = getProjectedCoords(node);
             let nodeColor = node.color || '#94a3b8';
-            if (isNavigating && !onActivePath) nodeColor = '#dbe5e1';
+            if (vMode !== 'point_select' && isNavigating && !onActivePath) nodeColor = '#dbe5e1';
             else if (!isBldgActive && !isSelected && !onPath) nodeColor = '#dbe5e1';
 
             let radius = node.type === 'poi' ? 5.0 : 7.0;
@@ -1722,7 +1796,7 @@
 
             ctx.beginPath(); ctx.arc(p.x, p.y, radius * mapZoom, 0, 2 * Math.PI);
             ctx.fillStyle = nodeColor; ctx.fill();
-            ctx.strokeStyle = (isNavigating && !onActivePath) || !isBldgActive ? 'transparent' : '#ffffff';
+            ctx.strokeStyle = (vMode !== 'point_select' && isNavigating && !onActivePath) || !isBldgActive ? 'transparent' : '#ffffff';
             ctx.lineWidth = 1.5 * mapZoom; ctx.stroke();
 
             if (isSelected) {
@@ -1742,13 +1816,21 @@
     }
 
     function fetchRoute(start, end) {
-        setInfoBox(() => t('routeSolving')); routeSelector.style.display = 'none';
-        fetch(`/api/route?start=${start}&end=${end}`)
-            .then(res => { if(!res.ok) throw new Error(t('routeDisconnected')); return res.json(); })
+        setInfoBox(() => t('routeSolving'));
+        const params = new URLSearchParams({ start, end, mode: currentRouteMode });
+        fetch(`/api/route?${params.toString()}`)
+            .then(async res => {
+                const payload = await res.json().catch(() => null);
+                if (!res.ok) {
+                    const detail = payload && payload.detail ? payload.detail : null;
+                    const err = new Error(detail && detail.message ? detail.message : t('routeDisconnected'));
+                    err.reason = detail && detail.reason ? detail.reason : '';
+                    throw err;
+                }
+                return payload;
+            })
             .then(data => {
                 currentPath = data.path; altPath = data.alt_path || []; activeRoute = 'main';
-                document.getElementById('btn-main-route').classList.add('active'); document.getElementById('btn-alt-route').classList.remove('active');
-                if (altPath.length > 0) routeSelector.style.display = 'flex';
 
                 if (is3DMode) {
                     active3DCheckboxes.clear();
@@ -1760,13 +1842,15 @@
                 }
                 drawMap();
                 setInfoBox(() => {
-                    let html = `<b>${t('routeSuccess')}</b>\n${t('mainDistance')}<span style="color:#2563eb;font-weight:bold;">${data.total_distance}</span> m`;
-                    if(altPath.length > 0) html += `\n${t('altDistance')}${data.alt_distance} m`;
+                    let html = `<b>${t('routeSuccess')}</b>\n${t('routeModeLabel')}<b>${getRouteModeLabel(data.mode || currentRouteMode)}</b>\n${t('mainDistance')}<span style="color:#2563eb;font-weight:bold;">${data.total_distance}</span> m`;
                     html += `\n\n<b>${t('directions')}</b>\n`;
                     data.directions.forEach((d, idx) => html += `${idx + 1}. ${d}\n`);
                     return html;
                 });
-            }).catch(err => { currentPath = []; altPath = []; drawMap(); setInfoBox(() => `${t('routeFail')}${err.message}`); });
+            }).catch(err => {
+                currentPath = []; altPath = []; activeRoute = 'main'; drawMap();
+                setInfoBox(() => err.reason === 'no_stair_free_route' ? t('noStairFreeRoute') : `${t('routeFail')}${err.message}`);
+            });
     }
 
     document.getElementById('route-btn').addEventListener('click', () => {
@@ -1784,7 +1868,7 @@
     poiSetEndBtn.addEventListener('click', () => setPoiEndpoint('end'));
 
     document.getElementById('clear-btn').addEventListener('click', () => {
-        currentPath = []; altPath = []; tempStart = null; tempEnd = null; clickState = 0; routeSelector.style.display = 'none';
+        currentPath = []; altPath = []; tempStart = null; tempEnd = null; clickState = 0;
         selectedSpaceIds = { start: null, end: null };
         startSpaceInput.value = ""; endSpaceInput.value = "";
         startSpaceMenu.classList.remove('open'); endSpaceMenu.classList.remove('open');
@@ -1824,7 +1908,7 @@
             }
 
             let hoveredNode = null, minDist = Infinity;
-            [...nodesData, ...poisData].filter(n=>isNodeVisible(n)).forEach(node => {
+            [...nodesData, ...poisData].filter(n=>isNodeVisible(n) && isNodeDrawableForMode(n)).forEach(node => {
                 let p = getProjectedCoords(node);
                 const dist = Math.sqrt((p.x - mouseX)**2 + (p.y - mouseY)**2);
                 if (dist < 15 * Math.max(1, mapZoom) && dist < minDist) { minDist = dist; hoveredNode = node; }
@@ -1850,7 +1934,7 @@
         mouseY = (event.clientY - rect.top) * (canvas.height / rect.height);
 
         let closestNode = null, minDist = Infinity;
-        [...nodesData, ...poisData].filter(n=>isNodeVisible(n)).forEach(node => {
+        [...nodesData, ...poisData].filter(n=>isNodeVisible(n) && isNodeDrawableForMode(n)).forEach(node => {
             let p = getProjectedCoords(node);
             const dist = Math.sqrt((p.x - mouseX)**2 + (p.y - mouseY)**2);
             if (dist < 20 * Math.max(1, mapZoom) && dist < minDist) { minDist = dist; closestNode = node; }

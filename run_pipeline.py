@@ -23,9 +23,10 @@ def run_step(script_name):
 def main():
     print("🚀 開始執行 [SIP 智慧導航圖資自動化整合管線]...", flush=True)
     
-    # 依序執行的三部曲腳本
+    # 依序執行資料整合腳本
     steps = [
         "1_svg_parser.py",
+        "enrich_pois.py",
         "2_knn_recommender.py",
         "3_merge_connections.py",
         "4_campus_features_parser.py"

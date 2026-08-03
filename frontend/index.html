@@ -323,6 +323,33 @@
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
         }
 
+        .debug-panel { display: none; border-color: rgba(47,125,104,0.24); background: rgba(244,249,246,0.9); }
+        .debug-row { display: grid; gap: 6px; }
+        .debug-toggle { display: inline-flex; align-items: center; gap: 8px; color: var(--text-main); font-size: 0.82rem; font-weight: 820; }
+        .debug-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .debug-btn {
+            min-height: 34px; padding: 7px 10px; border-radius: 10px; border: 1px solid rgba(47,125,104,0.13);
+            background: #fbfdfc; color: var(--primary); font-size: 0.78rem; font-weight: 820; cursor: pointer;
+        }
+        .debug-btn:hover { background: var(--primary-soft); border-color: rgba(47,125,104,0.22); }
+        .debug-btn.danger { color: var(--danger); background: var(--danger-soft); border-color: transparent; }
+        .debug-status, .debug-meta, .debug-list {
+            color: var(--text-muted); font-size: 0.76rem; line-height: 1.38; overflow-wrap: anywhere;
+        }
+        .debug-status { min-height: 20px; font-weight: 760; }
+        .debug-list {
+            max-height: 110px; overflow-y: auto; padding: 7px 8px; border-radius: 10px;
+            border: 1px solid rgba(47,125,104,0.1); background: rgba(255,255,255,0.72);
+        }
+        .debug-list-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; padding: 6px 0; border-top: 1px solid rgba(47,125,104,0.08); }
+        .debug-list-row:first-child { border-top: 0; }
+        .debug-edge-main { display: grid; gap: 5px; min-width: 0; }
+        .debug-edge-label { color: var(--text-main); font-size: 0.74rem; font-weight: 760; overflow-wrap: anywhere; }
+        .debug-edge-controls { display: flex; gap: 6px; align-items: center; }
+        .debug-edge-type { min-width: 0; width: 100%; font-size: 0.72rem; padding: 5px 7px; }
+        .debug-edge-swatch { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; border: 1px solid rgba(255,255,255,0.85); }
+        .debug-btn.compact { min-height: 28px; padding: 5px 8px; border-radius: 8px; font-size: 0.72rem; }
+
         .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.73rem; padding: 10px 12px; background: linear-gradient(180deg, #f9fcfa, #f3f8f6); border-radius: 13px; border: 1px solid rgba(47,125,104,0.12); }
         .legend-item { display: flex; align-items: center; gap: 8px; color: var(--text-muted); }
         .color-box { width: 10px; height: 10px; border-radius: 50%; }
@@ -356,9 +383,33 @@
                 <button id="btn-view-all" class="view-btn active" onclick="setViewMode('all')" data-i18n="viewAll">全部圖資</button>
                 <button id="btn-view-main" class="view-btn" onclick="setViewMode('main_only')" data-i18n="viewMain">主動線</button>
                 <button id="btn-view-vert" class="view-btn" onclick="setViewMode('vertical_only')" data-i18n="viewVertical">垂直動線</button>
+                <button id="btn-view-campus" class="view-btn" onclick="setViewMode('campus_only')" data-i18n="viewCampus">校園模式</button>
                 <button id="btn-view-volume" class="view-btn" onclick="setViewMode('volume_only')" data-i18n="viewVolume">量體模式</button>
                 <button id="btn-view-points" class="view-btn" onclick="setViewMode('point_select')" data-i18n="viewPointSelect">點選輔助</button>
             </div>
+        </div>
+
+        <div id="edge-editor-panel" class="panel-section debug-panel">
+            <div class="section-title" data-i18n="edgeEditorTitle">Developer Edge Editor</div>
+            <label class="debug-toggle">
+                <input id="edge-editor-enabled" type="checkbox">
+                <span data-i18n="edgeEditorEnable">啟用 Edge Editor</span>
+            </label>
+            <div class="debug-row">
+                <label class="debug-meta" for="edge-type-select" data-i18n="edgeEditorType">Edge Type</label>
+                <select id="edge-type-select"></select>
+            </div>
+            <div id="edge-editor-source" class="debug-meta"></div>
+            <div id="edge-editor-status" class="debug-status"></div>
+            <div class="debug-actions">
+                <button id="edge-cancel-selection" class="debug-btn" type="button" data-i18n="edgeCancelSelection">取消選取</button>
+                <button id="edge-undo-last" class="debug-btn" type="button" data-i18n="edgeUndoLast">Undo</button>
+                <button id="edge-clear-draft" class="debug-btn danger" type="button" data-i18n="edgeClearDraft">清除 Draft</button>
+                <button id="edge-import-draft" class="debug-btn" type="button" data-i18n="edgeImportDraft">匯入 JSON</button>
+                <button id="edge-export-draft" class="debug-btn" type="button" data-i18n="edgeExportDraft">匯出 JSON</button>
+            </div>
+            <input id="edge-import-file" type="file" accept="application/json,.json" style="display: none;">
+            <div id="edge-draft-list" class="debug-list"></div>
         </div>
 
         <div id="elevation-panel" class="panel-section" style="display: none;">
@@ -520,6 +571,28 @@
     const poiDetailClose = document.getElementById('poi-detail-close');
     const poiSetStartBtn = document.getElementById('poi-set-start');
     const poiSetEndBtn = document.getElementById('poi-set-end');
+    const edgeEditorPanel = document.getElementById('edge-editor-panel');
+    const edgeEditorEnabledInput = document.getElementById('edge-editor-enabled');
+    const edgeTypeSelect = document.getElementById('edge-type-select');
+    const edgeEditorSource = document.getElementById('edge-editor-source');
+    const edgeEditorStatus = document.getElementById('edge-editor-status');
+    const edgeCancelSelectionBtn = document.getElementById('edge-cancel-selection');
+    const edgeUndoLastBtn = document.getElementById('edge-undo-last');
+    const edgeClearDraftBtn = document.getElementById('edge-clear-draft');
+    const edgeImportDraftBtn = document.getElementById('edge-import-draft');
+    const edgeImportFileInput = document.getElementById('edge-import-file');
+    const edgeExportDraftBtn = document.getElementById('edge-export-draft');
+    const edgeDraftList = document.getElementById('edge-draft-list');
+    const DEBUG_MODE = new URLSearchParams(window.location.search).get('debug') === '1';
+    const CAMPUS_EDGE_TYPES = ['backbone', 'secondary', 'entrance_connector', 'covered_walkway', 'outdoor_stair', 'ramp'];
+    const CAMPUS_EDGE_TYPE_COLORS = {
+        backbone: 'rgba(224, 116, 116, 0.92)',
+        secondary: 'rgba(216, 194, 122, 0.9)',
+        entrance_connector: 'rgba(37, 99, 235, 0.9)',
+        covered_walkway: 'rgba(47, 125, 104, 0.92)',
+        outdoor_stair: 'rgba(124, 58, 237, 0.86)',
+        ramp: 'rgba(107, 114, 128, 0.86)'
+    };
 
     const I18N = {
         zh: {
@@ -535,8 +608,43 @@
             viewAll: "全部圖資",
             viewMain: "主動線",
             viewVertical: "垂直動線",
+            viewCampus: "校園模式",
             viewVolume: "量體模式",
             viewPointSelect: "點選輔助",
+            edgeEditorTitle: "Developer Edge Editor",
+            edgeEditorEnable: "啟用 Edge Editor",
+            edgeEditorType: "Edge Type",
+            edgeCancelSelection: "取消選取",
+            edgeUndoLast: "Undo",
+            edgeClearDraft: "清除 Draft",
+            edgeImportDraft: "匯入 JSON",
+            edgeExportDraft: "匯出 JSON",
+            edgeDeleteDraft: "刪除",
+            edgeSourceEmpty: "Source：尚未選取",
+            edgeSourceSelected: "Source：{id} · {meta}",
+            edgeDraftEmpty: "尚未建立 Draft Edge",
+            edgeDraftCount: "Draft Edge：{count} 筆",
+            edgeStatusReady: "Edge Editor 已啟用。請點選第一個 Node。",
+            edgeStatusDisabled: "Edge Editor 未啟用。",
+            edgeStatusNeedType: "尚未選擇 Edge Type。",
+            edgeStatusInvalidType: "Edge Type 不屬於校園類型。",
+            edgeStatusMissingNode: "找不到對應 Node。",
+            edgeStatusSelfLoop: "不允許將 Node 連接到自己。",
+            edgeStatusDuplicate: "此 Edge 已存在。",
+            edgeStatusCancelled: "已取消目前選取。",
+            edgeStatusCreated: "已建立 Draft Edge：{source} → {target}",
+            edgeStatusDeleted: "已刪除 Draft Edge。",
+            edgeStatusTypeUpdated: "已更新 Draft Edge Type。",
+            edgeStatusUndo: "已移除上一筆 Draft Edge。",
+            edgeStatusNothingUndo: "沒有可 Undo 的 Draft Edge。",
+            edgeStatusCleared: "已清空 Draft Edge。",
+            edgeStatusImported: "已匯入 {count} 筆 Draft Edge。",
+            edgeStatusImportedWithInvalidType: "已匯入 {count} 筆；請更新非校園 Edge Type。",
+            edgeStatusImportEmpty: "匯入檔案沒有可用的 Draft Edge。",
+            edgeStatusImportInvalid: "匯入 JSON 格式不符合 Draft Edge schema。",
+            edgeStatusExported: "已匯出 campus_edges_draft.json。",
+            edgeStatusExportEmpty: "沒有可匯出的 Draft Edge。",
+            edgeConfirmClear: "清除本次所有 Draft Edge？",
             elevationSection: "2D 剖面基準",
             layersSection: "3D 疊層",
             startSection: "起點",
@@ -614,8 +722,43 @@
             viewAll: "All Layers",
             viewMain: "Main Route",
             viewVertical: "Vertical Links",
+            viewCampus: "Campus Mode",
             viewVolume: "Volume Mode",
             viewPointSelect: "Point Select",
+            edgeEditorTitle: "Developer Edge Editor",
+            edgeEditorEnable: "Enable Edge Editor",
+            edgeEditorType: "Edge Type",
+            edgeCancelSelection: "Cancel Selection",
+            edgeUndoLast: "Undo",
+            edgeClearDraft: "Clear Draft",
+            edgeImportDraft: "Import JSON",
+            edgeExportDraft: "Export JSON",
+            edgeDeleteDraft: "Delete",
+            edgeSourceEmpty: "Source: none",
+            edgeSourceSelected: "Source: {id} · {meta}",
+            edgeDraftEmpty: "No draft edges",
+            edgeDraftCount: "Draft edges: {count}",
+            edgeStatusReady: "Edge Editor enabled. Select the first node.",
+            edgeStatusDisabled: "Edge Editor disabled.",
+            edgeStatusNeedType: "Choose an Edge Type.",
+            edgeStatusInvalidType: "Edge Type is not a campus type.",
+            edgeStatusMissingNode: "No matching node found.",
+            edgeStatusSelfLoop: "Cannot connect a node to itself.",
+            edgeStatusDuplicate: "This edge already exists.",
+            edgeStatusCancelled: "Selection cancelled.",
+            edgeStatusCreated: "Draft edge created: {source} -> {target}",
+            edgeStatusDeleted: "Draft edge deleted.",
+            edgeStatusTypeUpdated: "Draft edge type updated.",
+            edgeStatusUndo: "Last draft edge removed.",
+            edgeStatusNothingUndo: "No draft edge to undo.",
+            edgeStatusCleared: "Draft edges cleared.",
+            edgeStatusImported: "Imported {count} draft edges.",
+            edgeStatusImportedWithInvalidType: "Imported {count} edges; update non-campus Edge Types.",
+            edgeStatusImportEmpty: "No usable draft edges found in the import file.",
+            edgeStatusImportInvalid: "Import JSON does not match the draft edge schema.",
+            edgeStatusExported: "Exported campus_edges_draft.json.",
+            edgeStatusExportEmpty: "No draft edges to export.",
+            edgeConfirmClear: "Clear all draft edges?",
             elevationSection: "2D Section Datum",
             layersSection: "3D Layers",
             startSection: "Start",
@@ -689,6 +832,12 @@
         return (I18N[currentLang] && I18N[currentLang][key]) || I18N.zh[key] || key;
     }
 
+    function tx(key, params = {}) {
+        return Object.entries(params).reduce((text, [name, value]) => {
+            return text.replaceAll(`{${name}}`, value);
+        }, t(key));
+    }
+
     function formatBuildingOption(building) {
         return currentLang === 'zh' ? `${building} 棟` : `${building} Building`;
     }
@@ -729,6 +878,7 @@
         infoBox.innerHTML = renderInfoBox();
         updateRouteSummary();
         renderPoiDetailCard();
+        renderEdgeEditor();
         drawMap();
     }
 
@@ -832,9 +982,16 @@
     let spaceSearchItems = [];
     let selectedSpaceIds = { start: null, end: null };
     let selectedPoiForCard = null;
+    let edgeEditorEnabled = false;
+    let edgeEditorSourceId = null;
+    let edgeEditorHoverNodeId = null;
+    let edgeEditorStatusKey = 'edgeStatusDisabled';
+    let edgeEditorStatusParams = {};
+    let draftEdges = [];
 
     document.addEventListener("DOMContentLoaded", () => {
         toggle3DBtn.style.backgroundColor = 'var(--vertical-color)';
+        if (DEBUG_MODE) edgeEditorPanel.style.display = 'flex';
         applyI18n();
     });
 
@@ -1129,11 +1286,13 @@
         document.getElementById('btn-view-all').classList.remove('active');
         document.getElementById('btn-view-main').classList.remove('active');
         document.getElementById('btn-view-vert').classList.remove('active');
+        document.getElementById('btn-view-campus').classList.remove('active');
         document.getElementById('btn-view-volume').classList.remove('active');
         document.getElementById('btn-view-points').classList.remove('active');
         if(mode === 'all') document.getElementById('btn-view-all').classList.add('active');
         if(mode === 'main_only') document.getElementById('btn-view-main').classList.add('active');
         if(mode === 'vertical_only') document.getElementById('btn-view-vert').classList.add('active');
+        if(mode === 'campus_only') document.getElementById('btn-view-campus').classList.add('active');
         if(mode === 'volume_only') document.getElementById('btn-view-volume').classList.add('active');
         if(mode === 'point_select') document.getElementById('btn-view-points').classList.add('active');
         drawMap();
@@ -1178,7 +1337,7 @@
             // 如果後端有吐出自定義 SVG 樓板邊界，則取代預設形狀
             if (data.slabs) BLDG_SHAPES = data.slabs;
             [...nodesData, ...poisData].forEach(n => { n.z = getNodeElevation(n.building, n.floor_name); nodeMap[n.id] = n; });
-            generateGroupedFloorCheckboxes(); initSpaceSearch(); drawMap();
+            generateGroupedFloorCheckboxes(); initSpaceSearch(); initEdgeEditor(); drawMap();
         })
         .catch(e => { drawMap(); });
 
@@ -1204,6 +1363,14 @@
         return normalizeColor(node.color) === '#0ea5e9' || verticalNodeIds.has(node.id);
     }
 
+    function isCampusNode(node) {
+        return node && node.scope === 'campus';
+    }
+
+    function isCampusMode() {
+        return currentViewMode === 'campus_only';
+    }
+
     function isOrangeNode(node) {
         return node.type === 'poi' || normalizeColor(node.color) === '#ff9955';
     }
@@ -1221,10 +1388,322 @@
     }
 
     function isNodeDrawableForMode(node) {
+        if (isCampusMode()) return isCampusNode(node);
+        if (isCampusNode(node)) return false;
         if (isRouteNode(node)) return true;
         if (currentViewMode === 'vertical_only') return isVerticalNode(node);
         if (currentViewMode === 'point_select') return isPointSelectNode(node);
         return true;
+    }
+
+    function isEdgeDrawableForMode(edge, n1, n2) {
+        const isCampusEdge = isCampusNode(n1) && isCampusNode(n2);
+        if (isCampusMode()) return isCampusEdge;
+        return !isCampusNode(n1) && !isCampusNode(n2);
+    }
+
+    function formatNodeMeta(node) {
+        return [
+            node.scope,
+            node.building,
+            node.floor_name ? formatFloorLabel(node.floor_name) : ''
+        ].filter(value => !isBlankPoiValue(value)).join(' / ');
+    }
+
+    function getEdgeKey(source, target) {
+        return [String(source), String(target)].sort().join('::');
+    }
+
+    function getCampusEdgeColor(type) {
+        return CAMPUS_EDGE_TYPE_COLORS[type] || 'rgba(47, 125, 104, 0.92)';
+    }
+
+    function getRoutingNodeIds() {
+        return new Set(nodesData.map(node => node.id));
+    }
+
+    function getExistingEdgeKeys() {
+        const keys = new Set();
+        edgesData.forEach(edge => {
+            if (edge && edge.from && edge.to) keys.add(getEdgeKey(edge.from, edge.to));
+        });
+        draftEdges.forEach(edge => keys.add(getEdgeKey(edge[0], edge[1])));
+        return keys;
+    }
+
+    function setEdgeEditorStatus(key, params = {}) {
+        edgeEditorStatusKey = key;
+        edgeEditorStatusParams = params;
+        renderEdgeEditor();
+    }
+
+    function populateEdgeTypeSelect() {
+        if (!DEBUG_MODE || !edgeTypeSelect) return;
+        const previousValue = edgeTypeSelect.value;
+        const edgeTypes = CAMPUS_EDGE_TYPES;
+        edgeTypeSelect.innerHTML = '';
+        edgeTypes.forEach(type => edgeTypeSelect.add(new Option(type, type)));
+        if (edgeTypes.includes(previousValue)) edgeTypeSelect.value = previousValue;
+        else edgeTypeSelect.value = 'backbone';
+    }
+
+    function renderEdgeEditor() {
+        if (!DEBUG_MODE || !edgeEditorPanel) return;
+        const sourceNode = edgeEditorSourceId ? nodeMap[edgeEditorSourceId] : null;
+        edgeEditorSource.textContent = sourceNode
+            ? tx('edgeSourceSelected', { id: edgeEditorSourceId, meta: formatNodeMeta(sourceNode) })
+            : t('edgeSourceEmpty');
+        edgeEditorStatus.textContent = tx(edgeEditorStatusKey, edgeEditorStatusParams);
+        edgeDraftList.innerHTML = '';
+        const count = document.createElement('div');
+        count.textContent = draftEdges.length ? tx('edgeDraftCount', { count: draftEdges.length }) : t('edgeDraftEmpty');
+        edgeDraftList.appendChild(count);
+        draftEdges.forEach((edge, index) => {
+            const row = document.createElement('div');
+            row.className = 'debug-list-row';
+            const main = document.createElement('div');
+            main.className = 'debug-edge-main';
+            const label = document.createElement('div');
+            label.className = 'debug-edge-label';
+            label.textContent = `${index + 1}. ${edge[0]} -> ${edge[1]}`;
+            const controls = document.createElement('div');
+            controls.className = 'debug-edge-controls';
+            const swatch = document.createElement('span');
+            swatch.className = 'debug-edge-swatch';
+            swatch.style.background = getCampusEdgeColor(edge[2]);
+            const typeSelect = document.createElement('select');
+            typeSelect.className = 'debug-edge-type';
+            typeSelect.dataset.edgeTypeIndex = index;
+            const typeOptions = CAMPUS_EDGE_TYPES.includes(edge[2]) ? CAMPUS_EDGE_TYPES : [edge[2], ...CAMPUS_EDGE_TYPES];
+            typeOptions.forEach(type => {
+                const label = CAMPUS_EDGE_TYPES.includes(type) ? type : `${type} (legacy)`;
+                typeSelect.add(new Option(label, type));
+            });
+            typeSelect.value = edge[2];
+            controls.appendChild(swatch);
+            controls.appendChild(typeSelect);
+            main.appendChild(label);
+            main.appendChild(controls);
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'debug-btn compact danger';
+            deleteBtn.type = 'button';
+            deleteBtn.dataset.edgeDeleteIndex = index;
+            deleteBtn.textContent = t('edgeDeleteDraft');
+            row.appendChild(main);
+            row.appendChild(deleteBtn);
+            edgeDraftList.appendChild(row);
+        });
+    }
+
+    function validateDraftEdge(sourceId, targetId, edgeType, options = {}) {
+        const nodeIds = getRoutingNodeIds();
+        if (!edgeType) return { ok: false, messageKey: 'edgeStatusNeedType' };
+        if (!options.allowUnknownType && !CAMPUS_EDGE_TYPES.includes(edgeType)) return { ok: false, messageKey: 'edgeStatusInvalidType' };
+        if (!nodeIds.has(sourceId) || !nodeIds.has(targetId)) return { ok: false, messageKey: 'edgeStatusMissingNode' };
+        if (sourceId === targetId) return { ok: false, messageKey: 'edgeStatusSelfLoop' };
+        const existingKeys = options.skipDraft ? new Set(edgesData.map(edge => getEdgeKey(edge.from, edge.to))) : getExistingEdgeKeys();
+        if (existingKeys.has(getEdgeKey(sourceId, targetId))) return { ok: false, messageKey: 'edgeStatusDuplicate' };
+        return { ok: true };
+    }
+
+    function handleEdgeEditorNodeClick(node) {
+        if (!edgeEditorEnabled) return false;
+        if (!node) {
+            setEdgeEditorStatus('edgeStatusMissingNode');
+            return true;
+        }
+        const edgeType = edgeTypeSelect.value;
+        if (!edgeType) {
+            setEdgeEditorStatus('edgeStatusNeedType');
+            return true;
+        }
+        if (!edgeEditorSourceId) {
+            edgeEditorSourceId = node.id;
+            setEdgeEditorStatus('edgeStatusReady');
+            drawMap();
+            return true;
+        }
+        const result = validateDraftEdge(edgeEditorSourceId, node.id, edgeType);
+        if (!result.ok) {
+            setEdgeEditorStatus(result.messageKey);
+            drawMap();
+            return true;
+        }
+        draftEdges.push([edgeEditorSourceId, node.id, edgeType]);
+        const source = edgeEditorSourceId;
+        edgeEditorSourceId = null;
+        setEdgeEditorStatus('edgeStatusCreated', { source, target: node.id });
+        drawMap();
+        return true;
+    }
+
+    function cancelEdgeSelection() {
+        edgeEditorSourceId = null;
+        setEdgeEditorStatus('edgeStatusCancelled');
+        drawMap();
+    }
+
+    function undoLastDraftEdge() {
+        if (!draftEdges.length) {
+            setEdgeEditorStatus('edgeStatusNothingUndo');
+            return;
+        }
+        draftEdges.pop();
+        setEdgeEditorStatus('edgeStatusUndo');
+        drawMap();
+    }
+
+    function clearDraftEdges() {
+        if (!draftEdges.length) {
+            setEdgeEditorStatus('edgeStatusCleared');
+            return;
+        }
+        if (!window.confirm(t('edgeConfirmClear'))) return;
+        draftEdges = [];
+        edgeEditorSourceId = null;
+        setEdgeEditorStatus('edgeStatusCleared');
+        drawMap();
+    }
+
+    function deleteDraftEdge(index) {
+        if (index < 0 || index >= draftEdges.length) return;
+        draftEdges.splice(index, 1);
+        setEdgeEditorStatus('edgeStatusDeleted');
+        drawMap();
+    }
+
+    function updateDraftEdgeType(index, edgeType) {
+        if (index < 0 || index >= draftEdges.length) return;
+        if (!CAMPUS_EDGE_TYPES.includes(edgeType)) {
+            setEdgeEditorStatus('edgeStatusInvalidType');
+            renderEdgeEditor();
+            return;
+        }
+        draftEdges[index][2] = edgeType;
+        setEdgeEditorStatus('edgeStatusTypeUpdated');
+        drawMap();
+    }
+
+    function validateAllDraftEdges(options = {}) {
+        const seen = new Set(edgesData.map(edge => getEdgeKey(edge.from, edge.to)));
+        for (const edge of draftEdges) {
+            const [source, target, type] = edge;
+            const result = validateDraftEdge(source, target, type, { skipDraft: true, allowUnknownType: options.allowUnknownType });
+            if (!result.ok) return result;
+            const key = getEdgeKey(source, target);
+            if (seen.has(key)) return { ok: false, messageKey: 'edgeStatusDuplicate' };
+            seen.add(key);
+        }
+        return { ok: true };
+    }
+
+    function normalizeImportedDraftEdge(edge) {
+        if (Array.isArray(edge) && edge.length >= 3) {
+            return [String(edge[0]), String(edge[1]), String(edge[2])];
+        }
+        if (edge && typeof edge === 'object') {
+            const source = edge.source || edge.from;
+            const target = edge.target || edge.to;
+            if (source && target && edge.type) return [String(source), String(target), String(edge.type)];
+        }
+        return null;
+    }
+
+    function extractDraftEdgesFromImport(payload) {
+        if (Array.isArray(payload)) return payload.map(normalizeImportedDraftEdge).filter(Boolean);
+        if (!payload || typeof payload !== 'object') return [];
+        const preferred = payload["校園動線 Draft"] || payload.campus_edges_draft || payload.draftEdges || payload.edges;
+        if (Array.isArray(preferred)) return preferred.map(normalizeImportedDraftEdge).filter(Boolean);
+        return Object.values(payload)
+            .filter(Array.isArray)
+            .flatMap(edges => edges.map(normalizeImportedDraftEdge).filter(Boolean));
+    }
+
+    async function importDraftEdges(file) {
+        if (!file) return;
+        let importedEdges = [];
+        try {
+            const payload = JSON.parse(await file.text());
+            importedEdges = extractDraftEdgesFromImport(payload);
+        } catch (error) {
+            setEdgeEditorStatus('edgeStatusImportInvalid');
+            return;
+        }
+        if (!importedEdges.length) {
+            setEdgeEditorStatus('edgeStatusImportEmpty');
+            return;
+        }
+        const previousDraftEdges = draftEdges;
+        draftEdges = [...draftEdges, ...importedEdges];
+        const result = validateAllDraftEdges({ allowUnknownType: true });
+        if (!result.ok) {
+            draftEdges = previousDraftEdges;
+            setEdgeEditorStatus(result.messageKey);
+            drawMap();
+            return;
+        }
+        edgeEditorSourceId = null;
+        const hasUnknownType = importedEdges.some(edge => !CAMPUS_EDGE_TYPES.includes(edge[2]));
+        setEdgeEditorStatus(hasUnknownType ? 'edgeStatusImportedWithInvalidType' : 'edgeStatusImported', { count: importedEdges.length });
+        drawMap();
+    }
+
+    function exportDraftEdges() {
+        if (!draftEdges.length) {
+            setEdgeEditorStatus('edgeStatusExportEmpty');
+            return;
+        }
+        const result = validateAllDraftEdges();
+        if (!result.ok) {
+            setEdgeEditorStatus(result.messageKey);
+            return;
+        }
+        const payload = {
+            "校園動線 Draft": draftEdges.map(edge => [edge[0], edge[1], edge[2]])
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2) + '\n'], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'campus_edges_draft.json';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        setEdgeEditorStatus('edgeStatusExported');
+    }
+
+    function initEdgeEditor() {
+        if (!DEBUG_MODE || !edgeEditorPanel) return;
+        edgeEditorPanel.style.display = 'flex';
+        populateEdgeTypeSelect();
+        renderEdgeEditor();
+        edgeEditorEnabledInput.addEventListener('change', () => {
+            edgeEditorEnabled = edgeEditorEnabledInput.checked;
+            edgeEditorSourceId = null;
+            if (edgeEditorEnabled && !isCampusMode()) setViewMode('campus_only');
+            setEdgeEditorStatus(edgeEditorEnabled ? 'edgeStatusReady' : 'edgeStatusDisabled');
+            drawMap();
+        });
+        edgeTypeSelect.addEventListener('change', () => renderEdgeEditor());
+        edgeCancelSelectionBtn.addEventListener('click', cancelEdgeSelection);
+        edgeUndoLastBtn.addEventListener('click', undoLastDraftEdge);
+        edgeClearDraftBtn.addEventListener('click', clearDraftEdges);
+        edgeImportDraftBtn.addEventListener('click', () => edgeImportFileInput.click());
+        edgeImportFileInput.addEventListener('change', () => {
+            importDraftEdges(edgeImportFileInput.files[0]).finally(() => { edgeImportFileInput.value = ''; });
+        });
+        edgeDraftList.addEventListener('click', (event) => {
+            const deleteButton = event.target.closest('[data-edge-delete-index]');
+            if (!deleteButton) return;
+            deleteDraftEdge(Number(deleteButton.dataset.edgeDeleteIndex));
+        });
+        edgeDraftList.addEventListener('change', (event) => {
+            const typeSelect = event.target.closest('[data-edge-type-index]');
+            if (!typeSelect) return;
+            updateDraftEdgeType(Number(typeSelect.dataset.edgeTypeIndex), typeSelect.value);
+        });
+        edgeExportDraftBtn.addEventListener('click', exportDraftEdges);
     }
 
     function generateGroupedFloorCheckboxes() {
@@ -1264,12 +1743,28 @@
 
     function isNodeVisible(node) {
         if (!node) return false;
+        if (isCampusMode()) return isCampusNode(node);
+        if (isCampusNode(node)) return false;
         let isActiveByFilter = currentBuildingFilter === 'General' || node.building === currentBuildingFilter || (currentBuildingFilter === 'RB' && node.building === 'RB-STACK');
         if (!isActiveByFilter) return true;
 
         if (is3DMode) return active3DCheckboxes.has(`${node.building}-${node.floor_name}`);
         if (currentPath.includes(node.id) || altPath.includes(node.id)) return true;
         return Math.abs(node.z - currentElevation) <= 200;
+    }
+
+    function findClosestNodeAt(maxDistance, includePois = true) {
+        let closestNode = null, minDist = Infinity;
+        const candidates = includePois ? [...nodesData, ...poisData] : nodesData;
+        candidates.filter(n => isNodeVisible(n) && isNodeDrawableForMode(n)).forEach(node => {
+            let p = getProjectedCoords(node);
+            const dist = Math.sqrt((p.x - mouseX)**2 + (p.y - mouseY)**2);
+            if (dist < maxDistance && dist < minDist) {
+                minDist = dist;
+                closestNode = node;
+            }
+        });
+        return closestNode;
     }
 
     elevationSelect.addEventListener('change', (e) => { currentElevation = parseInt(e.target.value); drawMap(); });
@@ -1638,10 +2133,43 @@
         });
     }
 
+    function drawDraftEdges() {
+        if (!DEBUG_MODE || (!draftEdges.length && !(edgeEditorEnabled && edgeEditorSourceId))) return;
+        ctx.save();
+        draftEdges.forEach(edge => {
+            const n1 = nodeMap[edge[0]], n2 = nodeMap[edge[1]];
+            if (!n1 || !n2 || !isNodeVisible(n1) || !isNodeVisible(n2)) return;
+            const p1 = getProjectedCoords(n1), p2 = getProjectedCoords(n2);
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = getCampusEdgeColor(edge[2]);
+            ctx.lineWidth = 4 * mapZoom;
+            ctx.setLineDash([8 * mapZoom, 5 * mapZoom]);
+            ctx.stroke();
+        });
+        if (edgeEditorEnabled && edgeEditorSourceId && nodeMap[edgeEditorSourceId]) {
+            const sourceNode = nodeMap[edgeEditorSourceId];
+            if (isNodeVisible(sourceNode)) {
+                const sourcePoint = getProjectedCoords(sourceNode);
+                ctx.beginPath();
+                ctx.moveTo(sourcePoint.x, sourcePoint.y);
+                ctx.lineTo(mouseX, mouseY);
+                ctx.strokeStyle = 'rgba(47, 125, 104, 0.42)';
+                ctx.lineWidth = 2 * mapZoom;
+                ctx.setLineDash([6 * mapZoom, 6 * mapZoom]);
+                ctx.stroke();
+            }
+        }
+        ctx.restore();
+        ctx.setLineDash([]);
+    }
+
     function drawMap() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         let topLayerCapsules = [];
         const isVolumeMode = currentViewMode === 'volume_only';
+        const campusMode = isCampusMode();
         updateHUD();
 
         minimapWrapper.style.display = is3DMode ? 'none' : 'flex';
@@ -1668,10 +2196,18 @@
         const BLDG_COLORS = { "RB": 'rgba(173, 216, 230, 0.22)', "RB-STACK": 'rgba(173, 216, 230, 0.15)', "T4": 'rgba(144, 238, 144, 0.22)', "T1": 'rgba(255, 235, 153, 0.22)', "AU": 'rgba(251, 146, 60, 0.3)' };
 
         if (is3DMode) {
-            active3DCheckboxes.forEach(group => {
-                let parts = group.split('-'); let f = parts.pop(), b = parts.join('-'); let z = getNodeElevation(b, f);
-                if (BLDG_SHAPES[b]) slabsToDraw.push({b, f, z, label: `${b} ${f}F`, color: BLDG_COLORS[b], path: BLDG_SHAPES[b]});
-            });
+            if (campusMode) {
+                for (let b in BUILDING_HEIGHTS) {
+                    for (let f in BUILDING_HEIGHTS[b]) {
+                        if (BLDG_SHAPES[b]) slabsToDraw.push({b, f, z: BUILDING_HEIGHTS[b][f], label: `${b} ${f}F`, color: BLDG_COLORS[b], path: BLDG_SHAPES[b]});
+                    }
+                }
+            } else {
+                active3DCheckboxes.forEach(group => {
+                    let parts = group.split('-'); let f = parts.pop(), b = parts.join('-'); let z = getNodeElevation(b, f);
+                    if (BLDG_SHAPES[b]) slabsToDraw.push({b, f, z, label: `${b} ${f}F`, color: BLDG_COLORS[b], path: BLDG_SHAPES[b]});
+                });
+            }
             slabsToDraw.sort((a, b) => a.z - b.z);
         } else {
             for (let bldg in BUILDING_HEIGHTS) {
@@ -1785,6 +2321,8 @@
         edgesData.forEach(edge => {
             const n1 = nodeMap[edge.from], n2 = nodeMap[edge.to];
             if (!n1 || !n2 || !isNodeVisible(n1) || !isNodeVisible(n2)) return;
+            if (!isEdgeDrawableForMode(edge, n1, n2)) return;
+            const isCampusEdge = isCampusNode(n1) && isCampusNode(n2);
 
             let n1Active = currentBuildingFilter === 'General' || n1.building === currentBuildingFilter || (currentBuildingFilter === 'RB' && n1.building === 'RB-STACK');
             let n2Active = currentBuildingFilter === 'General' || n2.building === currentBuildingFilter || (currentBuildingFilter === 'RB' && n2.building === 'RB-STACK');
@@ -1813,14 +2351,14 @@
                 }
             } else {
                 ctx.setLineDash(isVertical ? [5,5] : []);
-                ctx.strokeStyle = isBldgActive ? (isVertical ? 'rgba(77,176,193,0.82)' : (edge.type === 'bridge' ? 'rgba(80,174,142,0.78)' : 'rgba(224,116,116,0.72)')) : 'rgba(178,194,187,0.22)';
+                ctx.strokeStyle = isCampusEdge ? getCampusEdgeColor(edge.type) : (isBldgActive ? (isVertical ? 'rgba(77,176,193,0.82)' : (edge.type === 'bridge' ? 'rgba(80,174,142,0.78)' : 'rgba(224,116,116,0.72)')) : 'rgba(178,194,187,0.22)');
                 ctx.lineWidth = (edge.type === 'bridge' ? 3.5 : 2.0) * mapZoom;
             }
             ctx.stroke();
         });
         ctx.setLineDash([]);
 
-        if (vMode !== 'vertical_only') {
+        if (vMode !== 'vertical_only' && !campusMode) {
             poisData.forEach(poi => {
                 if (isNodeVisible(poi)) {
                     let poiOnPath = currentPath.includes(poi.id) || altPath.includes(poi.id);
@@ -1844,6 +2382,8 @@
             });
         }
 
+        drawDraftEdges();
+
         const allNodes = [...nodesData, ...poisData].filter(n => isNodeVisible(n) && isNodeDrawableForMode(n));
         allNodes.sort((a, b) => getProjectedCoords(a).y - getProjectedCoords(b).y);
 
@@ -1853,6 +2393,8 @@
             let onPath = currentPath.includes(node.id) || altPath.includes(node.id);
             let onActivePath = activePathArray.includes(node.id);
             let isSelected = node.id === tempStart || node.id === tempEnd;
+            let isEdgeSource = DEBUG_MODE && edgeEditorEnabled && node.id === edgeEditorSourceId;
+            let isEdgeHovered = DEBUG_MODE && edgeEditorEnabled && node.id === edgeEditorHoverNodeId;
             if (vMode === 'main_only' && node.type === 'poi' && !onPath && !isSelected) return;
             let isBldgActive = currentBuildingFilter === 'General' || node.building === currentBuildingFilter || (currentBuildingFilter === 'RB' && node.building === 'RB-STACK');
 
@@ -1864,13 +2406,24 @@
             let radius = node.type === 'poi' ? 5.0 : 7.0;
             if (onActivePath) radius = 8.5;
             if (isSelected) radius = 12.0;
+            if (isEdgeSource) radius = 11.0;
 
             ctx.beginPath(); ctx.arc(p.x, p.y, radius * mapZoom, 0, 2 * Math.PI);
             ctx.fillStyle = nodeColor; ctx.fill();
             ctx.strokeStyle = (vMode !== 'point_select' && isNavigating && !onActivePath) || !isBldgActive ? 'transparent' : '#ffffff';
             ctx.lineWidth = 1.5 * mapZoom; ctx.stroke();
 
-            if (isSelected) {
+            if (isEdgeHovered || isEdgeSource) {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, (radius + (isEdgeSource ? 7 : 4)) * mapZoom, 0, 2 * Math.PI);
+                ctx.strokeStyle = isEdgeSource ? 'rgba(47, 125, 104, 0.95)' : 'rgba(47, 125, 104, 0.42)';
+                ctx.lineWidth = (isEdgeSource ? 3 : 2) * mapZoom;
+                ctx.stroke();
+            }
+
+            if (isEdgeSource) {
+                drawStartEndCapsule(ctx, node.id, p.x + 15 * mapZoom, p.y, '#2f7d68');
+            } else if (isSelected) {
                 let bgColor = BLDG_DARK_COLORS[node.building] || '#1e293b';
                 drawStartEndCapsule(ctx, node.id, p.x + 15 * mapZoom, p.y, bgColor);
             } else if (isNavigating && onActivePath) {
@@ -1982,14 +2535,11 @@
                 return;
             }
 
-            let hoveredNode = null, minDist = Infinity;
-            [...nodesData, ...poisData].filter(n=>isNodeVisible(n) && isNodeDrawableForMode(n)).forEach(node => {
-                let p = getProjectedCoords(node);
-                const dist = Math.sqrt((p.x - mouseX)**2 + (p.y - mouseY)**2);
-                if (dist < 15 * Math.max(1, mapZoom) && dist < minDist) { minDist = dist; hoveredNode = node; }
-            });
+            const editorHoverNode = edgeEditorEnabled ? findClosestNodeAt(15 * Math.max(1, mapZoom), false) : null;
+            edgeEditorHoverNodeId = editorHoverNode ? editorHoverNode.id : null;
+            const hoveredNode = editorHoverNode || findClosestNodeAt(15 * Math.max(1, mapZoom), true);
 
-            if (hoveredNode && hoveredNode.type === 'poi') {
+            if (hoveredNode && (hoveredNode.type === 'poi' || isCampusNode(hoveredNode) || edgeEditorEnabled)) {
                 renderHoverTooltip(hoveredNode, e);
             } else {
                 hoverTooltip.style.display = 'none';
@@ -2008,12 +2558,9 @@
         mouseX = (event.clientX - rect.left) * (canvas.width / rect.width);
         mouseY = (event.clientY - rect.top) * (canvas.height / rect.height);
 
-        let closestNode = null, minDist = Infinity;
-        [...nodesData, ...poisData].filter(n=>isNodeVisible(n) && isNodeDrawableForMode(n)).forEach(node => {
-            let p = getProjectedCoords(node);
-            const dist = Math.sqrt((p.x - mouseX)**2 + (p.y - mouseY)**2);
-            if (dist < 20 * Math.max(1, mapZoom) && dist < minDist) { minDist = dist; closestNode = node; }
-        });
+        if (edgeEditorEnabled && handleEdgeEditorNodeClick(findClosestNodeAt(20 * Math.max(1, mapZoom), false))) return;
+
+        let closestNode = findClosestNodeAt(20 * Math.max(1, mapZoom), true);
 
         if (closestNode) {
             if (closestNode.type === 'poi') {

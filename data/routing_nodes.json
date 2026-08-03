@@ -2909,6 +2909,1551 @@
       "y": 734,
       "color": "#ff5555",
       "type": "routing_node"
+    },
+    {
+      "id": "Building-IH2-1",
+      "building": "IH2",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -192,
+      "y": -787,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1713.0,
+      "source_y": 2031.0
+    },
+    {
+      "id": "Building-SwimmingPool-1",
+      "building": "SWIMMINGPOOL",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -785,
+      "y": -738,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1137.0,
+      "source_y": 2076.0
+    },
+    {
+      "id": "Lawn-2",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1791,
+      "y": -542,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "lawn",
+      "color": "#d8c27a",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3640.0,
+      "source_y": 2276.0
+    },
+    {
+      "id": "Lawn-3",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1519,
+      "y": -910,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "lawn",
+      "color": "#d8c27a",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3377.0,
+      "source_y": 1918.0
+    },
+    {
+      "id": "Lawn-4",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1253,
+      "y": -521,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "lawn",
+      "color": "#d8c27a",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3117.0,
+      "source_y": 2295.0
+    },
+    {
+      "id": "Lawn-1",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1578,
+      "y": -77,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "lawn",
+      "color": "#d8c27a",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3430.721,
+      "source_y": 2727.627
+    },
+    {
+      "id": "Lawn-IB",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 2066,
+      "y": 265,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "lawn",
+      "color": "#d8c27a",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3904.161,
+      "source_y": 3062.255
+    },
+    {
+      "id": "Pool-E1",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 676,
+      "y": -848,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "pool",
+      "color": "#d8c27a",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2557.0,
+      "source_y": 1974.635
+    },
+    {
+      "id": "Pool-RB",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 340,
+      "y": 319,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "pool",
+      "color": "#d8c27a",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2226.0,
+      "source_y": 3108.0
+    },
+    {
+      "id": "Court-Tennis-1",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -409,
+      "y": 148,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "court",
+      "color": "#d8c27a",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1499.0,
+      "source_y": 2938.477
+    },
+    {
+      "id": "Court-Volleyball-1",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -408,
+      "y": -18,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "court",
+      "color": "#d8c27a",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1500.583,
+      "source_y": 2777.414
+    },
+    {
+      "id": "Court-Volleyball-2",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -809,
+      "y": -26,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "court",
+      "color": "#d8c27a",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1110.237,
+      "source_y": 2767.56
+    },
+    {
+      "id": "Court-Soccer-1",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -487,
+      "y": 523,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "court",
+      "color": "#d8c27a",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1421.12,
+      "source_y": 3302.639
+    },
+    {
+      "id": "Court-Basketball-1",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -745,
+      "y": 148,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "court",
+      "color": "#d8c27a",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1172.56,
+      "source_y": 2937.038
+    },
+    {
+      "id": "Building-T4-1",
+      "building": "T4",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 980,
+      "y": 242,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2848.609,
+      "source_y": 3035.61
+    },
+    {
+      "id": "Building-T3-1",
+      "building": "T3",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 151,
+      "y": -819,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2046.61,
+      "source_y": 2000.61
+    },
+    {
+      "id": "Building-Dorm-1",
+      "building": "DORM",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 577,
+      "y": -1112,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2462.0,
+      "source_y": 1718.0
+    },
+    {
+      "id": "Building-Dorm-2",
+      "building": "DORM",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1231,
+      "y": -1117,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3098.106,
+      "source_y": 1715.086
+    },
+    {
+      "id": "Building-IB-1",
+      "building": "IB",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1479,
+      "y": -1103,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3339.0,
+      "source_y": 1730.0
+    },
+    {
+      "id": "Building-IB-2",
+      "building": "IB",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 2394,
+      "y": 547,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 4222.0,
+      "source_y": 3337.171
+    },
+    {
+      "id": "Building-IB-3",
+      "building": "IB",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 2405,
+      "y": 175,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 4234.0,
+      "source_y": 2976.165
+    },
+    {
+      "id": "Building-E2-1",
+      "building": "E2",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 2365,
+      "y": -61,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 4196.44,
+      "source_y": 2746.349
+    },
+    {
+      "id": "Building-Security-SW",
+      "building": "SECURITY-SW",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 2763,
+      "y": -24,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 4583.0,
+      "source_y": 2784.0
+    },
+    {
+      "id": "Building-Security-W",
+      "building": "SECURITY-W",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1412,
+      "y": 925,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3266.0,
+      "source_y": 3701.0
+    },
+    {
+      "id": "Building-Security-NE",
+      "building": "SECURITY-NE",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -1186,
+      "y": 119,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 744.0,
+      "source_y": 2907.0
+    },
+    {
+      "id": "Building-T2-1",
+      "building": "T2",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 2325,
+      "y": -676,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 4160.0,
+      "source_y": 2148.0
+    },
+    {
+      "id": "Building-Cafeteria-3",
+      "building": "CAFETERIA",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 2308,
+      "y": -572,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 4143.022,
+      "source_y": 2249.095
+    },
+    {
+      "id": "Building-MA-1",
+      "building": "MA",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1911,
+      "y": -685,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3757.0,
+      "source_y": 2138.0
+    },
+    {
+      "id": "Building-EE-1",
+      "building": "EE",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1897,
+      "y": -1148,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3745.0,
+      "source_y": 1688.0
+    },
+    {
+      "id": "Building-Haoyang-1",
+      "building": "HAOYANG",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1895,
+      "y": -1320,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3744.0,
+      "source_y": 1521.0
+    },
+    {
+      "id": "Building-T4-2",
+      "building": "T4",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 555,
+      "y": 70,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2436.609,
+      "source_y": 2866.61
+    },
+    {
+      "id": "Building-E1-1",
+      "building": "E1",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 692,
+      "y": -21,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2570.0,
+      "source_y": 2779.0
+    },
+    {
+      "id": "Building-E1-2",
+      "building": "E1",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1131,
+      "y": -252,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2997.0,
+      "source_y": 2556.0
+    },
+    {
+      "id": "Building-E1-3",
+      "building": "E1",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1121,
+      "y": -773,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2990.0,
+      "source_y": 2049.0
+    },
+    {
+      "id": "Building-T4-3",
+      "building": "T4",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 82,
+      "y": 200,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1975.61,
+      "source_y": 2990.61
+    },
+    {
+      "id": "Building-T1-1",
+      "building": "T1",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 174,
+      "y": 289,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2064.919,
+      "source_y": 3078.035
+    },
+    {
+      "id": "Building-Stand-1",
+      "building": "STAND",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -489,
+      "y": 466,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1420.0,
+      "source_y": 3247.0
+    },
+    {
+      "id": "Building-TR-1",
+      "building": "TR",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -1065,
+      "y": 115,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 861.11,
+      "source_y": 2904.297
+    },
+    {
+      "id": "Building-IA-1",
+      "building": "IA",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -1034,
+      "y": 2,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 892.144,
+      "source_y": 2794.296
+    },
+    {
+      "id": "Building-S-1",
+      "building": "S",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -151,
+      "y": -112,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1750.61,
+      "source_y": 2686.609
+    },
+    {
+      "id": "Building-S-2",
+      "building": "S",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 67,
+      "y": -527,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1964.0,
+      "source_y": 2284.0
+    },
+    {
+      "id": "Building-PostOffice-1",
+      "building": "POSTOFFICE",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 108,
+      "y": -220,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2003.0,
+      "source_y": 2583.0
+    },
+    {
+      "id": "Building-Cafeteria-1",
+      "building": "CAFETERIA",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 2,
+      "y": -133,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1899.0,
+      "source_y": 2667.0
+    },
+    {
+      "id": "Building-Cafeteria-IA",
+      "building": "CAFETERIA-IA",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -1026,
+      "y": -241,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 901.0,
+      "source_y": 2558.0
+    },
+    {
+      "id": "Building-Cafeteria-2",
+      "building": "CAFETERIA",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 133,
+      "y": -405,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2028.0,
+      "source_y": 2403.0
+    },
+    {
+      "id": "Building-S-3",
+      "building": "S",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -366,
+      "y": -469,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1543.0,
+      "source_y": 2339.0
+    },
+    {
+      "id": "Building-Gym-1",
+      "building": "GYM",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -535,
+      "y": -323,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1378.61,
+      "source_y": 2480.609
+    },
+    {
+      "id": "Building-TR-2",
+      "building": "TR",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -1232,
+      "y": 523,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 697.61,
+      "source_y": 3299.61
+    },
+    {
+      "id": "Building-RB-1",
+      "building": "RB",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 493,
+      "y": 545,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2374.497,
+      "source_y": 3328.013
+    },
+    {
+      "id": "Building-Library-1",
+      "building": "LIBRARY",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1160,
+      "y": 591,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3021.752,
+      "source_y": 3375.658
+    },
+    {
+      "id": "Building-AD-1",
+      "building": "AD",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1532,
+      "y": 339,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3384.609,
+      "source_y": 3131.609
+    },
+    {
+      "id": "Building-AD-2",
+      "building": "AD",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1528,
+      "y": 112,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3381.609,
+      "source_y": 2911.609
+    },
+    {
+      "id": "Gate-101",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1547,
+      "y": 931,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "gate",
+      "color": "#ff9955",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3397.178,
+      "source_y": 3707.502
+    },
+    {
+      "id": "Gate-201",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -1255,
+      "y": 87,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "gate",
+      "color": "#ff9955",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 676.462,
+      "source_y": 2875.633
+    },
+    {
+      "id": "Gate-301",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 23,
+      "y": -1084,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "gate",
+      "color": "#ff9955",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1923.967,
+      "source_y": 1743.029
+    },
+    {
+      "id": "Gate-302",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1858,
+      "y": -1479,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "gate",
+      "color": "#ff9955",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3708.609,
+      "source_y": 1365.61
+    },
+    {
+      "id": "Gate-401",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 2910,
+      "y": 57,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "gate",
+      "color": "#ff9955",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 4725.609,
+      "source_y": 2863.609
+    },
+    {
+      "id": "Path-102",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1242,
+      "y": 769,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3101.0,
+      "source_y": 3549.0
+    },
+    {
+      "id": "Path-103",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1197,
+      "y": 458,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3059.0,
+      "source_y": 3246.0
+    },
+    {
+      "id": "Path-104",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1194,
+      "y": 266,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3056.749,
+      "source_y": 3059.075
+    },
+    {
+      "id": "Path-105",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1193,
+      "y": 29,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3056.0,
+      "source_y": 2829.0
+    },
+    {
+      "id": "Path-106",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 707,
+      "y": 31,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2583.913,
+      "source_y": 2828.824
+    },
+    {
+      "id": "Path-107",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 191,
+      "y": 28,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2082.815,
+      "source_y": 2824.341
+    },
+    {
+      "id": "Path-123",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 28,
+      "y": 145,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1924.0,
+      "source_y": 2937.0
+    },
+    {
+      "id": "Path-124",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 34,
+      "y": 464,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1928.0,
+      "source_y": 3247.0
+    },
+    {
+      "id": "Path-125",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -502,
+      "y": 485,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1407.0,
+      "source_y": 3266.0
+    },
+    {
+      "id": "Path-126",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -958,
+      "y": 468,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 964.0,
+      "source_y": 3247.0
+    },
+    {
+      "id": "Path-127",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -1296,
+      "y": 516,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 635.0,
+      "source_y": 3293.0
+    },
+    {
+      "id": "Path-128",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -299,
+      "y": -92,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1607.0,
+      "source_y": 2706.0
+    },
+    {
+      "id": "Path-108",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 180,
+      "y": -326,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2072.899,
+      "source_y": 2480.0
+    },
+    {
+      "id": "Path-109",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 181,
+      "y": -701,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2075.258,
+      "source_y": 2116.0
+    },
+    {
+      "id": "Path-110",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 225,
+      "y": -1019,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2120.0,
+      "source_y": 1807.0
+    },
+    {
+      "id": "Path-111",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 693,
+      "y": -1020,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2575.0,
+      "source_y": 1808.0
+    },
+    {
+      "id": "Path-112",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1201,
+      "y": -1020,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3068.0,
+      "source_y": 1810.0
+    },
+    {
+      "id": "Path-129",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1197,
+      "y": -501,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3062.0,
+      "source_y": 2314.0
+    },
+    {
+      "id": "Path-113",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1862,
+      "y": -1054,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3711.0,
+      "source_y": 1779.0
+    },
+    {
+      "id": "Path-114",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1862,
+      "y": -624,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3709.0,
+      "source_y": 2197.0
+    },
+    {
+      "id": "Path-115",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1863,
+      "y": -305,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3709.0,
+      "source_y": 2507.0
+    },
+    {
+      "id": "Path-116",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1846,
+      "y": 24,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3691.0,
+      "source_y": 2827.0
+    },
+    {
+      "id": "Path-117",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1857,
+      "y": 441,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3700.0,
+      "source_y": 3232.0
+    },
+    {
+      "id": "Path-118",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1798,
+      "y": 770,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3642.0,
+      "source_y": 3552.0
+    },
+    {
+      "id": "Path-119",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 2375,
+      "y": 428,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 4204.0,
+      "source_y": 3222.0
+    },
+    {
+      "id": "Path-120",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 2304,
+      "y": 6,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 4136.184,
+      "source_y": 2811.0
+    },
+    {
+      "id": "Path-121",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 2800,
+      "y": 26,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 4619.0,
+      "source_y": 2833.0
+    },
+    {
+      "id": "Path-122",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 2775,
+      "y": 465,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 4593.0,
+      "source_y": 3259.0
+    },
+    {
+      "id": "Path-101",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1545,
+      "y": 844,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "outdoor_path",
+      "color": "#ff5555",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3395.606,
+      "source_y": 3623.041
+    },
+    {
+      "id": "CoveredPath-101",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -61,
+      "y": 101,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "covered_path",
+      "color": "#10b981",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1837.0,
+      "source_y": 2894.0
+    },
+    {
+      "id": "CoveredPath-104",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 237,
+      "y": 69,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "covered_path",
+      "color": "#10b981",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2127.0,
+      "source_y": 2864.0
+    },
+    {
+      "id": "CoveredPath-105",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 226,
+      "y": -239,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "covered_path",
+      "color": "#10b981",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2118.0,
+      "source_y": 2565.0
+    },
+    {
+      "id": "CoveredPath-106",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1153,
+      "y": 280,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "covered_path",
+      "color": "#10b981",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3016.252,
+      "source_y": 3073.285
+    },
+    {
+      "id": "CoveredPath-118",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1151,
+      "y": 514,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "covered_path",
+      "color": "#10b981",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3014.0,
+      "source_y": 3300.0
+    },
+    {
+      "id": "CoveredPath-107",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1003,
+      "y": 282,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "covered_path",
+      "color": "#10b981",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2871.0,
+      "source_y": 3074.0
+    },
+    {
+      "id": "CoveredPath-108",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1098,
+      "y": 26,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "covered_path",
+      "color": "#10b981",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2964.0,
+      "source_y": 2826.0
+    },
+    {
+      "id": "CoveredPath-109",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1096,
+      "y": -120,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "covered_path",
+      "color": "#10b981",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2962.745,
+      "source_y": 2683.72
+    },
+    {
+      "id": "CoveredPath-110",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1095,
+      "y": -211,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "covered_path",
+      "color": "#10b981",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2962.255,
+      "source_y": 2595.802
+    },
+    {
+      "id": "CoveredPath-111",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1524,
+      "y": -137,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "covered_path",
+      "color": "#10b981",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3379.0,
+      "source_y": 2669.0
+    },
+    {
+      "id": "CoveredPath-114",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1793,
+      "y": -134,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "covered_path",
+      "color": "#10b981",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3640.0,
+      "source_y": 2673.0
+    },
+    {
+      "id": "CoveredPath-115",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1906,
+      "y": -143,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "covered_path",
+      "color": "#10b981",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3750.0,
+      "source_y": 2665.0
+    },
+    {
+      "id": "CoveredPath-116",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 2395,
+      "y": -48,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "covered_path",
+      "color": "#10b981",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 4225.0,
+      "source_y": 2759.0
+    },
+    {
+      "id": "CoveredPath-117",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 2401,
+      "y": 123,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "covered_path",
+      "color": "#10b981",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 4230.0,
+      "source_y": 2925.0
+    },
+    {
+      "id": "CoveredPath-112",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1530,
+      "y": 53,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "covered_path",
+      "color": "#10b981",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3384.0,
+      "source_y": 2854.0
+    },
+    {
+      "id": "CoveredPath-102",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -511,
+      "y": 96,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "covered_path",
+      "color": "#10b981",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 1400.0,
+      "source_y": 2888.0
+    },
+    {
+      "id": "CoveredPath-103",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": -1003,
+      "y": 90,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "covered_path",
+      "color": "#10b981",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 922.0,
+      "source_y": 2880.0
     }
   ],
   "edges": [
@@ -5185,6 +6730,750 @@
       "to": "T1-S2-4F",
       "distance": 1.06,
       "type": "backbone"
+    },
+    {
+      "from": "Path-101",
+      "to": "Path-102",
+      "distance": 27.38,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-102",
+      "to": "Path-103",
+      "distance": 27.56,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-103",
+      "to": "Path-104",
+      "distance": 16.84,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-104",
+      "to": "Path-105",
+      "distance": 20.79,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-105",
+      "to": "Path-106",
+      "distance": 42.63,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-106",
+      "to": "Path-107",
+      "distance": 45.26,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-107",
+      "to": "Path-123",
+      "distance": 17.6,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-123",
+      "to": "Path-124",
+      "distance": 27.98,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-107",
+      "to": "Path-128",
+      "distance": 44.25,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-124",
+      "to": "Path-125",
+      "distance": 47.05,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-125",
+      "to": "Path-126",
+      "distance": 40.02,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-107",
+      "to": "Path-108",
+      "distance": 31.06,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-105",
+      "to": "Path-116",
+      "distance": 57.27,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-116",
+      "to": "Path-120",
+      "distance": 40.2,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-116",
+      "to": "Path-115",
+      "distance": 28.89,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-115",
+      "to": "Path-114",
+      "distance": 27.98,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-114",
+      "to": "Path-113",
+      "distance": 37.71,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-113",
+      "to": "Path-112",
+      "distance": 58.05,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-109",
+      "to": "Path-110",
+      "distance": 28.16,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-108",
+      "to": "Path-109",
+      "distance": 32.89,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-110",
+      "to": "Path-111",
+      "distance": 41.05,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-111",
+      "to": "Path-112",
+      "distance": 44.55,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-112",
+      "to": "Path-129",
+      "distance": 45.52,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-129",
+      "to": "Path-105",
+      "distance": 46.49,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-126",
+      "to": "Building-TR-2",
+      "distance": 24.51,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-TR-2",
+      "to": "Path-127",
+      "distance": 5.65,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "CoveredPath-103",
+      "to": "CoveredPath-102",
+      "distance": 43.15,
+      "type": "covered_walkway"
+    },
+    {
+      "from": "CoveredPath-102",
+      "to": "CoveredPath-101",
+      "distance": 39.47,
+      "type": "covered_walkway"
+    },
+    {
+      "from": "CoveredPath-101",
+      "to": "CoveredPath-104",
+      "distance": 26.29,
+      "type": "covered_walkway"
+    },
+    {
+      "from": "CoveredPath-104",
+      "to": "CoveredPath-105",
+      "distance": 27.03,
+      "type": "covered_walkway"
+    },
+    {
+      "from": "CoveredPath-118",
+      "to": "CoveredPath-106",
+      "distance": 20.52,
+      "type": "covered_walkway"
+    },
+    {
+      "from": "CoveredPath-106",
+      "to": "CoveredPath-107",
+      "distance": 13.16,
+      "type": "covered_walkway"
+    },
+    {
+      "from": "CoveredPath-106",
+      "to": "CoveredPath-108",
+      "distance": 22.79,
+      "type": "covered_walkway"
+    },
+    {
+      "from": "CoveredPath-108",
+      "to": "CoveredPath-109",
+      "distance": 12.81,
+      "type": "covered_walkway"
+    },
+    {
+      "from": "CoveredPath-109",
+      "to": "CoveredPath-110",
+      "distance": 7.98,
+      "type": "covered_walkway"
+    },
+    {
+      "from": "CoveredPath-109",
+      "to": "CoveredPath-111",
+      "distance": 37.57,
+      "type": "covered_walkway"
+    },
+    {
+      "from": "CoveredPath-111",
+      "to": "CoveredPath-112",
+      "distance": 16.67,
+      "type": "covered_walkway"
+    },
+    {
+      "from": "CoveredPath-111",
+      "to": "CoveredPath-114",
+      "distance": 23.59,
+      "type": "covered_walkway"
+    },
+    {
+      "from": "CoveredPath-114",
+      "to": "CoveredPath-115",
+      "distance": 9.94,
+      "type": "covered_walkway"
+    },
+    {
+      "from": "CoveredPath-116",
+      "to": "CoveredPath-117",
+      "distance": 15.01,
+      "type": "covered_walkway"
+    },
+    {
+      "from": "Path-101",
+      "to": "Path-118",
+      "distance": 23.12,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-118",
+      "to": "Path-117",
+      "distance": 29.32,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-117",
+      "to": "Path-119",
+      "distance": 45.45,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-119",
+      "to": "Path-122",
+      "distance": 35.23,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-120",
+      "to": "Path-121",
+      "distance": 43.54,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-120",
+      "to": "Path-119",
+      "distance": 37.53,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-116",
+      "to": "Path-117",
+      "distance": 36.59,
+      "type": "backbone"
+    },
+    {
+      "from": "CoveredPath-101",
+      "to": "Path-123",
+      "distance": 8.71,
+      "type": "covered_walkway"
+    },
+    {
+      "from": "CoveredPath-104",
+      "to": "Path-107",
+      "distance": 5.4,
+      "type": "covered_walkway"
+    },
+    {
+      "from": "CoveredPath-102",
+      "to": "Path-125",
+      "distance": 34.13,
+      "type": "backbone"
+    },
+    {
+      "from": "Building-IA-1",
+      "to": "CoveredPath-103",
+      "distance": 8.18,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "CoveredPath-103",
+      "to": "Building-Cafeteria-IA",
+      "distance": 29.1,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "CoveredPath-103",
+      "to": "Building-TR-1",
+      "distance": 5.86,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "CoveredPath-103",
+      "to": "Building-Security-NE",
+      "distance": 16.25,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Path-128",
+      "to": "Building-S-1",
+      "distance": 13.1,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-S-1",
+      "to": "Path-107",
+      "distance": 32.41,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-Cafeteria-1",
+      "to": "Path-107",
+      "distance": 21.78,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-PostOffice-1",
+      "to": "Path-108",
+      "distance": 11.24,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-PostOffice-1",
+      "to": "Path-107",
+      "distance": 22.94,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-Cafeteria-2",
+      "to": "Path-108",
+      "distance": 8.06,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-S-2",
+      "to": "Path-108",
+      "distance": 20.22,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-S-2",
+      "to": "Path-109",
+      "distance": 18.24,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-IH2-1",
+      "to": "Path-109",
+      "distance": 33.57,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-T3-1",
+      "to": "Path-109",
+      "distance": 10.68,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-S-3",
+      "to": "Path-128",
+      "distance": 33.58,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Path-128",
+      "to": "Building-Gym-1",
+      "distance": 28.96,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Path-128",
+      "to": "Building-SwimmingPool-1",
+      "distance": 70.9,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-T4-2",
+      "to": "Path-106",
+      "distance": 13.76,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-E1-1",
+      "to": "Path-106",
+      "distance": 4.75,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-E1-2",
+      "to": "CoveredPath-110",
+      "distance": 4.79,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-E1-3",
+      "to": "Path-129",
+      "distance": 24.77,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Path-129",
+      "to": "Building-E1-2",
+      "distance": 22.59,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-MA-1",
+      "to": "Path-114",
+      "distance": 6.86,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Path-114",
+      "to": "Building-T2-1",
+      "distance": 40.86,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Path-114",
+      "to": "Building-Cafeteria-3",
+      "distance": 39.38,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Path-113",
+      "to": "Building-EE-1",
+      "distance": 8.8,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-Haoyang-1",
+      "to": "Path-113",
+      "distance": 23.51,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-IB-1",
+      "to": "Path-112",
+      "distance": 25.45,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-IB-1",
+      "to": "Path-113",
+      "distance": 33.87,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-Dorm-2",
+      "to": "Path-112",
+      "distance": 8.91,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-Dorm-1",
+      "to": "Path-111",
+      "distance": 12.99,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Path-123",
+      "to": "Building-T4-3",
+      "distance": 6.76,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Path-123",
+      "to": "Building-T1-1",
+      "distance": 17.99,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Path-106",
+      "to": "Building-RB-1",
+      "distance": 48.83,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-T4-1",
+      "to": "CoveredPath-107",
+      "distance": 4.05,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "CoveredPath-118",
+      "to": "Building-Library-1",
+      "distance": 6.8,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-Library-1",
+      "to": "Path-103",
+      "distance": 12.11,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-Library-1",
+      "to": "Path-102",
+      "distance": 17.19,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-IB-3",
+      "to": "CoveredPath-117",
+      "distance": 4.57,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-IB-3",
+      "to": "Path-120",
+      "distance": 17.27,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-IB-3",
+      "to": "Path-119",
+      "distance": 22.35,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Path-119",
+      "to": "Building-IB-2",
+      "distance": 10.57,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-Security-SW",
+      "to": "Path-121",
+      "distance": 5.46,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-E2-1",
+      "to": "CoveredPath-116",
+      "distance": 2.87,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-E2-1",
+      "to": "Path-120",
+      "distance": 7.95,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Gate-401",
+      "to": "Path-121",
+      "distance": 10.02,
+      "type": "backbone"
+    },
+    {
+      "from": "Gate-302",
+      "to": "Path-113",
+      "distance": 37.28,
+      "type": "backbone"
+    },
+    {
+      "from": "Gate-301",
+      "to": "Path-110",
+      "distance": 18.61,
+      "type": "backbone"
+    },
+    {
+      "from": "Gate-201",
+      "to": "CoveredPath-103",
+      "distance": 22.1,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-127",
+      "to": "Path-126",
+      "distance": 29.94,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-101",
+      "to": "Gate-101",
+      "distance": 7.63,
+      "type": "backbone"
+    },
+    {
+      "from": "Building-Security-W",
+      "to": "Gate-101",
+      "distance": 11.85,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Lawn-IB",
+      "to": "Path-117",
+      "distance": 23.96,
+      "type": "secondary"
+    },
+    {
+      "from": "Lawn-IB",
+      "to": "Path-116",
+      "distance": 28.62,
+      "type": "secondary"
+    },
+    {
+      "from": "Lawn-IB",
+      "to": "Path-119",
+      "distance": 30.64,
+      "type": "secondary"
+    },
+    {
+      "from": "Lawn-1",
+      "to": "CoveredPath-112",
+      "distance": 12.15,
+      "type": "secondary"
+    },
+    {
+      "from": "Lawn-1",
+      "to": "CoveredPath-111",
+      "distance": 7.08,
+      "type": "secondary"
+    },
+    {
+      "from": "Lawn-1",
+      "to": "Path-116",
+      "distance": 25.12,
+      "type": "secondary"
+    },
+    {
+      "from": "Lawn-1",
+      "to": "Path-105",
+      "distance": 35.02,
+      "type": "secondary"
+    },
+    {
+      "from": "Lawn-2",
+      "to": "Path-114",
+      "distance": 9.51,
+      "type": "secondary"
+    },
+    {
+      "from": "Lawn-3",
+      "to": "Path-112",
+      "distance": 29.51,
+      "type": "secondary"
+    },
+    {
+      "from": "Lawn-3",
+      "to": "Path-113",
+      "distance": 32.63,
+      "type": "secondary"
+    },
+    {
+      "from": "Lawn-4",
+      "to": "Path-129",
+      "distance": 5.22,
+      "type": "secondary"
+    },
+    {
+      "from": "Pool-E1",
+      "to": "Path-111",
+      "distance": 15.16,
+      "type": "secondary"
+    },
+    {
+      "from": "Court-Volleyball-2",
+      "to": "CoveredPath-103",
+      "distance": 19.82,
+      "type": "secondary"
+    },
+    {
+      "from": "Court-Volleyball-2",
+      "to": "CoveredPath-102",
+      "distance": 28.24,
+      "type": "secondary"
+    },
+    {
+      "from": "CoveredPath-102",
+      "to": "Court-Volleyball-1",
+      "distance": 13.48,
+      "type": "secondary"
+    },
+    {
+      "from": "Court-Tennis-1",
+      "to": "CoveredPath-102",
+      "distance": 10.04,
+      "type": "secondary"
+    },
+    {
+      "from": "CoveredPath-102",
+      "to": "Court-Basketball-1",
+      "distance": 21.02,
+      "type": "secondary"
+    },
+    {
+      "from": "Court-Basketball-1",
+      "to": "CoveredPath-103",
+      "distance": 23.19,
+      "type": "secondary"
+    },
+    {
+      "from": "Court-Soccer-1",
+      "to": "Path-125",
+      "distance": 3.58,
+      "type": "secondary"
+    },
+    {
+      "from": "Building-Stand-1",
+      "to": "Path-125",
+      "distance": 2.02,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Pool-RB",
+      "to": "Path-123",
+      "distance": 31.33,
+      "type": "secondary"
+    },
+    {
+      "from": "Pool-RB",
+      "to": "Path-106",
+      "distance": 40.92,
+      "type": "secondary"
     }
   ]
 }

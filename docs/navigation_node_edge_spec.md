@@ -15,7 +15,7 @@
 
 ## 2. 室內 Node 定義
 
-室內 node 主要位於 `A*_map.svg`，目前 `scripts/1_svg_parser.py` 已會解析 `A*_map.svg` 的 `circle` 與 `floor-*` 圖形。
+室內 node 主要位於 `A*_map.svg`，目前 `scripts/1_svg_parser.py` 已會解析 `A*_map.svg` 的 `circle` 與 `floor-*` 圖形。校園 node 來源仍與室內 node 分開，位於 `L01_CampusLayout.svg`，但會在輸出的 routing graph 中以 `scope: "campus"` 合併。
 
 ### 2.1 紅色：室內水平動線點
 
@@ -123,7 +123,7 @@ T4-101
 
 ## 3. L01 校園大尺度 Node 定義
 
-L01 node 位於 `data/L01_CampusLayout.svg`。目前 parser 尚未正式掃描 `L01_CampusLayout.svg`，所以本節是建議採用的目標規格。
+L01 node 位於 `data/L01_CampusLayout.svg`。目前 `scripts/1_svg_parser.py` 會正式掃描 `Gate-*`、`Path-*`、`CoveredPath-*`、`Building-*`、`Lawn-*`、`Pool-*`、`Court-*` 與其他黃色 circle，透過同名 `Building-*` anchor 對齊到 `A01_map.svg` 座標系，並輸出為 `scope: "campus"` 的 routing nodes。
 
 ### 3.1 橘色：校園大門 Gate
 
@@ -158,7 +158,7 @@ Gate-401  # 西側第 1 個大門
 規則：
 
 - 顏色：橘色，建議 `#ff9955`。
-- 建議角色：同時是 `routing_node` 與可搜尋 POI。
+- 現行角色：`routing_node`，前端搜尋會納入 routing nodes，因此仍可被選作起終點。
 - Gate 需要直接接到附近的 `Path-*` 或 `CoveredPath-*`。
 - 若只把 Gate 當 POI，校園路網可能無法把它當成可通過的入口節點，因此建議在 L01 parser 中讓 Gate 具備 routing node 身分。
 
@@ -198,7 +198,7 @@ Path-602
 
 - 顏色：紅色，建議 `#ff5555`。
 - 資料型別：`routing_node`。
-- 常用 edge type：`walkway`。
+- 常用 edge type：主要幹道用 `backbone`，支線步道用 `secondary`。
 - `Path-*` 只表示戶外路網幾何，不表示建築入口，也不表示 POI。
 
 ### 3.3 藍色：建築入口與跨尺度對齊錨點
@@ -259,6 +259,33 @@ CoveredPath-602
 - 常用 edge type：`covered_walkway`。
 - 一般模式下可以跟 `walkway` 使用相同距離成本。
 - 雨天模式、遮蔽優先模式、無障礙偏好模式中，可以讓 `covered_walkway` 擁有較低 penalty 或較高優先權。
+
+### 3.5 黃色：校園開放空間與運動場地
+
+用途：草地、水池、球場等校園開放空間節點，可作為校園路網定位、輔助建 edge 或未來搜尋目標。
+
+建議命名：
+
+```text
+Lawn-{AREA_CODE}
+Pool-{AREA_CODE}
+Court-{SPORT}-{SEQ}
+```
+
+例子：
+
+```text
+Lawn-IB
+Pool-E1
+Court-Basketball-1
+```
+
+規則：
+
+- 顏色：淡土黃色，建議 `#d8c27a`。
+- 資料型別：`routing_node`。
+- 現行 parser 會掃描 `Lawn-*`、`Pool-*`、`Court-*`，也會收其他黃色 circle 作為 `campus_landmark`。
+- 若同一類空間需要多個點，仍必須保持全域唯一 ID，例如 `Lawn-IB-1`、`Lawn-IB-2`。
 
 ## 4. 校園建築輪廓 Floor / Footprint 定義
 
@@ -337,6 +364,14 @@ anchor 數量的意義：
 
 目前 backend 會把 edge 當作無向邊，也就是 `A -> B` 與 `B -> A` 都可通行。
 
+若不想直接修改正式 `raw_edges.json`，可以將 Edge Editor 匯出的檔案放在：
+
+```text
+data/campus_edges_draft.json
+```
+
+`run_pipeline.py` 會在產生 `routing_nodes.json` 時自動讀取並合併這個 draft 檔，但不會回寫或覆蓋 `raw_edges.json`。合併時會略過與正式 edge 或同一 draft 檔內重複的無向邊。
+
 ### 6.1 室內 Edge Type
 
 ```text
@@ -372,40 +407,52 @@ POI 接到附近 routing node 的邏輯連線。目前不是直接寫在 `raw_ed
 ### 6.2 校園 Edge Type
 
 ```text
-walkway
+backbone
 ```
 
-一般戶外路徑，常連接 `Path-*`、`Gate-*`、`Building-*`。
+校園主要幹道，通常用來連接主要建築、大門與校園主要轉折點。
+
+```text
+secondary
+```
+
+次要步道或支線，通常連接主要幹道到局部區域。
+
+```text
+entrance_connector
+```
+
+校園動線連到建築入口或跨尺度入口 anchor 的連線。
 
 ```text
 covered_walkway
 ```
 
-風雨走廊或遮蔽路徑，常連接 `CoveredPath-*`。
+有遮蔽的走道、風雨走廊或騎樓，常連接 `CoveredPath-*`。
 
 ```text
-gate_access
+outdoor_stair
 ```
 
-大門與最近校園路徑的連線。距離上可先等同 `walkway`，但保留 type 方便未來 UI 或權重調整。
+室外樓梯。語意上與室內 `stair` 分開，避免把校園地形樓梯誤判成建築內垂直動線。
 
 ```text
-building_entry
+ramp
 ```
 
-校園 `Building-*` anchor 與室內入口走廊 node 的連線。
+坡道或無階差動線。第一版仍使用幾何距離，未加入無障礙 routing 權重。
 
 例子：
 
 ```json
-["Path-501", "Building-RB-1", "building_entry"]
+["Path-501", "Building-RB-1", "entrance_connector"]
 ```
 
 ### 6.3 Edge 權重建議
 
 目前行為：
 
-- 同樓層或同校園平面 edge 用像素距離乘上 `SCALE_FACTOR`。
+- 同樓層、同校園平面或校園坡道 edge 用像素距離乘上 `SCALE_FACTOR`。
 - `stair` 與 `elevator` 用樓層差乘上 `10.0` 估算距離。
 - backend 目前主要使用 distance 做 Dijkstra；edge type 目前更多是資料語意與前端顯示用途。
 
@@ -414,7 +461,7 @@ building_entry
 - distance 保留為實體距離基礎成本。
 - 偏好邏輯放在 routing engine，例如雨天模式、遮蔽優先、少樓梯模式。
 - `covered_walkway` 不要直接改短實體距離；應在特定 routing mode 中降低 penalty。
-- `building_entry` 建議給一個小固定成本，避免進出建築在路徑計算上完全免費。
+- `entrance_connector` 建議給一個小固定成本，避免進出建築在路徑計算上完全免費。
 
 ## 7. 目前 L01 的建議決策
 

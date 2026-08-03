@@ -7,6 +7,9 @@ from bs4 import BeautifulSoup
 # 比例尺常數 (Pixel to Meter)
 # RB-B104 (356, 673) 到 RB-B105 (299, 674) 校準為 500 cm。
 SCALE_FACTOR = 5.0 / math.sqrt((356 - 299)**2 + (673 - 674)**2)
+CAMPUS_NODE_PREFIXES = ("Gate-", "Path-", "CoveredPath-", "Building-", "Lawn-", "Pool-", "Court-")
+CAMPUS_LANDMARK_COLOR = "#d8c27a"
+CAMPUS_LANDMARK_SOURCE_COLORS = ("#ffff00", CAMPUS_LANDMARK_COLOR)
 
 print("🚀 開始執行 [步驟一]: 全新多樓層 SVG 融合解析管線...")
 
@@ -112,6 +115,14 @@ def get_floor_label(tag):
     return (tag.get('inkscape:label') or tag.get('id') or '').strip()
 
 
+def get_circle_label(tag):
+    return (tag.get('inkscape:label') or tag.get('id') or '').strip()
+
+
+def get_svg_style_text(tag):
+    return (tag.get('fill', '') + ';' + tag.get('style', '')).lower()
+
+
 def parse_svg_path_to_points(path_d):
     """
     支援常見直線 path：M/m, L/l, H/h, V/v, Z/z
@@ -208,8 +219,212 @@ def extract_floor_points(el):
 
     return []
 
+
 # ==========================================
-# 4. 多 SVG 自動化掃描與解析
+# 4. L01 校園節點解析與座標對齊工具
+# ==========================================
+def extract_building_anchors(soup):
+    anchors = {}
+    for circle in soup.find_all('circle'):
+        label = get_circle_label(circle)
+        if not label.startswith('Building-') or label in anchors:
+            continue
+        anchors[label] = [float(circle.get('cx')), float(circle.get('cy'))]
+    return anchors
+
+
+def solve_similarity_transform(source_points, target_points):
+    n = len(source_points)
+    if n < 2:
+        raise ValueError("至少需要 2 個共用 Building-* anchor 才能解出 L01 -> A01 transform")
+
+    src_mean = [
+        sum(point[0] for point in source_points) / n,
+        sum(point[1] for point in source_points) / n,
+    ]
+    dst_mean = [
+        sum(point[0] for point in target_points) / n,
+        sum(point[1] for point in target_points) / n,
+    ]
+
+    denom = 0.0
+    a_num = 0.0
+    b_num = 0.0
+    for src, dst in zip(source_points, target_points):
+        x = src[0] - src_mean[0]
+        y = src[1] - src_mean[1]
+        X = dst[0] - dst_mean[0]
+        Y = dst[1] - dst_mean[1]
+        denom += x * x + y * y
+        a_num += x * X + y * Y
+        b_num += x * Y - y * X
+
+    if denom == 0:
+        raise ValueError("共用 anchor 重疊，無法計算 transform")
+
+    a = a_num / denom
+    b = b_num / denom
+    tx = dst_mean[0] - a * src_mean[0] + b * src_mean[1]
+    ty = dst_mean[1] - b * src_mean[0] - a * src_mean[1]
+
+    return {"a": a, "b": b, "tx": tx, "ty": ty}
+
+
+def apply_transform(point, transform):
+    x, y = point
+    a = transform["a"]
+    b = transform["b"]
+    return [
+        a * x - b * y + transform["tx"],
+        b * x + a * y + transform["ty"],
+    ]
+
+
+def extract_campus_building_code(label):
+    raw = label.replace("Building-", "", 1)
+    parts = raw.split("-")
+    if len(parts) > 1 and parts[-1].isdigit():
+        parts = parts[:-1]
+    return "-".join(parts).upper() if parts else "CAMPUS"
+
+
+def classify_campus_node(label):
+    if label.startswith("Gate-"):
+        return {
+            "building": "Campus",
+            "subtype": "gate",
+            "color": "#ff9955",
+        }
+    if label.startswith("Path-"):
+        return {
+            "building": "Campus",
+            "subtype": "outdoor_path",
+            "color": "#ff5555",
+        }
+    if label.startswith("CoveredPath-"):
+        return {
+            "building": "Campus",
+            "subtype": "covered_path",
+            "color": "#10b981",
+        }
+    if label.startswith("Building-"):
+        return {
+            "building": extract_campus_building_code(label),
+            "subtype": "building_entry",
+            "color": "#0ea5e9",
+        }
+    if label.startswith("Lawn-"):
+        return {
+            "building": "Campus",
+            "subtype": "lawn",
+            "color": CAMPUS_LANDMARK_COLOR,
+        }
+    if label.startswith("Pool-"):
+        return {
+            "building": "Campus",
+            "subtype": "pool",
+            "color": CAMPUS_LANDMARK_COLOR,
+        }
+    if label.startswith("Court-"):
+        return {
+            "building": "Campus",
+            "subtype": "court",
+            "color": CAMPUS_LANDMARK_COLOR,
+        }
+    return None
+
+
+def is_campus_landmark_color(circle):
+    style_text = get_svg_style_text(circle)
+    return any(color in style_text for color in CAMPUS_LANDMARK_SOURCE_COLORS)
+
+
+def is_campus_node_candidate(circle):
+    label = get_circle_label(circle)
+    if label.startswith(CAMPUS_NODE_PREFIXES):
+        return True
+    return is_campus_landmark_color(circle)
+
+
+def parse_campus_nodes(data_dir, existing_node_ids):
+    l01_path = os.path.join(data_dir, "L01_CampusLayout.svg")
+    a01_path = os.path.join(data_dir, "A01_map.svg")
+    if not os.path.exists(l01_path):
+        print(f"⚠️ 警告：找不到 {l01_path}，略過 L01 校園節點解析。")
+        return []
+    if not os.path.exists(a01_path):
+        print(f"⚠️ 警告：找不到 {a01_path}，略過 L01 校園節點對齊。")
+        return []
+
+    with open(l01_path, 'r', encoding='utf-8') as file:
+        l01_soup = BeautifulSoup(file, 'xml')
+    with open(a01_path, 'r', encoding='utf-8') as file:
+        a01_soup = BeautifulSoup(file, 'xml')
+
+    l01_anchors = extract_building_anchors(l01_soup)
+    a01_anchors = extract_building_anchors(a01_soup)
+    common_anchor_ids = sorted(set(l01_anchors) & set(a01_anchors))
+    if len(common_anchor_ids) < 2:
+        print("⚠️ 警告：L01 與 A01 共用 Building-* anchor 少於 2 個，略過 L01 校園節點解析。")
+        print(f"   共用 anchors: {common_anchor_ids}")
+        return []
+
+    transform = solve_similarity_transform(
+        [l01_anchors[key] for key in common_anchor_ids],
+        [a01_anchors[key] for key in common_anchor_ids],
+    )
+
+    campus_nodes = []
+    seen_ids = set(existing_node_ids)
+    duplicate_ids = []
+    for circle in l01_soup.find_all('circle'):
+        label = get_circle_label(circle)
+        if not label or not is_campus_node_candidate(circle):
+            continue
+
+        classification = classify_campus_node(label)
+        if not classification and is_campus_landmark_color(circle):
+            classification = {
+                "building": "Campus",
+                "subtype": "campus_landmark",
+                "color": CAMPUS_LANDMARK_COLOR,
+            }
+        if not classification:
+            continue
+
+        if label in seen_ids:
+            duplicate_ids.append(label)
+            continue
+        seen_ids.add(label)
+
+        source_x = float(circle.get('cx'))
+        source_y = float(circle.get('cy'))
+        x, y = apply_transform([source_x, source_y], transform)
+        campus_nodes.append({
+            "id": label,
+            "building": classification["building"],
+            "floor": 0.0,
+            "floor_name": "L01",
+            "x": round(x),
+            "y": round(y),
+            "type": "routing_node",
+            "scope": "campus",
+            "subtype": classification["subtype"],
+            "color": classification["color"],
+            "source": "L01_CampusLayout.svg",
+            "source_x": round(source_x, 3),
+            "source_y": round(source_y, 3),
+        })
+
+    if duplicate_ids:
+        unique_duplicates = sorted(set(duplicate_ids))
+        print(f"⚠️ L01 校園節點略過 {len(duplicate_ids)} 個重複 ID: {', '.join(unique_duplicates)}")
+
+    print(f"  🏫 解析 L01_CampusLayout.svg -> 校園 Node {len(campus_nodes)} 個 | 共用 anchors {len(common_anchor_ids)} 個")
+    return campus_nodes
+
+# ==========================================
+# 5. 多 SVG 自動化掃描與解析
 # ==========================================
 routing_nodes = []
 pois = []
@@ -295,46 +510,111 @@ for svg_file in sorted(svg_files):
         else:
             print(f"⚠️ 樓板 {floor_label} 沒有成功解析出座標")
 
+existing_node_ids = {node["id"] for node in routing_nodes}
+routing_nodes.extend(parse_campus_nodes(data_dir, existing_node_ids))
+
+
+def collect_edge_rows(edge_payload, source_name, default_type=None):
+    if isinstance(edge_payload, dict):
+        groups = edge_payload.items()
+    elif isinstance(edge_payload, list):
+        groups = [(source_name, edge_payload)]
+    else:
+        print(f"⚠️ {source_name} 格式錯誤：edge 檔必須是 object 或 array，已略過。")
+        return []
+
+    edge_rows = []
+    skipped_count = 0
+    for group_name, edges_list in groups:
+        if not isinstance(edges_list, list):
+            print(f"⚠️ {source_name} / {group_name} 不是 edge array，已略過。")
+            continue
+        for edge_data in edges_list:
+            if not isinstance(edge_data, list) or len(edge_data) < 2:
+                skipped_count += 1
+                continue
+            start_id = str(edge_data[0]).strip()
+            end_id = str(edge_data[1]).strip()
+            edge_type = str(edge_data[2]).strip() if len(edge_data) > 2 and str(edge_data[2]).strip() else default_type
+            if not start_id or not end_id or not edge_type:
+                skipped_count += 1
+                continue
+            edge_rows.append([start_id, end_id, edge_type])
+
+    if skipped_count:
+        print(f"⚠️ {source_name} 略過 {skipped_count} 筆 schema 不完整的 edge。")
+    return edge_rows
+
+
+def edge_key(edge_data):
+    return tuple(sorted((edge_data[0], edge_data[1])))
+
+
 # ==========================================
-# 5. 讀取 raw_edges.json 並依跨樓層邏輯解算
+# 6. 讀取 raw_edges.json 與可選 campus_edges_draft.json，並依跨樓層邏輯解算
 # ==========================================
 edges = []
+raw_edges = []
 try:
     with open('data/raw_edges.json', 'r', encoding='utf-8') as f:
         grouped_edges = json.load(f)
-
-    raw_edges = []
-    for group_name, edges_list in grouped_edges.items():
-        raw_edges.extend(edges_list)
-
-    for edge_data in raw_edges:
-        start_id = edge_data[0]
-        end_id = edge_data[1]
-        edge_type = edge_data[2] if len(edge_data) > 2 else "walkway"
-
-        n1 = next((n for n in routing_nodes if n['id'] == start_id), None)
-        n2 = next((n for n in routing_nodes if n['id'] == end_id), None)
-
-        if n1 and n2:
-            # 跨樓層 (垂直動線) 核心權重算式
-            if n1['floor'] != n2['floor'] and edge_type in ["stair", "elevator"]:
-                floor_diff = abs(n1['floor'] - n2['floor'])
-                distance = round(floor_diff * 10.0, 2)
-            else:
-                pixel_dist = math.sqrt((n2['x'] - n1['x'])**2 + (n2['y'] - n1['y'])**2)
-                distance = round(pixel_dist * SCALE_FACTOR, 2)
-
-            edges.append({
-                "from": start_id,
-                "to": end_id,
-                "distance": distance,
-                "type": edge_type
-            })
+    raw_edges.extend(collect_edge_rows(grouped_edges, "raw_edges.json", default_type="walkway"))
 except FileNotFoundError:
     print("⚠️ 警告：找不到 data/raw_edges.json，骨幹連線為空。")
 
+campus_draft_edges_path = os.path.join(data_dir, "campus_edges_draft.json")
+if os.path.exists(campus_draft_edges_path):
+    try:
+        with open(campus_draft_edges_path, 'r', encoding='utf-8') as f:
+            campus_draft_payload = json.load(f)
+        campus_draft_edges = collect_edge_rows(campus_draft_payload, "campus_edges_draft.json")
+        existing_edge_keys = {edge_key(edge_data) for edge_data in raw_edges}
+        unique_campus_draft_edges = []
+        duplicate_count = 0
+        for edge_data in campus_draft_edges:
+            key = edge_key(edge_data)
+            if key in existing_edge_keys:
+                duplicate_count += 1
+                continue
+            existing_edge_keys.add(key)
+            unique_campus_draft_edges.append(edge_data)
+        raw_edges.extend(unique_campus_draft_edges)
+        print(f"  🧩 合併 campus_edges_draft.json -> Edge {len(unique_campus_draft_edges)} 條" + (f" | 略過重複 {duplicate_count} 條" if duplicate_count else ""))
+    except json.JSONDecodeError as e:
+        print(f"⚠️ campus_edges_draft.json JSON 格式錯誤，已略過: {e}")
+
+missing_edge_count = 0
+for edge_data in raw_edges:
+    start_id = edge_data[0]
+    end_id = edge_data[1]
+    edge_type = edge_data[2]
+
+    n1 = next((n for n in routing_nodes if n['id'] == start_id), None)
+    n2 = next((n for n in routing_nodes if n['id'] == end_id), None)
+
+    if n1 and n2:
+        # 跨樓層 (垂直動線) 核心權重算式
+        if n1['floor'] != n2['floor'] and edge_type in ["stair", "elevator"]:
+            floor_diff = abs(n1['floor'] - n2['floor'])
+            distance = round(floor_diff * 10.0, 2)
+        else:
+            pixel_dist = math.sqrt((n2['x'] - n1['x'])**2 + (n2['y'] - n1['y'])**2)
+            distance = round(pixel_dist * SCALE_FACTOR, 2)
+
+        edges.append({
+            "from": start_id,
+            "to": end_id,
+            "distance": distance,
+            "type": edge_type
+        })
+    else:
+        missing_edge_count += 1
+
+if missing_edge_count:
+    print(f"⚠️ Edge 略過 {missing_edge_count} 條：找不到對應 node。")
+
 # ==========================================
-# 6. 輸出至獨立 JSON
+# 7. 輸出至獨立 JSON
 # ==========================================
 routing_graph = {
     "nodes": routing_nodes,
@@ -349,4 +629,6 @@ with open('data/slabs.json', 'w', encoding='utf-8') as f:
     json.dump(slabs_data, f, indent=2, ensure_ascii=False)
 
 print("✅ [步驟一] 執行完畢！")
-print(f"📊 統計：總計融合 {len(svg_files)} 個樓層 | 骨幹 Node {len(routing_nodes)} 個 | Edge {len(edges)} 條 | POI {len(pois)} 個 | 解析樓板 {len(slabs_data)} 棟")
+campus_node_count = sum(1 for node in routing_nodes if node.get("scope") == "campus")
+indoor_node_count = len(routing_nodes) - campus_node_count
+print(f"📊 統計：總計融合 {len(svg_files)} 個樓層 | 室內 Node {indoor_node_count} 個 | 校園 Node {campus_node_count} 個 | Edge {len(edges)} 條 | POI {len(pois)} 個 | 解析樓板 {len(slabs_data)} 棟")

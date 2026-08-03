@@ -91,20 +91,25 @@ python run_pipeline.py
 Pipeline steps:
 
 1. `scripts/1_svg_parser.py`
-   - Reads `data/A*_map.svg`.
-   - Extracts routing nodes, POIs, floor metadata, and slab geometry.
+   - Reads `data/A*_map.svg` and `data/L01_CampusLayout.svg`.
+   - Extracts indoor routing nodes, POIs, floor metadata, slab geometry, and campus-scale routing nodes.
+   - Aligns L01 campus nodes into the A01 coordinate space using shared `Building-*` anchors.
    - Reads `data/raw_edges.json`.
    - Writes `data/routing_nodes.json`, `data/pois.json`, and `data/slabs.json`.
 
-2. `scripts/2_knn_recommender.py`
+2. `scripts/enrich_pois.py`
+   - Merges generated POI geometry with CSV-maintained metadata.
+   - Writes `data/pois_enriched.json`.
+
+3. `scripts/2_knn_recommender.py`
    - Connects each POI to nearby valid routing nodes on the same building and floor.
    - Writes `data/draft_connection.json`.
 
-3. `scripts/3_merge_connections.py`
+4. `scripts/3_merge_connections.py`
    - Applies manual add/remove overrides from `data/connection_overrides.json`.
    - Writes `data/final_connections.json`.
 
-4. `scripts/4_campus_features_parser.py`
+5. `scripts/4_campus_features_parser.py`
    - Reads `data/L01_CampusLayout.svg` and `data/A01_map.svg`.
    - Uses shared `Building-*` anchors to align campus-scale features into the A01 coordinate space.
    - Writes `data/campus_features.json`.
@@ -122,6 +127,7 @@ sip/
 |   |-- raw_edges.json           # Manually defined routing graph edges
 |   |-- routing_nodes.json       # Generated routing nodes and edges
 |   |-- pois.json                # Generated POI nodes
+|   |-- pois_enriched.json       # Generated POIs merged with metadata
 |   |-- slabs.json               # Generated building slab geometry
 |   |-- draft_connection.json    # Generated POI connection candidates
 |   |-- connection_overrides.json # Manual POI connection overrides
@@ -148,8 +154,8 @@ The parser depends on naming and color conventions in the SVG files:
 - Routing nodes and POIs are read from SVG `circle` elements.
 - Node identity comes from `inkscape:label` or `id`.
 - Floor slabs are read from `polygon` or `path` elements whose label or id starts with `floor-`.
-- Campus-scale footprints and outdoor areas are read from `data/L01_CampusLayout.svg`.
-- Shared `Building-*` anchor circles are used for L01-to-A01 alignment and are ignored by the routing graph parser.
+- Campus-scale routing nodes, footprints, and outdoor areas are read from `data/L01_CampusLayout.svg`.
+- Shared `Building-*` anchor circles are used for L01-to-A01 alignment. In L01 they are emitted as campus `building_entry` routing nodes; in `A*_map.svg` they are ignored by the indoor parser.
 - Orange nodes (`#ff9955`) are treated as POIs.
 - Red, green, blue, and related route colors are mapped to routing-node categories used by the renderer and connection recommender.
 

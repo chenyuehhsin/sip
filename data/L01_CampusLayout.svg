@@ -22,13 +22,13 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="1.1227747"
-     inkscape:cx="2187.8834"
-     inkscape:cy="3097.2377"
+     inkscape:zoom="0.42648327"
+     inkscape:cx="3231.0763"
+     inkscape:cy="2501.8566"
      inkscape:window-width="1440"
-     inkscape:window-height="810"
+     inkscape:window-height="899"
      inkscape:window-x="0"
-     inkscape:window-y="34"
+     inkscape:window-y="33"
      inkscape:window-maximized="0"
      inkscape:current-layer="layer3" />
   <rect
@@ -64,7 +64,7 @@
      inkscape:label="Layer 1-Building">
     <path
        style="fill:#cccccc;fill-opacity:0.8"
-       d="m 2670.5037,3131.0828 1.0686,328.0691 162.1445,4.9245 2.1373,180.3669 152.0324,3.8559 5.3431,-512.9419 -168.8433,-1.0686 1.0686,160.2943 h -45.951 l -2.1373,-162.4316 z"
+       d="m 2670.5037,3131.0828 1.0686,328.0691 110.9951,1.7929 3.1812,186.6301 202.1379,0.7243 5.3431,-512.9419 -168.8433,-1.0686 1.0686,160.2943 h -45.951 l -2.1373,-162.4316 z"
        id="path1"
        inkscape:label="floor-Library"
        sodipodi:nodetypes="ccccccccccc" />
@@ -281,91 +281,91 @@
        r="12"
        inkscape:label="Building-SwimmingPool-1" />
     <circle
-       style="fill:#ffff00;stroke-width:7.5365"
+       style="fill:#d8c27a;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-9-7-9"
        cx="3640"
        cy="2276"
        r="12"
        inkscape:label="Lawn-2" />
     <circle
-       style="fill:#ffff00;stroke-width:7.5365"
+       style="fill:#d8c27a;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-9-7-6"
        cx="3377"
        cy="1918"
        r="12"
        inkscape:label="Lawn-3" />
     <circle
-       style="fill:#ffff00;stroke-width:7.5365"
+       style="fill:#d8c27a;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-9-7-3"
        cx="3117"
        cy="2295"
        r="12"
        inkscape:label="Lawn-4" />
     <circle
-       style="fill:#ffff00;stroke-width:7.5365"
+       style="fill:#d8c27a;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-9-7"
-       cx="3383.979"
-       cy="2732.3015"
+       cx="3430.7207"
+       cy="2727.6274"
        r="12"
        inkscape:label="Lawn-1" />
     <circle
-       style="fill:#ffff00;stroke-width:7.5365"
+       style="fill:#d8c27a;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-9-7-37"
        cx="3904.1614"
        cy="3062.2549"
        r="12"
        inkscape:label="Lawn-IB" />
     <circle
-       style="fill:#ffff00;stroke-width:7.5365"
+       style="fill:#d8c27a;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-9-7-37-51"
        cx="3389.343"
        cy="3505.4722"
        r="12"
        inkscape:label="Lawn-IB" />
     <circle
-       style="fill:#ffff00;stroke-width:7.5365"
+       style="fill:#d8c27a;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-9-7-37-51-9"
        cx="2557"
        cy="1974.6353"
        r="12"
        inkscape:label="Pool-E1" />
     <circle
-       style="fill:#ffff00;stroke-width:7.5365"
+       style="fill:#d8c27a;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-9-7-37-51-9-5"
        cx="2226"
        cy="3108"
        r="12"
        inkscape:label="Pool-RB" />
     <circle
-       style="fill:#ffff00;stroke-width:7.5365"
+       style="fill:#d8c27a;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-9-7-37-5"
        cx="1499"
        cy="2938.4773"
        r="12"
        inkscape:label="Court-Tennis-1" />
     <circle
-       style="fill:#ffff00;stroke-width:7.5365"
+       style="fill:#d8c27a;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-9-7-37-5-68"
        cx="1500.583"
        cy="2777.4141"
        r="12"
        inkscape:label="Court-Volleyball-1" />
     <circle
-       style="fill:#ffff00;stroke-width:7.5365"
+       style="fill:#d8c27a;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-9-7-37-5-68-7"
        cx="1110.2368"
        cy="2767.5601"
        r="12"
        inkscape:label="Court-Volleyball-2" />
     <circle
-       style="fill:#ffff00;stroke-width:7.5365"
+       style="fill:#d8c27a;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-9-7-37-5-64"
        cx="1421.1204"
        cy="3302.6392"
        r="12"
        inkscape:label="Court-Soccer-1" />
     <circle
-       style="fill:#ffff00;stroke-width:7.5365"
+       style="fill:#d8c27a;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-9-7-37-5-6"
        cx="1172.5602"
        cy="2937.0376"
@@ -417,14 +417,14 @@
        style="fill:#0000ff;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-5-4-3"
        cx="4234"
-       cy="2936"
+       cy="2976.1648"
        r="12"
        inkscape:label="Building-IB-3" />
     <circle
        style="fill:#0000ff;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-5-4-3-9"
-       cx="4222"
-       cy="2750"
+       cx="4196.4404"
+       cy="2746.3486"
        r="12"
        inkscape:label="Building-E2-1" />
     <circle
@@ -680,22 +680,331 @@
        r="12"
        inkscape:label="Gate-401" />
   </g>
-  <circle
-     style="fill:#ff5555;stroke-width:7.5365"
-     id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1"
-     cx="3395.606"
-     cy="3623.0405"
-     r="12"
-     inkscape:label="Path-101" />
-  <circle
-     style="fill:#55d400;stroke-width:7.5365"
-     id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-8"
-     cx="1837"
-     cy="2894"
-     r="12"
-     inkscape:label="CoveredPath-101" />
   <g
      inkscape:groupmode="layer"
      id="layer4"
-     inkscape:label="Layer 4-Node path" />
+     inkscape:label="Layer 4-Node path">
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0"
+       cx="3101"
+       cy="3549"
+       r="12"
+       inkscape:label="Path-102" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-0"
+       cx="3059"
+       cy="3246"
+       r="12"
+       inkscape:label="Path-103" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-2"
+       cx="3056.7493"
+       cy="3059.0747"
+       r="12"
+       inkscape:label="Path-104" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-8"
+       cx="3056"
+       cy="2829"
+       r="12"
+       inkscape:label="Path-105" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-26"
+       cx="2583.9128"
+       cy="2828.8237"
+       r="12"
+       inkscape:label="Path-106" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-4"
+       cx="2082.8147"
+       cy="2824.3406"
+       r="12"
+       inkscape:label="Path-107" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-4-0"
+       cx="1924"
+       cy="2937"
+       r="12"
+       inkscape:label="Path-123" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-4-2"
+       cx="1928"
+       cy="3247"
+       r="12"
+       inkscape:label="Path-124" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-4-6"
+       cx="1407"
+       cy="3266"
+       r="12"
+       inkscape:label="Path-125" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-4-4"
+       cx="963.99994"
+       cy="3247"
+       r="12"
+       inkscape:label="Path-126" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-4-03"
+       cx="634.99994"
+       cy="3293"
+       r="12"
+       inkscape:label="Path-127" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-4-1"
+       cx="1607"
+       cy="2706"
+       r="12"
+       inkscape:label="Path-128" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-5"
+       cx="2072.8987"
+       cy="2480"
+       r="12"
+       inkscape:label="Path-108" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-7"
+       cx="2075.2583"
+       cy="2116"
+       r="12"
+       inkscape:label="Path-109" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-07"
+       cx="2120"
+       cy="1807"
+       r="12"
+       inkscape:label="Path-110" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-1"
+       cx="2575"
+       cy="1808"
+       r="12"
+       inkscape:label="Path-111" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-3"
+       cx="3068"
+       cy="1810"
+       r="12"
+       inkscape:label="Path-112" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-3-2"
+       cx="3062"
+       cy="2314"
+       r="12"
+       inkscape:label="Path-129" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-38"
+       cx="3711"
+       cy="1779"
+       r="12"
+       inkscape:label="Path-113" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-48"
+       cx="3709"
+       cy="2197"
+       r="12"
+       inkscape:label="Path-114" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-9"
+       cx="3709"
+       cy="2507"
+       r="12"
+       inkscape:label="Path-115" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-94"
+       cx="3691"
+       cy="2827"
+       r="12"
+       inkscape:label="Path-116" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-6"
+       cx="3700"
+       cy="3232"
+       r="12"
+       inkscape:label="Path-117" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-95"
+       cx="3642"
+       cy="3552"
+       r="12"
+       inkscape:label="Path-118" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-95-6"
+       cx="4204"
+       cy="3222"
+       r="12"
+       inkscape:label="Path-119" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-95-6-6"
+       cx="4136.1841"
+       cy="2811"
+       r="12"
+       inkscape:label="Path-120" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-95-6-9"
+       cx="4619"
+       cy="2833"
+       r="12"
+       inkscape:label="Path-121" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-0-95-6-9-0"
+       cx="4593"
+       cy="3259"
+       r="12"
+       inkscape:label="Path-122" />
+    <circle
+       style="fill:#ff5555;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1"
+       cx="3395.606"
+       cy="3623.0405"
+       r="12"
+       inkscape:label="Path-101" />
+    <circle
+       style="fill:#55d400;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-8"
+       cx="1837"
+       cy="2894"
+       r="12"
+       inkscape:label="CoveredPath-101" />
+    <circle
+       style="fill:#55d400;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-8-0"
+       cx="2127"
+       cy="2864"
+       r="12"
+       inkscape:label="CoveredPath-104" />
+    <circle
+       style="fill:#55d400;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-8-0-6"
+       cx="2118"
+       cy="2565"
+       r="12"
+       inkscape:label="CoveredPath-105" />
+    <circle
+       style="fill:#55d400;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-8-0-5"
+       cx="3016.252"
+       cy="3073.2849"
+       r="12"
+       inkscape:label="CoveredPath-106" />
+    <circle
+       style="fill:#55d400;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-8-0-5-8"
+       cx="3014"
+       cy="3300"
+       r="12"
+       inkscape:label="CoveredPath-118" />
+    <circle
+       style="fill:#55d400;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-8-0-66"
+       cx="2871"
+       cy="3074"
+       r="12"
+       inkscape:label="CoveredPath-107" />
+    <circle
+       style="fill:#55d400;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-8-0-9"
+       cx="2964"
+       cy="2826"
+       r="12"
+       inkscape:label="CoveredPath-108" />
+    <circle
+       style="fill:#55d400;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-8-0-3"
+       cx="2962.7446"
+       cy="2683.7197"
+       r="12"
+       inkscape:label="CoveredPath-109" />
+    <circle
+       style="fill:#55d400;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-8-0-3-7"
+       cx="2962.2554"
+       cy="2595.8018"
+       r="12"
+       inkscape:label="CoveredPath-110" />
+    <circle
+       style="fill:#55d400;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-8-0-3-0"
+       cx="3379"
+       cy="2669"
+       r="12"
+       inkscape:label="CoveredPath-111" />
+    <circle
+       style="fill:#55d400;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-8-0-3-0-2"
+       cx="3640"
+       cy="2673"
+       r="12"
+       inkscape:label="CoveredPath-114" />
+    <circle
+       style="fill:#55d400;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-8-0-3-0-29"
+       cx="3750"
+       cy="2665"
+       r="12"
+       inkscape:label="CoveredPath-115" />
+    <circle
+       style="fill:#55d400;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-8-0-3-0-29-0"
+       cx="4225"
+       cy="2759"
+       r="12"
+       inkscape:label="CoveredPath-116" />
+    <circle
+       style="fill:#55d400;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-8-0-3-0-29-3"
+       cx="4230"
+       cy="2925"
+       r="12"
+       inkscape:label="CoveredPath-117" />
+    <circle
+       style="fill:#55d400;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-8-0-3-4"
+       cx="3384"
+       cy="2854"
+       r="12"
+       inkscape:label="CoveredPath-112" />
+    <circle
+       style="fill:#55d400;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-8-7"
+       cx="1400"
+       cy="2888"
+       r="12"
+       inkscape:label="CoveredPath-102" />
+    <circle
+       style="fill:#55d400;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-8-3"
+       cx="922"
+       cy="2880"
+       r="12"
+       inkscape:label="CoveredPath-103" />
+  </g>
 </svg>

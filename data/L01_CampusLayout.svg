@@ -22,15 +22,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.42648327"
-     inkscape:cx="3231.0763"
-     inkscape:cy="2501.8566"
+     inkscape:zoom="0.1906592"
+     inkscape:cx="2126.8315"
+     inkscape:cy="2541.1834"
      inkscape:window-width="1440"
-     inkscape:window-height="899"
+     inkscape:window-height="802"
      inkscape:window-x="0"
-     inkscape:window-y="33"
+     inkscape:window-y="34"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer3" />
+     inkscape:current-layer="layer2" />
   <rect
      width="7569.4102"
      height="4409.3301"
@@ -321,7 +321,7 @@
        cx="3389.343"
        cy="3505.4722"
        r="12"
-       inkscape:label="Lawn-IB" />
+       inkscape:label="Lawn-Landmark" />
     <circle
        style="fill:#d8c27a;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-9-7-37-51-9"
@@ -398,14 +398,14 @@
        cx="3098.1055"
        cy="1715.0856"
        r="12"
-       inkscape:label="Building-Dorm-2" />
+       inkscape:label="Building-Dorm-3" />
     <circle
        style="fill:#0000ff;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-5-8-7-8-6"
        cx="3339"
        cy="1730"
        r="12"
-       inkscape:label="Building-IB-1" />
+       inkscape:label="Building-Dorm-2" />
     <circle
        style="fill:#0000ff;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-5-4-9"
@@ -528,8 +528,8 @@
     <circle
        style="fill:#0000ff;stroke-width:7.5365"
        id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-5-8-3-3-6"
-       cx="1420"
-       cy="3247"
+       cx="1420.6887"
+       cy="3219.4504"
        r="12"
        inkscape:label="Building-Stand-1" />
     <circle
@@ -679,6 +679,27 @@
        cy="2863.6094"
        r="12"
        inkscape:label="Gate-401" />
+    <circle
+       style="fill:#ff6600;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-9-1-89-1"
+       cx="2670"
+       cy="3741"
+       r="12"
+       inkscape:label="Gate-102" />
+    <circle
+       style="fill:#ff6600;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-9-1-89-1-8"
+       cx="2463"
+       cy="1312"
+       r="12"
+       inkscape:label="Gate-303" />
+    <circle
+       style="fill:#ff6600;stroke-width:7.5365"
+       id="circle11287-4-6-9-4-1-5-3-2-6-7-4-7-8-2-1-1-0-7-5-2-2-1-9-1-89-1-8-8"
+       cx="4338"
+       cy="1477"
+       r="12"
+       inkscape:label="Gate-304" />
   </g>
   <g
      inkscape:groupmode="layer"

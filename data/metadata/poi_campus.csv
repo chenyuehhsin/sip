@@ -1,0 +1,48 @@
+id,name,name_zh
+Building-AD,AD,行政大樓
+Building-S,S,學生活動中心
+Building-Gym,Gym,體育館
+Building-IB,IB,國際大樓
+Building-T3,T3,第三教學大樓
+Building-IA,IA,醫揚大樓
+Building-T1,T1,第一教學大樓
+Building-E1,E1,工程一館
+Building-E2,E2,工程二館
+Building-MA,MA,管理大樓
+Building-EE,EE,電資館
+Building-T2,T2,第二教學大樓
+Building-RB,RB,綜合研究大樓
+Building-T4,T4,第四教學大樓
+Building-TR,TR,研揚大樓
+Building-Haoyang,Haoyang,浩揚實驗大樓
+Building-Library,Library,圖書館
+Building-AU,AU,視聽館
+Building-SwimmingPool,SwimmingPool,游泳池
+Building-PostOffice-1,PostOffice,郵局
+Building-Cafeteria-1,Cafeteria-1,第一學生餐廳
+Building-Cafeteria-2,Cafeteria-2,教職員工餐廳
+Building-Cafeteria-3,Cafeteria-3,第三學生餐廳
+Building-Cafeteria-IA,Cafeteria-IA,醫陽餐廳
+Building-Dorm-1,Dorm-1,第一學生宿舍
+Building-Dorm-2,Dorm-2,第二學生宿舍
+Building-Dorm-3,Dorm-3,第三學生宿舍
+Building-IH2-1,IH2,國際會館二館
+Building-Security-W,Security-W,警衛室
+Building-Security-NE,Security-NE,警衛室
+Building-Security-SW,Security-SW,警衛室
+Building-Stand-1,Ceremonial Stand,司令台
+Gate-101,Main Gate,大門
+Gate-201,Car Parking Ent.,停車場入口
+Gate-301,Back Gate,後門
+Gate-302,Back Gate,後門
+Gate-401,Car Parking Ent.,地下停車場入口
+Gate-102,Motorcycle Parking Ent.,機車停車場入口
+Gate-303,Motorcycle Parking Ent.,機車停車場入口
+Gate-304,Motorcycle Parking Ent.,機車停車場入口
+Lawn-Landmark,Landmark,地標噴水池
+Pool-RB,Turtle Pond,烏龜池
+Court-Soccer-1,Athletic Field,運動場
+Court-Tennis-1,Tennis,網球場
+Court-Basketball-1,Basketball,籃球場
+Court-Volleyball-1,Volleyball,排球場
+Court-Volleyball-2,Volleyball,排球場

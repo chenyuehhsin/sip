@@ -14,8 +14,14 @@ except FileNotFoundError as e:
     print(f"❌ 錯誤：找不到必要檔案 {e.filename}。請先執行 1_svg_parser.py")
     exit(1)
 
-VALID_NAVIGATION_COLORS = ['#ff5555', '#87de87'] # 紅色走廊、綠色空橋
-K_CANDIDATES = 2 
+VALID_NAVIGATION_COLORS = {'#ff5555', '#87de87'} # 紅色走廊、綠色空橋
+K_CANDIDATES = 2
+WATER_FOUNTAIN_K_CANDIDATES = 1
+
+
+def is_water_fountain_poi(poi):
+    poi_id = str(poi.get('id', '')).upper()
+    return poi.get('category') == 'water_fountain' or '-WF-' in poi_id
 
 draft_connections = {}
 warnings = 0
@@ -41,7 +47,8 @@ for poi in pois:
         node['distance_to_poi'] = math.sqrt((node['x'] - poi['x'])**2 + (node['y'] - poi['y'])**2)
         
     valid_candidates.sort(key=lambda n: n['distance_to_poi'])
-    top_k_nodes = valid_candidates[:K_CANDIDATES]
+    k_candidates = WATER_FOUNTAIN_K_CANDIDATES if is_water_fountain_poi(poi) else K_CANDIDATES
+    top_k_nodes = valid_candidates[:k_candidates]
     target_ids = [n['id'] for n in top_k_nodes]
     
     draft_connections[poi_id] = target_ids

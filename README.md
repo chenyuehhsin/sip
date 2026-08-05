@@ -157,6 +157,7 @@ The parser depends on naming and color conventions in the SVG files:
 - Campus-scale routing nodes, footprints, and outdoor areas are read from `data/L01_CampusLayout.svg`.
 - Shared `Building-*` anchor circles are used for L01-to-A01 alignment. In L01 they are emitted as campus `building_entry` routing nodes; in `A*_map.svg` they are ignored by the indoor parser.
 - Orange nodes (`#ff9955`) are treated as POIs.
+- Water fountain nodes named like `{building}-{floor}F-WF-{number}` are treated as POIs and connected to the nearest valid navigation node.
 - Red, green, blue, and related route colors are mapped to routing-node categories used by the renderer and connection recommender.
 
 ## Important Runtime Files

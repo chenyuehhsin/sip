@@ -10,6 +10,9 @@ SCALE_FACTOR = 5.0 / math.sqrt((356 - 299)**2 + (673 - 674)**2)
 CAMPUS_NODE_PREFIXES = ("Gate-", "Path-", "CoveredPath-", "Building-", "Lawn-", "Pool-", "Court-")
 CAMPUS_LANDMARK_COLOR = "#d8c27a"
 CAMPUS_LANDMARK_SOURCE_COLORS = ("#ffff00", CAMPUS_LANDMARK_COLOR)
+WATER_FOUNTAIN_COLOR = "#00ffff"
+WATER_FOUNTAIN_CATEGORY = "water_fountain"
+WATER_FOUNTAIN_PATTERN = re.compile(r'^[A-Z0-9-]+-[B]?\d+(?:-\d+)?F-WF-\d+$', re.IGNORECASE)
 
 print("🚀 開始執行 [步驟一]: 全新多樓層 SVG 融合解析管線...")
 
@@ -121,6 +124,10 @@ def get_circle_label(tag):
 
 def get_svg_style_text(tag):
     return (tag.get('fill', '') + ';' + tag.get('style', '')).lower()
+
+
+def is_water_fountain_label(label):
+    return bool(WATER_FOUNTAIN_PATTERN.match(str(label).strip()))
 
 
 def parse_svg_path_to_points(path_d):
@@ -476,7 +483,17 @@ for svg_file in sorted(svg_files):
             }
 
             # 依色彩進行圖學渲染分層歸類
-            if '#ff9955' in attr_str:
+            if is_water_fountain_label(label):
+                node_data["color"] = WATER_FOUNTAIN_COLOR
+                node_data["type"] = "poi"
+                node_data["category"] = WATER_FOUNTAIN_CATEGORY
+                node_data["name_zh"] = "飲水機"
+                node_data["public_access"] = "public"
+                node_data["source"] = "floor_plan"
+                node_data["status"] = "active"
+                node_data["subtype"] = WATER_FOUNTAIN_CATEGORY
+                pois.append(node_data)
+            elif '#ff9955' in attr_str:
                 node_data["color"] = "#ff9955"
                 node_data["type"] = "poi"
                 pois.append(node_data)

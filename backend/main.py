@@ -1,3 +1,4 @@
+import csv
 import json
 import math
 import heapq
@@ -10,6 +11,24 @@ app = FastAPI(title="SIP Multi-floor Navigation Engine")
 SCALE_FACTOR = 5.0 / math.sqrt((356 - 299)**2 + (673 - 674)**2)
 
 print("🚀 啟動 SIP 跨樓層雙向尋路引擎...")
+
+def load_campus_pois(path='data/metadata/poi_campus.csv'):
+    try:
+        with open(path, 'r', encoding='utf-8-sig', newline='') as f:
+            reader = csv.DictReader(f)
+            rows = []
+            for row in reader:
+                campus_id = str(row.get('id', '')).strip()
+                if not campus_id:
+                    continue
+                rows.append({
+                    "id": campus_id,
+                    "name": str(row.get('name', '')).strip(),
+                    "name_zh": str(row.get('name_zh', '')).strip()
+                })
+            return rows
+    except FileNotFoundError:
+        return []
 
 try:
     with open('data/routing_nodes.json', 'r', encoding='utf-8') as f:
@@ -25,6 +44,7 @@ try:
         campus_features_data = {"features": []}
     with open('data/final_connections.json', 'r', encoding='utf-8') as f:
         connections_data = json.load(f)
+    campus_pois_data = load_campus_pois()
 except FileNotFoundError as e:
     print(f"❌ 嚴重錯誤：找不到 {e.filename}！請確認已完成 1~3 資料融合步驟。")
     exit(1)
@@ -176,6 +196,7 @@ def get_map_data():
         "pois": pois_data,
         "slabs": slabs_data,
         "campus_features": campus_features_data,
+        "campus_pois": campus_pois_data,
         "connections": connections_data 
     }
 

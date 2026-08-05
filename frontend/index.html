@@ -655,6 +655,8 @@
             spaceSearchPlaceholder: "搜尋空間名稱或編號",
             spaceResultPoi: "空間",
             spaceResultNode: "進階節點",
+            stairNode: "樓梯",
+            elevatorNode: "電梯",
             noSpaceResults: "沒有符合的空間",
             noneFloor: "無",
             buildingSuffix: "大樓",
@@ -680,6 +682,7 @@
             angleHint: "Windows：Ctrl + 滑鼠拖曳；Mac：Option + 滑鼠拖曳，可自由變換角度。",
             tooltipId: "編號: ",
             tooltipCategory: "分類: ",
+            tooltipDepartment: "單位: ",
             tooltipLocation: "位置: ",
             routeSolving: "正在進行跨樓層路徑解算...",
             routeDisconnected: "路網無法連通。",
@@ -769,6 +772,8 @@
             spaceSearchPlaceholder: "Search space name or ID",
             spaceResultPoi: "Space",
             spaceResultNode: "Advanced node",
+            stairNode: "Stair",
+            elevatorNode: "Elevator",
             noSpaceResults: "No matching spaces",
             noneFloor: "None",
             buildingSuffix: "Building",
@@ -794,6 +799,7 @@
             angleHint: "Windows: Ctrl + drag; Mac: Option + drag to freely change the viewing angle.",
             tooltipId: "ID: ",
             tooltipCategory: "Category: ",
+            tooltipDepartment: "Department: ",
             tooltipLocation: "Location: ",
             routeSolving: "Solving cross-floor route...",
             routeDisconnected: "The route network is not connected.",
@@ -858,6 +864,7 @@
         });
 
         populateElevationSelect();
+        rebuildSpaceSearchItems();
         refreshSelectedSpaceLabels();
     }
 
@@ -882,8 +889,10 @@
         drawMap();
     }
 
-    let nodesData = [], edgesData = [], poisData = [], connectionsData = {}, campusFeaturesData = [], nodeMap = {};
+    let nodesData = [], edgesData = [], poisData = [], connectionsData = {}, campusFeaturesData = [], campusPoisData = [], nodeMap = {};
     let verticalNodeIds = new Set();
+    let stairNodeIds = new Set();
+    let elevatorNodeIds = new Set();
     let currentPath = [], altPath = [];
     let currentRouteDistance = null;
     let currentElevation = 1000;
@@ -1029,17 +1038,59 @@
     }
 
     function getSpaceDisplayName(node) {
+        const verticalName = getVerticalNodeDisplayName(node);
+        if (verticalName) return verticalName;
         const meta = POI_METADATA_DB[node.id];
         return meta && meta.name ? meta.name : node.id;
     }
 
     function getSpaceInputLabel(node) {
+        if (isStairNode(node) || isElevatorNode(node)) {
+            return `${getSpaceDisplayName(node)} · ${getSpaceLocationLabel(node)}`;
+        }
         return `${getSpaceDisplayName(node)} — ${node.id}`;
     }
 
+    function getEndpointLabel(nodeId) {
+        const node = nodeMap[nodeId];
+        if (!node) return nodeId;
+        if (isStairNode(node) || isElevatorNode(node)) return getSpaceInputLabel(node);
+        return getSpaceDisplayName(node);
+    }
+
+    function getSelectedNodeCapsuleLabel(node) {
+        if (isStairNode(node) || isElevatorNode(node)) return getSpaceDisplayName(node);
+        return node.id;
+    }
+
+    function getSelectedNodeCapsuleStyle(node) {
+        if (isStairNode(node) || isElevatorNode(node)) {
+            return {
+                bgColor: '#eef2f6',
+                textColor: '#111827',
+                strokeColor: 'rgba(17, 24, 39, 0.18)'
+            };
+        }
+        return {
+            bgColor: BLDG_DARK_COLORS[node.building] || '#1e293b',
+            textColor: 'white',
+            strokeColor: 'white'
+        };
+    }
+
     function getSpaceMetaLabel(node) {
+        if (isStairNode(node) || isElevatorNode(node)) return getSpaceLocationLabel(node);
         const typeLabel = node.type === 'poi' ? t('spaceResultPoi') : t('spaceResultNode');
         return `${typeLabel} · ${formatBuildingOption(node.building)} ${formatFloorLabel(node.floor_name)}`;
+    }
+
+    function getSpaceLocationLabel(node) {
+        return `${formatBuildingOption(node.building)} ${formatFloorLabel(node.floor_name)}`;
+    }
+
+    function getSpaceResultMetaLabel(item) {
+        if (isStairNode(item.node) || isElevatorNode(item.node)) return getSpaceLocationLabel(item.node);
+        return `${item.id} · ${getSpaceMetaLabel(item.node)}`;
     }
 
     function rebuildSpaceSearchItems() {
@@ -1120,7 +1171,7 @@
                 button.dataset.nodeId = item.id;
                 button.innerHTML = `<span class="space-result-title"></span><span class="space-result-meta"></span>`;
                 button.querySelector('.space-result-title').textContent = getSpaceDisplayName(item.node);
-                button.querySelector('.space-result-meta').textContent = `${item.id} · ${getSpaceMetaLabel(item.node)}`;
+                button.querySelector('.space-result-meta').textContent = getSpaceResultMetaLabel(item);
                 button.addEventListener('mousedown', e => {
                     e.preventDefault();
                     selectSpace(type, item.id);
@@ -1192,6 +1243,8 @@
     }
 
     function getPoiDetailTitle(poi) {
+        const verticalName = getVerticalNodeDisplayName(poi);
+        if (verticalName) return verticalName;
         const nameZh = String(poi && poi.name_zh || '').trim();
         return nameZh || (poi && poi.id) || '';
     }
@@ -1233,7 +1286,7 @@
         if (type === 'start') {
             tempStart = poiId;
             selectSpace('start', tempStart);
-            setInfoBox(() => `${t('startSet')}<b>${tempStart}</b>\n${t('chooseEnd')}`);
+            setInfoBox(() => `${t('startSet')}<b>${getEndpointLabel(tempStart)}</b>\n${t('chooseEnd')}`);
             clickState = 1;
             drawMap();
             return;
@@ -1243,7 +1296,7 @@
         selectSpace('end', tempEnd);
         clickState = 0;
         if (tempStart && tempStart !== tempEnd) {
-            setInfoBox(() => `${t('endSet')}<b>${tempEnd}</b>\n${t('calculating')}`);
+            setInfoBox(() => `${t('endSet')}<b>${getEndpointLabel(tempEnd)}</b>\n${t('calculating')}`);
             fetchRoute(tempStart, tempEnd);
         } else {
             setInfoBox(() => t('invalidSelection'));
@@ -1265,15 +1318,31 @@
 
     function renderHoverTooltip(poi, event) {
         document.getElementById('tt-name').innerText = getPoiDetailTitle(poi);
-        hoverTooltipMeta.innerHTML = [
-            buildTooltipRow('tooltipId', poi.id),
-            buildTooltipRow('tooltipCategory', poi.category),
-            buildTooltipRow('tooltipLocation', getPoiLocationLabel(poi))
-        ].join('');
+        const tooltipRows = isStairNode(poi) || isElevatorNode(poi)
+            ? [
+                buildTooltipRow('tooltipLocation', getPoiLocationLabel(poi))
+            ]
+            : [
+                buildTooltipRow('tooltipId', poi.id),
+                buildTooltipRow('tooltipCategory', poi.category),
+                buildTooltipRow('tooltipDepartment', poi.department),
+                buildTooltipRow('tooltipLocation', getPoiLocationLabel(poi))
+            ];
+        hoverTooltipMeta.innerHTML = tooltipRows.join('');
 
         hoverTooltip.style.display = 'block';
         hoverTooltip.style.left = (event.clientX + 15) + 'px';
         hoverTooltip.style.top = (event.clientY + 15) + 'px';
+    }
+
+    function shouldShowHoverTooltip(node) {
+        return node && (
+            node.type === 'poi' ||
+            isCampusNode(node) ||
+            isStairNode(node) ||
+            isElevatorNode(node) ||
+            edgeEditorEnabled
+        );
     }
 
     function changeZoom(factor) { mapZoom = Math.min(Math.max(mapZoom * factor, 0.2), 5); drawMap(); }
@@ -1333,6 +1402,7 @@
             nodesData = data.nodes || []; edgesData = data.edges || [];
             poisData = data.pois || []; connectionsData = data.connections || {};
             campusFeaturesData = (data.campus_features && data.campus_features.features) || [];
+            campusPoisData = data.campus_pois || [];
             rebuildDerivedRouteSets();
             // 如果後端有吐出自定義 SVG 樓板邊界，則取代預設形狀
             if (data.slabs) BLDG_SHAPES = data.slabs;
@@ -1351,12 +1421,44 @@
 
     function rebuildDerivedRouteSets() {
         verticalNodeIds = new Set();
+        stairNodeIds = new Set();
+        elevatorNodeIds = new Set();
         edgesData.forEach(edge => {
             if (isVerticalEdge(edge)) {
                 verticalNodeIds.add(edge.from);
                 verticalNodeIds.add(edge.to);
+                const targetSet = edge.type === 'stair' ? stairNodeIds : elevatorNodeIds;
+                targetSet.add(edge.from);
+                targetSet.add(edge.to);
             }
         });
+    }
+
+    function isStairNode(node) {
+        return node && stairNodeIds.has(node.id);
+    }
+
+    function isElevatorNode(node) {
+        return node && elevatorNodeIds.has(node.id);
+    }
+
+    function getVerticalNodeCode(node) {
+        if (!node || !node.id) return '';
+        const id = String(node.id);
+        const floorSuffixPattern = /-[B]?\d+(?:-\d+)?F$/i;
+        let withoutFloor = id.replace(floorSuffixPattern, '');
+        const building = String(node.building || '').replace(/-STACK/i, '-Stack');
+        if (building && withoutFloor.toUpperCase().startsWith(`${building.toUpperCase()}-`)) {
+            withoutFloor = withoutFloor.slice(building.length + 1);
+        }
+        const fallbackParts = withoutFloor.split('-');
+        return (withoutFloor || fallbackParts[fallbackParts.length - 1] || '').trim();
+    }
+
+    function getVerticalNodeDisplayName(node) {
+        if (isStairNode(node)) return t('stairNode');
+        if (isElevatorNode(node)) return t('elevatorNode');
+        return '';
     }
 
     function isBlueNode(node) {
@@ -1808,13 +1910,13 @@
         return { x: cx + (outX - cx) * customZoom + customOffsetX, y: cy + (outY - cy) * customZoom + customOffsetY };
     }
 
-    function drawStartEndCapsule(ctx, text, x, y, bgColor) {
+    function drawStartEndCapsule(ctx, text, x, y, bgColor, textColor = 'white', strokeColor = 'white') {
         ctx.font = `bold ${Math.max(14, 14 * mapZoom)}px sans-serif`;
         const metrics = ctx.measureText(text);
         const padX = 14 * mapZoom, h = 30 * mapZoom, r = 6 * mapZoom;
         const w = metrics.width + padX * 2;
 
-        ctx.fillStyle = bgColor; ctx.strokeStyle = 'white'; ctx.lineWidth = 2.0 * mapZoom;
+        ctx.fillStyle = bgColor; ctx.strokeStyle = strokeColor; ctx.lineWidth = 2.0 * mapZoom;
 
         ctx.beginPath();
         ctx.moveTo(x + r, y - h/2); ctx.lineTo(x + w - r, y - h/2); ctx.arcTo(x + w, y - h/2, x + w, y + h/2, r);
@@ -1823,7 +1925,7 @@
         ctx.lineTo(x, y - h/2 + r); ctx.arcTo(x, y - h/2, x + r, y - h/2, r); ctx.closePath();
         ctx.fill(); ctx.stroke();
 
-        ctx.fillStyle = 'white'; ctx.fillText(text, x + padX, y + 5 * mapZoom);
+        ctx.fillStyle = textColor; ctx.fillText(text, x + padX, y + 5 * mapZoom);
     }
 
     function estimateWalkingMinutes(distanceMeters) {
@@ -2086,21 +2188,6 @@
         ctx.strokeStyle = style.stroke;
         ctx.lineWidth = Math.max(0.8, 1.25 * mapZoom);
         ctx.stroke();
-
-        if (mapZoom >= 0.32) {
-            const centroid = getFeatureCentroid(points);
-            if (centroid) {
-                const labelPoint = getProjectedCoords({x: centroid.x, y: centroid.y}, heightZ);
-                const floors = feature.massing && feature.massing.floors ? `${feature.massing.floors}F` : '';
-                ctx.fillStyle = style.labelFill;
-                ctx.font = `700 ${Math.max(9, 11 * mapZoom)}px 'Segoe UI', Arial`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(floors || feature.name || feature.label, labelPoint.x, labelPoint.y);
-                ctx.textAlign = 'left';
-                ctx.textBaseline = 'alphabetic';
-            }
-        }
     }
 
     function drawCampusFeatures() {
@@ -2131,6 +2218,105 @@
                 ctx.textBaseline = 'alphabetic';
             }
         });
+    }
+
+    function getCampusPoiLabel(row) {
+        if (!row) return '';
+        const zhName = String(row.name_zh || '').trim();
+        const enName = String(row.name || '').trim();
+        return currentLang === 'zh' ? (zhName || enName) : (enName || zhName);
+    }
+
+    function getCampusPoiNodeMatches(row) {
+        if (!row || !row.id) return [];
+        const id = String(row.id).trim();
+        const exact = nodeMap[id];
+        if (exact && isCampusNode(exact)) return [exact];
+        const prefix = `${id}-`;
+        return nodesData.filter(node => isCampusNode(node) && String(node.id || '').startsWith(prefix));
+    }
+
+    function getCampusPoiLabelPoint(row) {
+        const nodes = getCampusPoiNodeMatches(row);
+        if (!nodes.length) return null;
+        const sum = nodes.reduce((acc, node) => ({x: acc.x + node.x, y: acc.y + node.y}), {x: 0, y: 0});
+        return {
+            x: sum.x / nodes.length,
+            y: sum.y / nodes.length
+        };
+    }
+
+    function getCampusBuildingKey(value) {
+        return String(value || '')
+            .replace(/^Building-/i, '')
+            .replace(/^floor-/i, '')
+            .replace(/Cafteria/i, 'Cafeteria')
+            .toUpperCase();
+    }
+
+    function getCampusBuildingFeatureKeys(feature) {
+        const massing = feature.massing || {};
+        return [
+            feature.id,
+            feature.name,
+            feature.label,
+            massing.display_name
+        ].map(getCampusBuildingKey).filter(Boolean);
+    }
+
+    function getCampusPoiFeature(row) {
+        if (!row || !row.id) return null;
+        const exactKey = getCampusBuildingKey(row.id);
+        const fallbackKey = exactKey.replace(/-\d+$/, '');
+        return campusFeaturesData.find(feature => {
+            if (feature.category !== 'building') return false;
+            const keys = getCampusBuildingFeatureKeys(feature);
+            return keys.includes(exactKey) || keys.includes(fallbackKey);
+        }) || null;
+    }
+
+    function getCampusPoiLabelZ(row) {
+        const feature = getCampusPoiFeature(row);
+        if (!feature) return 0;
+        return getCampusFeatureHeight(feature);
+    }
+
+    function isDuplicateCampusBuildingLabel(row) {
+        const id = String(row && row.id || '');
+        return /^Building-(AU|T1|T4|RB)(?:-|$)/i.test(id);
+    }
+
+    function isCampusBuildingPoi(row) {
+        return /^Building-/i.test(String(row && row.id || ''));
+    }
+
+    function drawCampusPoiLabels() {
+        if (!isCampusMode() || !campusPoisData.length) return;
+        const drawnKeys = new Set();
+        ctx.save();
+        campusPoisData.forEach(row => {
+            if (!isCampusBuildingPoi(row)) return;
+            if (isDuplicateCampusBuildingLabel(row)) return;
+            const label = getCampusPoiLabel(row);
+            if (!label) return;
+            const key = String(row.id || '');
+            if (drawnKeys.has(key)) return;
+            const point = getCampusPoiLabelPoint(row);
+            if (!point) return;
+            drawnKeys.add(key);
+
+            const p = getProjectedCoords({x: point.x, y: point.y}, getCampusPoiLabelZ(row));
+            const fontSize = Math.max(13, 18 * mapZoom);
+            ctx.font = `800 ${fontSize}px 'Segoe UI', Arial`;
+            ctx.fillStyle = 'rgba(148, 163, 184, 0.78)';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.lineWidth = Math.max(2, 3 * mapZoom);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.58)';
+            ctx.strokeText(label, p.x, p.y + 0.5);
+            ctx.fillText(label, p.x, p.y + 0.5);
+        });
+        ctx.restore();
     }
 
     function drawDraftEdges() {
@@ -2424,8 +2610,16 @@
             if (isEdgeSource) {
                 drawStartEndCapsule(ctx, node.id, p.x + 15 * mapZoom, p.y, '#2f7d68');
             } else if (isSelected) {
-                let bgColor = BLDG_DARK_COLORS[node.building] || '#1e293b';
-                drawStartEndCapsule(ctx, node.id, p.x + 15 * mapZoom, p.y, bgColor);
+                const capsuleStyle = getSelectedNodeCapsuleStyle(node);
+                drawStartEndCapsule(
+                    ctx,
+                    getSelectedNodeCapsuleLabel(node),
+                    p.x + 15 * mapZoom,
+                    p.y,
+                    capsuleStyle.bgColor,
+                    capsuleStyle.textColor,
+                    capsuleStyle.strokeColor
+                );
             } else if (isNavigating && onActivePath) {
                 let pIdx = activePathArray.indexOf(node.id);
                 if (pIdx > 0 && pIdx < activePathArray.length - 1 && (pIdx % 3 === 0 || node.id.includes('Stair'))) {
@@ -2438,6 +2632,7 @@
         }
 
         topLayerCapsules.forEach(cap => drawDynamicCapsule(ctx, cap.lines, cap.x, cap.y, cap.bgColor, cap.textColor, cap.isHovered));
+        drawCampusPoiLabels();
     }
 
     function fetchRoute(start, end) {
@@ -2539,7 +2734,7 @@
             edgeEditorHoverNodeId = editorHoverNode ? editorHoverNode.id : null;
             const hoveredNode = editorHoverNode || findClosestNodeAt(15 * Math.max(1, mapZoom), true);
 
-            if (hoveredNode && (hoveredNode.type === 'poi' || isCampusNode(hoveredNode) || edgeEditorEnabled)) {
+            if (shouldShowHoverTooltip(hoveredNode)) {
                 renderHoverTooltip(hoveredNode, e);
             } else {
                 hoverTooltip.style.display = 'none';
@@ -2572,12 +2767,12 @@
             if (clickState === 0) {
                 tempStart = closestNode.id;
                 selectSpace('start', tempStart);
-                setInfoBox(() => `${t('startSet')}<b>${tempStart}</b>\n${t('chooseEnd')}`);
+                setInfoBox(() => `${t('startSet')}<b>${getEndpointLabel(tempStart)}</b>\n${t('chooseEnd')}`);
                 clickState = 1; drawMap();
             } else if (clickState === 1) {
                 tempEnd = closestNode.id;
                 selectSpace('end', tempEnd);
-                setInfoBox(() => `${t('endSet')}<b>${tempEnd}</b>\n${t('calculating')}`);
+                setInfoBox(() => `${t('endSet')}<b>${getEndpointLabel(tempEnd)}</b>\n${t('calculating')}`);
                 clickState = 0; fetchRoute(tempStart, tempEnd);
             }
         }

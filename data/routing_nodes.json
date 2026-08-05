@@ -3016,6 +3016,21 @@
       "source_y": 3062.255
     },
     {
+      "id": "Lawn-Landmark",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1538,
+      "y": 723,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "lawn",
+      "color": "#d8c27a",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3389.343,
+      "source_y": 3505.472
+    },
+    {
       "id": "Pool-E1",
       "building": "Campus",
       "floor": 0.0,
@@ -3166,7 +3181,7 @@
       "source_y": 1718.0
     },
     {
-      "id": "Building-Dorm-2",
+      "id": "Building-Dorm-3",
       "building": "DORM",
       "floor": 0.0,
       "floor_name": "L01",
@@ -3181,8 +3196,8 @@
       "source_y": 1715.086
     },
     {
-      "id": "Building-IB-1",
-      "building": "IB",
+      "id": "Building-Dorm-2",
+      "building": "DORM",
       "floor": 0.0,
       "floor_name": "L01",
       "x": 1479,
@@ -3455,15 +3470,15 @@
       "building": "STAND",
       "floor": 0.0,
       "floor_name": "L01",
-      "x": -489,
-      "y": 466,
+      "x": -488,
+      "y": 437,
       "type": "routing_node",
       "scope": "campus",
       "subtype": "building_entry",
       "color": "#0ea5e9",
       "source": "L01_CampusLayout.svg",
-      "source_x": 1420.0,
-      "source_y": 3247.0
+      "source_x": 1420.689,
+      "source_y": 3219.45
     },
     {
       "id": "Building-TR-1",
@@ -3661,6 +3676,21 @@
       "source_y": 3375.658
     },
     {
+      "id": "Building-IB-1",
+      "building": "IB",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 1891,
+      "y": 718,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "building_entry",
+      "color": "#0ea5e9",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 3732.257,
+      "source_y": 3501.543
+    },
+    {
       "id": "Building-AD-1",
       "building": "AD",
       "floor": 0.0,
@@ -3764,6 +3794,51 @@
       "source": "L01_CampusLayout.svg",
       "source_x": 4725.609,
       "source_y": 2863.609
+    },
+    {
+      "id": "Gate-102",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 799,
+      "y": 969,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "gate",
+      "color": "#ff9955",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2670.0,
+      "source_y": 3741.0
+    },
+    {
+      "id": "Gate-303",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 576,
+      "y": -1529,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "gate",
+      "color": "#ff9955",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 2463.0,
+      "source_y": 1312.0
+    },
+    {
+      "id": "Gate-304",
+      "building": "Campus",
+      "floor": 0.0,
+      "floor_name": "L01",
+      "x": 2506,
+      "y": -1367,
+      "type": "routing_node",
+      "scope": "campus",
+      "subtype": "gate",
+      "color": "#ff9955",
+      "source": "L01_CampusLayout.svg",
+      "source_x": 4338.0,
+      "source_y": 1477.0
     },
     {
       "id": "Path-102",
@@ -7196,19 +7271,19 @@
     {
       "from": "Building-IB-1",
       "to": "Path-112",
-      "distance": 25.45,
+      "distance": 164.01,
       "type": "entrance_connector"
     },
     {
       "from": "Building-IB-1",
       "to": "Path-113",
-      "distance": 33.87,
+      "distance": 155.44,
       "type": "entrance_connector"
     },
     {
       "from": "Building-Dorm-2",
       "to": "Path-112",
-      "distance": 8.91,
+      "distance": 25.45,
       "type": "entrance_connector"
     },
     {
@@ -7460,7 +7535,7 @@
     {
       "from": "Building-Stand-1",
       "to": "Path-125",
-      "distance": 2.02,
+      "distance": 4.39,
       "type": "entrance_connector"
     },
     {

@@ -18,6 +18,7 @@ DEFAULT_POIS_PATH = PROJECT_ROOT / "data" / "pois.json"
 DEFAULT_MASTER_PATH = PROJECT_ROOT / "data" / "metadata" / "poi_master.csv"
 DEFAULT_CATEGORY_PATH = PROJECT_ROOT / "data" / "metadata" / "dictionary.csv"
 DEFAULT_OUTPUT_PATH = PROJECT_ROOT / "data" / "pois_enriched.json"
+WATER_FOUNTAIN_CATEGORY = "water_fountain"
 
 MASTER_REQUIRED_FIELDS = [
     "id",
@@ -94,6 +95,27 @@ def split_multi_value(value: str) -> list[str]:
 def find_duplicate_values(values: list[str]) -> list[str]:
     counts = Counter(values)
     return sorted(value for value, count in counts.items() if value and count > 1)
+
+
+def find_duplicate_value_lines(values: list[tuple[str, int]]) -> dict[str, list[int]]:
+    line_numbers_by_value: dict[str, list[int]] = {}
+    for value, line_number in values:
+        if not value:
+            continue
+        line_numbers_by_value.setdefault(value, []).append(line_number)
+    return {
+        value: line_numbers
+        for value, line_numbers in sorted(line_numbers_by_value.items())
+        if len(line_numbers) > 1
+    }
+
+
+def format_duplicate_lines(duplicates: dict[str, list[int]], limit: int = 30) -> str:
+    items = [
+        f"{value} at CSV line(s) {', '.join(str(line) for line in line_numbers)}"
+        for value, line_numbers in duplicates.items()
+    ]
+    return format_list(items, limit)
 
 
 def format_list(values: list[str], limit: int = 30) -> str:
@@ -179,6 +201,32 @@ def normalize_metadata(row: dict[str, str] | None) -> dict[str, Any]:
     return normalized
 
 
+def apply_generated_metadata_defaults(poi: dict[str, Any], metadata: dict[str, Any]) -> dict[str, Any]:
+    if poi.get("category") != WATER_FOUNTAIN_CATEGORY and "-WF-" not in clean_cell(poi.get("id")).upper():
+        return metadata
+
+    defaults = {
+        "name_zh": "飲水機",
+        "category": WATER_FOUNTAIN_CATEGORY,
+        "public_access": "public",
+        "source": "floor_plan",
+        "status": "active",
+    }
+    merged = dict(metadata)
+    for field, default_value in defaults.items():
+        if is_metadata_blank(merged.get(field)):
+            merged[field] = default_value
+    return merged
+
+
+def is_metadata_blank(value: Any) -> bool:
+    if value is None:
+        return True
+    if isinstance(value, list):
+        return not any(clean_cell(item) for item in value)
+    return clean_cell(value) == ""
+
+
 def validate_pois(pois: Any, report: ValidationReport) -> list[dict[str, Any]]:
     if not isinstance(pois, list):
         report.add_error("data/pois.json must contain a JSON array.")
@@ -221,8 +269,9 @@ def validate_master(
         return
 
     ids = [row.get("id", "") for row in rows if row.get("id", "")]
+    ids_with_lines = [(row.get("id", ""), index) for index, row in enumerate(rows, start=2)]
     empty_ids = [str(index) for index, row in enumerate(rows, start=2) if not row.get("id", "")]
-    duplicate_ids = find_duplicate_values(ids)
+    duplicate_id_lines = find_duplicate_value_lines(ids_with_lines)
     empty_categories = [row["id"] for row in rows if row.get("id") and not row.get("category")]
     unsupported = sorted(
         {
@@ -241,8 +290,8 @@ def validate_master(
 
     if empty_ids:
         report.add_error(f"poi_master.csv has row(s) with empty id at CSV line: {format_list(empty_ids)}")
-    if duplicate_ids:
-        report.add_error(f"poi_master.csv has duplicate id(s): {format_list(duplicate_ids)}")
+    if duplicate_id_lines:
+        report.add_error(f"poi_master.csv has duplicate id(s): {format_duplicate_lines(duplicate_id_lines)}")
     if unsupported:
         report.add_error(
             "poi_master.csv has unsupported category value(s): "
@@ -310,7 +359,8 @@ def enrich_pois(
     for poi in pois:
         poi_id = clean_cell(poi.get("id"))
         merged = dict(poi)
-        merged.update(normalize_metadata(master_by_id.get(poi_id)))
+        metadata = normalize_metadata(master_by_id.get(poi_id))
+        merged.update(apply_generated_metadata_defaults(poi, metadata))
         enriched.append(merged)
     return enriched
 

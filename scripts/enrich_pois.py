@@ -14,10 +14,10 @@ from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
-DEFAULT_POIS_PATH = PROJECT_ROOT / "data" / "pois.json"
+DEFAULT_POIS_PATH = PROJECT_ROOT / "data" / "generated" / "pois.json"
 DEFAULT_MASTER_PATH = PROJECT_ROOT / "data" / "metadata" / "poi_master.csv"
 DEFAULT_CATEGORY_PATH = PROJECT_ROOT / "data" / "metadata" / "dictionary.csv"
-DEFAULT_OUTPUT_PATH = PROJECT_ROOT / "data" / "pois_enriched.json"
+DEFAULT_OUTPUT_PATH = PROJECT_ROOT / "data" / "generated" / "pois_enriched.json"
 WATER_FOUNTAIN_CATEGORY = "water_fountain"
 
 MASTER_REQUIRED_FIELDS = [
@@ -229,7 +229,7 @@ def is_metadata_blank(value: Any) -> bool:
 
 def validate_pois(pois: Any, report: ValidationReport) -> list[dict[str, Any]]:
     if not isinstance(pois, list):
-        report.add_error("data/pois.json must contain a JSON array.")
+        report.add_error("data/generated/pois.json must contain a JSON array.")
         return []
 
     clean_pois: list[dict[str, Any]] = []
@@ -238,7 +238,7 @@ def validate_pois(pois: Any, report: ValidationReport) -> list[dict[str, Any]]:
 
     for index, poi in enumerate(pois, start=1):
         if not isinstance(poi, dict):
-            report.add_error(f"data/pois.json item #{index} is not an object.")
+            report.add_error(f"data/generated/pois.json item #{index} is not an object.")
             continue
         poi_id = clean_cell(poi.get("id"))
         if not poi_id:
@@ -374,7 +374,7 @@ def write_json(path: Path, data: Any) -> None:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Merge data/pois.json with CSV-maintained POI metadata."
+        description="Merge data/generated/pois.json with CSV-maintained POI metadata."
     )
     parser.add_argument("--pois", type=Path, default=DEFAULT_POIS_PATH)
     parser.add_argument("--master", type=Path, default=DEFAULT_MASTER_PATH)

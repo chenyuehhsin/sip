@@ -642,7 +642,7 @@
             edgeStatusImportedWithInvalidType: "已匯入 {count} 筆；請更新非校園 Edge Type。",
             edgeStatusImportEmpty: "匯入檔案沒有可用的 Draft Edge。",
             edgeStatusImportInvalid: "匯入 JSON 格式不符合 Draft Edge schema。",
-            edgeStatusExported: "已匯出 campus_edges_draft.json。",
+            edgeStatusExported: "已匯出 campus_edges.json。",
             edgeStatusExportEmpty: "沒有可匯出的 Draft Edge。",
             edgeConfirmClear: "清除本次所有 Draft Edge？",
             elevationSection: "2D 剖面基準",
@@ -759,7 +759,7 @@
             edgeStatusImportedWithInvalidType: "Imported {count} edges; update non-campus Edge Types.",
             edgeStatusImportEmpty: "No usable draft edges found in the import file.",
             edgeStatusImportInvalid: "Import JSON does not match the draft edge schema.",
-            edgeStatusExported: "Exported campus_edges_draft.json.",
+            edgeStatusExported: "Exported campus_edges.json.",
             edgeStatusExportEmpty: "No draft edges to export.",
             edgeConfirmClear: "Clear all draft edges?",
             elevationSection: "2D Section Datum",
@@ -1038,6 +1038,7 @@
     }
 
     function getSpaceDisplayName(node) {
+        if (isCampusNode(node)) return getCampusReadableNodeLabel(node);
         const verticalName = getVerticalNodeDisplayName(node);
         if (verticalName) return verticalName;
         const meta = POI_METADATA_DB[node.id];
@@ -1059,22 +1060,16 @@
     }
 
     function getSelectedNodeCapsuleLabel(node) {
+        if (isCampusNode(node)) return getCampusReadableNodeLabel(node);
         if (isStairNode(node) || isElevatorNode(node)) return getSpaceDisplayName(node);
         return node.id;
     }
 
     function getSelectedNodeCapsuleStyle(node) {
-        if (isStairNode(node) || isElevatorNode(node)) {
-            return {
-                bgColor: '#eef2f6',
-                textColor: '#111827',
-                strokeColor: 'rgba(17, 24, 39, 0.18)'
-            };
-        }
         return {
-            bgColor: BLDG_DARK_COLORS[node.building] || '#1e293b',
-            textColor: 'white',
-            strokeColor: 'white'
+            bgColor: '#eef2f6',
+            textColor: '#2563eb',
+            strokeColor: 'rgba(37, 99, 235, 0.24)'
         };
     }
 
@@ -1243,6 +1238,7 @@
     }
 
     function getPoiDetailTitle(poi) {
+        if (isCampusNode(poi)) return getCampusReadableNodeLabel(poi);
         const verticalName = getVerticalNodeDisplayName(poi);
         if (verticalName) return verticalName;
         const nameZh = String(poi && poi.name_zh || '').trim();
@@ -1473,6 +1469,89 @@
         return currentViewMode === 'campus_only';
     }
 
+    function getCampusMetadataMatch(nodeOrId) {
+        const id = String(nodeOrId && nodeOrId.id || nodeOrId || '').trim();
+        if (!id || !campusPoisData.length) return null;
+        const exact = campusPoisData.find(row => String(row.id || '').trim().toLowerCase() === id.toLowerCase());
+        if (exact) return exact;
+        const fallback = id.replace(/-\d+$/i, '');
+        if (fallback === id) return null;
+        return campusPoisData.find(row => String(row.id || '').trim().toLowerCase() === fallback.toLowerCase()) || null;
+    }
+
+    function getCampusNodeKind(node) {
+        const id = String(node && node.id || '');
+        if (/^CoveredPath-/i.test(id)) return 'covered_path';
+        if (/^Path-/i.test(id)) return 'path';
+        if (/^Building-/i.test(id)) return 'building';
+        if (/^Gate-/i.test(id)) return 'gate';
+        if (/^Lawn-/i.test(id)) return 'lawn';
+        if (/^Pool-/i.test(id)) return 'pool';
+        if (/^Court-/i.test(id)) return 'court';
+        return 'campus';
+    }
+
+    function isCampusPathNode(node) {
+        const kind = getCampusNodeKind(node);
+        return kind === 'path' || kind === 'covered_path';
+    }
+
+    function formatCampusBuildingLabel(row, node) {
+        const label = getCampusPoiLabel(row);
+        if (!label) return '';
+        if (currentLang !== 'zh') return label;
+
+        const code = String(row && row.name || '')
+            .trim()
+            .replace(/\s+/g, '');
+        if (/^[A-Z0-9]{1,4}$/i.test(code) && !label.toUpperCase().startsWith(code.toUpperCase())) {
+            return `${code}${label}`;
+        }
+
+        const buildingCode = String(node && node.building || '').trim();
+        if (/^[A-Z0-9]{1,4}$/i.test(buildingCode) && !label.toUpperCase().startsWith(buildingCode.toUpperCase())) {
+            return `${buildingCode}${label}`;
+        }
+        return label;
+    }
+
+    function getCampusReadableNodeLabel(node) {
+        const id = String(node && node.id || '').trim();
+        const kind = getCampusNodeKind(node);
+        const metadata = getCampusMetadataMatch(node);
+
+        if (kind === 'building' && metadata) return formatCampusBuildingLabel(metadata, node);
+        if (kind === 'gate' && metadata) {
+            const label = getCampusPoiLabel(metadata);
+            if (currentLang === 'zh' && id === 'Gate-101') return '校園大門';
+            return label || (currentLang === 'zh' ? '校園出入口' : 'Campus Gate');
+        }
+        if (metadata) return getCampusPoiLabel(metadata);
+
+        const labels = currentLang === 'zh'
+            ? {
+                covered_path: '風雨走廊',
+                path: '路徑',
+                gate: '校園出入口',
+                lawn: '草地',
+                pool: '水池',
+                court: '球場',
+                building: '校園建築',
+                campus: '校園節點'
+            }
+            : {
+                covered_path: 'Covered Walkway',
+                path: 'Path',
+                gate: 'Campus Gate',
+                lawn: 'Lawn',
+                pool: 'Pool',
+                court: 'Court',
+                building: 'Campus Building',
+                campus: 'Campus Node'
+            };
+        return labels[kind] || id;
+    }
+
     function isOrangeNode(node) {
         return node.type === 'poi' || normalizeColor(node.color) === '#ff9955';
     }
@@ -1489,8 +1568,24 @@
         return currentPath.includes(node.id) || altPath.includes(node.id) || node.id === tempStart || node.id === tempEnd;
     }
 
+    function pathHasEdge(path, edgeKey) {
+        for (let i = 0; i < path.length - 1; i++) {
+            if (getEdgeKey(path[i], path[i + 1]) === edgeKey) return true;
+        }
+        return false;
+    }
+
+    function isEdgeOnRoute(edge) {
+        const key = getEdgeKey(edge.from, edge.to);
+        return pathHasEdge(currentPath, key) || pathHasEdge(altPath, key);
+    }
+
     function isNodeDrawableForMode(node) {
-        if (isCampusMode()) return isCampusNode(node);
+        if (isCampusMode()) {
+            if (!isCampusNode(node)) return false;
+            if (isCampusPathNode(node)) return isRouteNode(node);
+            return true;
+        }
         if (isCampusNode(node)) return false;
         if (isRouteNode(node)) return true;
         if (currentViewMode === 'vertical_only') return isVerticalNode(node);
@@ -1500,7 +1595,7 @@
 
     function isEdgeDrawableForMode(edge, n1, n2) {
         const isCampusEdge = isCampusNode(n1) && isCampusNode(n2);
-        if (isCampusMode()) return isCampusEdge;
+        if (isCampusMode()) return isCampusEdge && isEdgeOnRoute(edge);
         return !isCampusNode(n1) && !isCampusNode(n2);
     }
 
@@ -1714,7 +1809,7 @@
     function extractDraftEdgesFromImport(payload) {
         if (Array.isArray(payload)) return payload.map(normalizeImportedDraftEdge).filter(Boolean);
         if (!payload || typeof payload !== 'object') return [];
-        const preferred = payload["校園動線 Draft"] || payload.campus_edges_draft || payload.draftEdges || payload.edges;
+        const preferred = payload["校園動線 Draft"] || payload.campus_edges || payload.campus_edges_draft || payload.draftEdges || payload.edges;
         if (Array.isArray(preferred)) return preferred.map(normalizeImportedDraftEdge).filter(Boolean);
         return Object.values(payload)
             .filter(Array.isArray)
@@ -1767,7 +1862,7 @@
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'campus_edges_draft.json';
+        link.download = 'campus_edges.json';
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -2590,9 +2685,10 @@
             else if (!isBldgActive && !isSelected && !onPath) nodeColor = '#dbe5e1';
 
             let radius = node.type === 'poi' ? 5.0 : 7.0;
-            if (onActivePath) radius = 8.5;
-            if (isSelected) radius = 12.0;
-            if (isEdgeSource) radius = 11.0;
+            if (isCampusNode(node)) radius = isCampusPathNode(node) ? 8.0 : 9.5;
+            if (onActivePath) radius = Math.max(radius, isCampusNode(node) ? 11.0 : 8.5);
+            if (isSelected) radius = Math.max(radius, isCampusNode(node) ? 13.0 : 12.0);
+            if (isEdgeSource) radius = Math.max(radius, isCampusNode(node) ? 12.0 : 11.0);
 
             ctx.beginPath(); ctx.arc(p.x, p.y, radius * mapZoom, 0, 2 * Math.PI);
             ctx.fillStyle = nodeColor; ctx.fill();
@@ -2631,8 +2727,8 @@
 
         }
 
-        topLayerCapsules.forEach(cap => drawDynamicCapsule(ctx, cap.lines, cap.x, cap.y, cap.bgColor, cap.textColor, cap.isHovered));
         drawCampusPoiLabels();
+        topLayerCapsules.forEach(cap => drawDynamicCapsule(ctx, cap.lines, cap.x, cap.y, cap.bgColor, cap.textColor, cap.isHovered));
     }
 
     function fetchRoute(start, end) {

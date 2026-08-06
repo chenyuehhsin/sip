@@ -386,16 +386,6 @@
       "entrance_connector"
     ],
     [
-      "Building-IB-1",
-      "Path-112",
-      "entrance_connector"
-    ],
-    [
-      "Building-IB-1",
-      "Path-113",
-      "entrance_connector"
-    ],
-    [
       "Building-Dorm-2",
       "Path-112",
       "entrance_connector"
@@ -619,6 +609,101 @@
       "Pool-RB",
       "Path-106",
       "secondary"
+    ],
+    [
+      "Building-IB-1",
+      "Path-118",
+      "entrance_connector"
+    ],
+    [
+      "Building-IB-1",
+      "Path-117",
+      "entrance_connector"
+    ],
+    [
+      "Path-103",
+      "Building-AD-1",
+      "entrance_connector"
+    ],
+    [
+      "Building-AD-1",
+      "Path-117",
+      "entrance_connector"
+    ],
+    [
+      "Building-AD-2",
+      "CoveredPath-112",
+      "entrance_connector"
+    ],
+    [
+      "Building-AD-2",
+      "Path-116",
+      "entrance_connector"
+    ],
+    [
+      "Building-AD-2",
+      "Path-105",
+      "entrance_connector"
+    ],
+    [
+      "Path-103",
+      "Path-117",
+      "backbone"
+    ],
+    [
+      "Lawn-Landmark",
+      "Path-101",
+      "secondary"
+    ],
+    [
+      "Lawn-Landmark",
+      "Path-102",
+      "secondary"
+    ],
+    [
+      "Lawn-Landmark",
+      "Path-118",
+      "secondary"
+    ],
+    [
+      "Path-104",
+      "Building-AD-1",
+      "entrance_connector"
+    ],
+    [
+      "CoveredPath-106",
+      "Building-AD-1",
+      "entrance_connector"
+    ],
+    [
+      "Path-104",
+      "CoveredPath-106",
+      "backbone"
+    ],
+    [
+      "Building-Dorm-2",
+      "Path-113",
+      "entrance_connector"
+    ],
+    [
+      "Building-E1-3",
+      "Path-112",
+      "entrance_connector"
+    ],
+    [
+      "Path-110",
+      "Building-Dorm-1",
+      "entrance_connector"
+    ],
+    [
+      "Path-108",
+      "CoveredPath-105",
+      "backbone"
+    ],
+    [
+      "Path-123",
+      "Path-104",
+      "backbone"
     ]
   ]
 }

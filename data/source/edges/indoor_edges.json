@@ -274,9 +274,7 @@
       ["RB-Stack-SD-4F", "RB-Stack-SD-5F", "stair"],
       ["RB-Stack-SD-5F", "RB-Stack-SD-6F", "stair"],
       ["RB-Stack-SD-6F", "RB-Stack-SD-7F", "stair"],
-      ["RB-Stack-SD-7F", "RB-Stack-SD-8F", "stair"],
-      ["RB-Stack-SD-8F", "RB-Stack-SD-9F", "stair"],
-      ["RB-Stack-SD-9F", "RB-Stack-SD-10F", "stair"]
+      ["RB-Stack-SD-7F", "RB-Stack-SD-8F", "stair"]
 
       ],
 

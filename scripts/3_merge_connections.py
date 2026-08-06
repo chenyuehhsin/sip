@@ -7,10 +7,10 @@ print("🛠️ 開始執行 [步驟三]: 人機協作資料融合器 (Merge Conn
 # 1. 載入檔案 (草稿與人類補丁)
 # ==========================================
 try:
-    with open('data/draft_connection.json', 'r', encoding='utf-8') as f:
+    with open('data/generated/draft_connection.json', 'r', encoding='utf-8') as f:
         draft_connections = json.load(f)
         
-    with open('data/connection_overrides.json', 'r', encoding='utf-8') as f:
+    with open('data/source/overrides/connection_overrides.json', 'r', encoding='utf-8') as f:
         overrides = json.load(f)
 except FileNotFoundError as e:
     print(f"❌ 錯誤：找不到檔案 {e.filename}。請確認已執行步驟二，並已建立 overrides 檔案。")
@@ -57,9 +57,9 @@ for rule in add_rules:
 # ==========================================
 # 4. 輸出最終 Ground Truth 檔案
 # ==========================================
-with open('data/final_connections.json', 'w', encoding='utf-8') as f:
+with open('data/generated/final_connections.json', 'w', encoding='utf-8') as f:
     json.dump(final_connections, f, indent=2, ensure_ascii=False)
 
 print("\n✅ [步驟三] 執行完畢！")
 print(f"📊 統計: 總計套用 {remove_count} 筆移除規則、{add_count} 筆新增規則。")
-print(f"📁 最終連線 Ground Truth 已成功寫入 data/final_connections.json！")
+print(f"📁 最終連線 Ground Truth 已成功寫入 data/generated/final_connections.json！")

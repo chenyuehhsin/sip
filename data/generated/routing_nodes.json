@@ -7269,18 +7269,6 @@
       "type": "entrance_connector"
     },
     {
-      "from": "Building-IB-1",
-      "to": "Path-112",
-      "distance": 164.01,
-      "type": "entrance_connector"
-    },
-    {
-      "from": "Building-IB-1",
-      "to": "Path-113",
-      "distance": 155.44,
-      "type": "entrance_connector"
-    },
-    {
       "from": "Building-Dorm-2",
       "to": "Path-112",
       "distance": 25.45,
@@ -7549,6 +7537,120 @@
       "to": "Path-106",
       "distance": 40.92,
       "type": "secondary"
+    },
+    {
+      "from": "Building-IB-1",
+      "to": "Path-118",
+      "distance": 9.35,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-IB-1",
+      "to": "Path-117",
+      "distance": 24.48,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Path-103",
+      "to": "Building-AD-1",
+      "distance": 31.18,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-AD-1",
+      "to": "Path-117",
+      "distance": 29.88,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-AD-2",
+      "to": "CoveredPath-112",
+      "distance": 5.18,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-AD-2",
+      "to": "Path-116",
+      "distance": 28.94,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-AD-2",
+      "to": "Path-105",
+      "distance": 30.27,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Path-103",
+      "to": "Path-117",
+      "distance": 57.91,
+      "type": "backbone"
+    },
+    {
+      "from": "Lawn-Landmark",
+      "to": "Path-101",
+      "distance": 10.63,
+      "type": "secondary"
+    },
+    {
+      "from": "Lawn-Landmark",
+      "to": "Path-102",
+      "distance": 26.27,
+      "type": "secondary"
+    },
+    {
+      "from": "Lawn-Landmark",
+      "to": "Path-118",
+      "distance": 23.17,
+      "type": "secondary"
+    },
+    {
+      "from": "Path-104",
+      "to": "Building-AD-1",
+      "distance": 30.33,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "CoveredPath-106",
+      "to": "Building-AD-1",
+      "distance": 33.64,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Path-104",
+      "to": "CoveredPath-106",
+      "distance": 3.8,
+      "type": "backbone"
+    },
+    {
+      "from": "Building-Dorm-2",
+      "to": "Path-113",
+      "distance": 33.87,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Building-E1-3",
+      "to": "Path-112",
+      "distance": 22.77,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Path-110",
+      "to": "Building-Dorm-1",
+      "distance": 31.93,
+      "type": "entrance_connector"
+    },
+    {
+      "from": "Path-108",
+      "to": "CoveredPath-105",
+      "distance": 8.63,
+      "type": "backbone"
+    },
+    {
+      "from": "Path-123",
+      "to": "Path-104",
+      "distance": 102.81,
+      "type": "backbone"
     }
   ]
 }

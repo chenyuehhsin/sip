@@ -91,28 +91,29 @@ python run_pipeline.py
 Pipeline steps:
 
 1. `scripts/1_svg_parser.py`
-   - Reads `data/A*_map.svg` and `data/L01_CampusLayout.svg`.
+   - Reads `data/source/svg/floors/A*_map.svg` and `data/source/svg/campus/L01_CampusLayout.svg`.
    - Extracts indoor routing nodes, POIs, floor metadata, slab geometry, and campus-scale routing nodes.
    - Aligns L01 campus nodes into the A01 coordinate space using shared `Building-*` anchors.
-   - Reads `data/raw_edges.json`.
-   - Writes `data/routing_nodes.json`, `data/pois.json`, and `data/slabs.json`.
+   - Reads indoor edges from `data/source/edges/indoor_edges.json`.
+   - Reads campus edges from `data/source/edges/campus_edges.json`.
+   - Writes `data/generated/routing_nodes.json`, `data/generated/pois.json`, and `data/generated/slabs.json`.
 
 2. `scripts/enrich_pois.py`
    - Merges generated POI geometry with CSV-maintained metadata.
-   - Writes `data/pois_enriched.json`.
+   - Writes `data/generated/pois_enriched.json`.
 
 3. `scripts/2_knn_recommender.py`
    - Connects each POI to nearby valid routing nodes on the same building and floor.
-   - Writes `data/draft_connection.json`.
+   - Writes `data/generated/draft_connection.json`.
 
 4. `scripts/3_merge_connections.py`
-   - Applies manual add/remove overrides from `data/connection_overrides.json`.
-   - Writes `data/final_connections.json`.
+   - Applies manual add/remove overrides from `data/source/overrides/connection_overrides.json`.
+   - Writes `data/generated/final_connections.json`.
 
 5. `scripts/4_campus_features_parser.py`
-   - Reads `data/L01_CampusLayout.svg` and `data/A01_map.svg`.
+   - Reads `data/source/svg/campus/L01_CampusLayout.svg` and `data/source/svg/floors/A01_map.svg`.
    - Uses shared `Building-*` anchors to align campus-scale features into the A01 coordinate space.
-   - Writes `data/campus_features.json`.
+   - Writes `data/generated/campus_features.json`.
 
 ## Repository Structure
 
@@ -123,24 +124,32 @@ sip/
 |   `-- utils/
 |       `-- validator.py         # Placeholder for graph validation utilities
 |-- data/
-|   |-- A*_map.svg               # Source SVG floor maps
-|   |-- raw_edges.json           # Manually defined routing graph edges
-|   |-- routing_nodes.json       # Generated routing nodes and edges
-|   |-- pois.json                # Generated POI nodes
-|   |-- pois_enriched.json       # Generated POIs merged with metadata
-|   |-- slabs.json               # Generated building slab geometry
-|   |-- draft_connection.json    # Generated POI connection candidates
-|   |-- connection_overrides.json # Manual POI connection overrides
-|   |-- final_connections.json   # Final POI connections used by the backend
-|   |-- campus_features.json     # Generated campus footprints and outdoor overlays
-|   |-- L01_CampusLayout.svg     # Campus-scale source SVG layout
-|   `-- map_data.json            # Legacy or auxiliary map data
+|   |-- source/                  # Hand-maintained source files
+|   |   |-- svg/
+|   |   |   |-- floors/A*_map.svg
+|   |   |   `-- campus/L01_CampusLayout.svg
+|   |   |-- edges/
+|   |   |   |-- indoor_edges.json
+|   |   |   `-- campus_edges.json
+|   |   `-- overrides/connection_overrides.json
+|   |-- generated/               # Pipeline outputs; regenerate instead of editing
+|   |   |-- routing_nodes.json
+|   |   |-- pois.json
+|   |   |-- pois_enriched.json
+|   |   |-- slabs.json
+|   |   |-- draft_connection.json
+|   |   |-- final_connections.json
+|   |   `-- campus_features.json
+|   |-- metadata/                # CSV and JSON metadata maintained by hand
+|   `-- legacy/map_data.json     # Legacy or auxiliary map data
 |-- frontend/
 |   `-- index.html               # Canvas dashboard and interaction logic
 |-- scripts/
 |   |-- 1_svg_parser.py
+|   |-- enrich_pois.py
 |   |-- 2_knn_recommender.py
-|   `-- 3_merge_connections.py
+|   |-- 3_merge_connections.py
+|   `-- 4_campus_features_parser.py
 |-- run_pipeline.py              # Runs all data pipeline steps
 |-- environment.yml              # Conda environment definition
 `-- README.md
@@ -150,11 +159,11 @@ sip/
 
 The parser depends on naming and color conventions in the SVG files:
 
-- Floor map files should follow the `A*_map.svg` naming pattern.
+- Floor map files should follow the `A*_map.svg` naming pattern under `data/source/svg/floors/`.
 - Routing nodes and POIs are read from SVG `circle` elements.
 - Node identity comes from `inkscape:label` or `id`.
 - Floor slabs are read from `polygon` or `path` elements whose label or id starts with `floor-`.
-- Campus-scale routing nodes, footprints, and outdoor areas are read from `data/L01_CampusLayout.svg`.
+- Campus-scale routing nodes, footprints, and outdoor areas are read from `data/source/svg/campus/L01_CampusLayout.svg`.
 - Shared `Building-*` anchor circles are used for L01-to-A01 alignment. In L01 they are emitted as campus `building_entry` routing nodes; in `A*_map.svg` they are ignored by the indoor parser.
 - Orange nodes (`#ff9955`) are treated as POIs.
 - Water fountain nodes named like `{building}-{floor}F-WF-{number}` are treated as POIs and connected to the nearest valid navigation node.
@@ -164,11 +173,11 @@ The parser depends on naming and color conventions in the SVG files:
 
 The backend loads these files at startup:
 
-- `data/routing_nodes.json`
-- `data/pois.json`
-- `data/slabs.json`
-- `data/campus_features.json`
-- `data/final_connections.json`
+- `data/generated/routing_nodes.json`
+- `data/generated/pois_enriched.json`
+- `data/generated/slabs.json`
+- `data/generated/campus_features.json`
+- `data/generated/final_connections.json`
 
 If any of these files are missing, run:
 
@@ -180,7 +189,7 @@ Then restart Uvicorn.
 
 ## Development Notes
 
-- Run commands from the repository root so relative paths such as `data/routing_nodes.json` resolve correctly.
+- Run commands from the repository root so relative paths such as `data/generated/routing_nodes.json` resolve correctly.
 - The frontend is intentionally dependency-free and is served directly by FastAPI.
 - The routing graph is undirected: every edge in `routing_nodes.json` is added in both directions by the backend.
 - POIs are injected into a temporary local graph only when they are used as route endpoints.

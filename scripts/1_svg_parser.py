@@ -13,6 +13,15 @@ CAMPUS_LANDMARK_SOURCE_COLORS = ("#ffff00", CAMPUS_LANDMARK_COLOR)
 WATER_FOUNTAIN_COLOR = "#00ffff"
 WATER_FOUNTAIN_CATEGORY = "water_fountain"
 WATER_FOUNTAIN_PATTERN = re.compile(r'^[A-Z0-9-]+-[B]?\d+(?:-\d+)?F-WF-\d+$', re.IGNORECASE)
+DATA_DIR = "data"
+FLOOR_SVG_DIR = os.path.join(DATA_DIR, "source", "svg", "floors")
+CAMPUS_SVG_DIR = os.path.join(DATA_DIR, "source", "svg", "campus")
+INDOOR_EDGES_PATH = os.path.join(DATA_DIR, "source", "edges", "indoor_edges.json")
+CAMPUS_EDGES_PATH = os.path.join(DATA_DIR, "source", "edges", "campus_edges.json")
+GENERATED_DIR = os.path.join(DATA_DIR, "generated")
+ROUTING_NODES_OUTPUT = os.path.join(GENERATED_DIR, "routing_nodes.json")
+POIS_OUTPUT = os.path.join(GENERATED_DIR, "pois.json")
+SLABS_OUTPUT = os.path.join(GENERATED_DIR, "slabs.json")
 
 print("🚀 開始執行 [步驟一]: 全新多樓層 SVG 融合解析管線...")
 
@@ -353,9 +362,9 @@ def is_campus_node_candidate(circle):
     return is_campus_landmark_color(circle)
 
 
-def parse_campus_nodes(data_dir, existing_node_ids):
-    l01_path = os.path.join(data_dir, "L01_CampusLayout.svg")
-    a01_path = os.path.join(data_dir, "A01_map.svg")
+def parse_campus_nodes(existing_node_ids):
+    l01_path = os.path.join(CAMPUS_SVG_DIR, "L01_CampusLayout.svg")
+    a01_path = os.path.join(FLOOR_SVG_DIR, "A01_map.svg")
     if not os.path.exists(l01_path):
         print(f"⚠️ 警告：找不到 {l01_path}，略過 L01 校園節點解析。")
         return []
@@ -437,20 +446,19 @@ routing_nodes = []
 pois = []
 slabs_data = {}
 
-data_dir = 'data'
-if not os.path.exists(data_dir):
-    print(f"❌ 錯誤：找不到 {data_dir} 資料夾！")
+if not os.path.exists(FLOOR_SVG_DIR):
+    print(f"❌ 錯誤：找不到 {FLOOR_SVG_DIR} 資料夾！")
     exit(1)
 
-svg_files = [f for f in os.listdir(data_dir) if f.startswith('A') and f.endswith('_map.svg')]
+svg_files = [f for f in os.listdir(FLOOR_SVG_DIR) if f.startswith('A') and f.endswith('_map.svg')]
 if not svg_files:
-    print("⚠️ 警告：data/ 資料夾下沒有找到任何 A*_map.svg 地圖檔案！")
+    print(f"⚠️ 警告：{FLOOR_SVG_DIR} 資料夾下沒有找到任何 A*_map.svg 地圖檔案！")
     exit(1)
 
 print(f"📂 偵測到 {len(svg_files)} 個樓層地圖檔案，開始進行解析...")
 
 for svg_file in sorted(svg_files):
-    filepath = os.path.join(data_dir, svg_file)
+    filepath = os.path.join(FLOOR_SVG_DIR, svg_file)
     default_floor, default_floor_name = parse_floor_from_filename(svg_file)
     default_building = "Unknown"
 
@@ -528,7 +536,7 @@ for svg_file in sorted(svg_files):
             print(f"⚠️ 樓板 {floor_label} 沒有成功解析出座標")
 
 existing_node_ids = {node["id"] for node in routing_nodes}
-routing_nodes.extend(parse_campus_nodes(data_dir, existing_node_ids))
+routing_nodes.extend(parse_campus_nodes(existing_node_ids))
 
 
 def collect_edge_rows(edge_payload, source_name, default_type=None):
@@ -568,46 +576,46 @@ def edge_key(edge_data):
 
 
 # ==========================================
-# 6. 讀取 raw_edges.json 與可選 campus_edges_draft.json，並依跨樓層邏輯解算
+# 6. 讀取室內與校園 edge 來源，並依跨樓層邏輯解算
 # ==========================================
 edges = []
-raw_edges = []
+source_edges = []
 try:
-    with open('data/raw_edges.json', 'r', encoding='utf-8') as f:
+    with open(INDOOR_EDGES_PATH, 'r', encoding='utf-8') as f:
         grouped_edges = json.load(f)
-    raw_edges.extend(collect_edge_rows(grouped_edges, "raw_edges.json", default_type="walkway"))
+    source_edges.extend(collect_edge_rows(grouped_edges, "indoor_edges.json", default_type="walkway"))
 except FileNotFoundError:
-    print("⚠️ 警告：找不到 data/raw_edges.json，骨幹連線為空。")
+    print(f"⚠️ 警告：找不到 {INDOOR_EDGES_PATH}，室內骨幹連線為空。")
 
-campus_draft_edges_path = os.path.join(data_dir, "campus_edges_draft.json")
-if os.path.exists(campus_draft_edges_path):
+if os.path.exists(CAMPUS_EDGES_PATH):
     try:
-        with open(campus_draft_edges_path, 'r', encoding='utf-8') as f:
-            campus_draft_payload = json.load(f)
-        campus_draft_edges = collect_edge_rows(campus_draft_payload, "campus_edges_draft.json")
-        existing_edge_keys = {edge_key(edge_data) for edge_data in raw_edges}
-        unique_campus_draft_edges = []
+        with open(CAMPUS_EDGES_PATH, 'r', encoding='utf-8') as f:
+            campus_edges_payload = json.load(f)
+        campus_edges = collect_edge_rows(campus_edges_payload, "campus_edges.json")
+        existing_edge_keys = {edge_key(edge_data) for edge_data in source_edges}
+        unique_campus_edges = []
         duplicate_count = 0
-        for edge_data in campus_draft_edges:
+        for edge_data in campus_edges:
             key = edge_key(edge_data)
             if key in existing_edge_keys:
                 duplicate_count += 1
                 continue
             existing_edge_keys.add(key)
-            unique_campus_draft_edges.append(edge_data)
-        raw_edges.extend(unique_campus_draft_edges)
-        print(f"  🧩 合併 campus_edges_draft.json -> Edge {len(unique_campus_draft_edges)} 條" + (f" | 略過重複 {duplicate_count} 條" if duplicate_count else ""))
+            unique_campus_edges.append(edge_data)
+        source_edges.extend(unique_campus_edges)
+        print(f"  🧩 合併 campus_edges.json -> Edge {len(unique_campus_edges)} 條" + (f" | 略過重複 {duplicate_count} 條" if duplicate_count else ""))
     except json.JSONDecodeError as e:
-        print(f"⚠️ campus_edges_draft.json JSON 格式錯誤，已略過: {e}")
+        print(f"⚠️ campus_edges.json JSON 格式錯誤，已略過: {e}")
 
-missing_edge_count = 0
-for edge_data in raw_edges:
+node_by_id = {node['id']: node for node in routing_nodes}
+missing_edge_details = []
+for edge_data in source_edges:
     start_id = edge_data[0]
     end_id = edge_data[1]
     edge_type = edge_data[2]
 
-    n1 = next((n for n in routing_nodes if n['id'] == start_id), None)
-    n2 = next((n for n in routing_nodes if n['id'] == end_id), None)
+    n1 = node_by_id.get(start_id)
+    n2 = node_by_id.get(end_id)
 
     if n1 and n2:
         # 跨樓層 (垂直動線) 核心權重算式
@@ -625,10 +633,19 @@ for edge_data in raw_edges:
             "type": edge_type
         })
     else:
-        missing_edge_count += 1
+        missing_parts = []
+        if not n1:
+            missing_parts.append(start_id)
+        if not n2:
+            missing_parts.append(end_id)
+        missing_edge_details.append(f"{start_id} -> {end_id} ({edge_type}); missing: {', '.join(missing_parts)}")
 
-if missing_edge_count:
-    print(f"⚠️ Edge 略過 {missing_edge_count} 條：找不到對應 node。")
+if missing_edge_details:
+    print(f"⚠️ Edge 略過 {len(missing_edge_details)} 條：找不到對應 node。")
+    for detail in missing_edge_details[:20]:
+        print(f"  - {detail}")
+    if len(missing_edge_details) > 20:
+        print(f"  ... 另有 {len(missing_edge_details) - 20} 條")
 
 # ==========================================
 # 7. 輸出至獨立 JSON
@@ -638,11 +655,12 @@ routing_graph = {
     "edges": edges
 }
 
-with open('data/routing_nodes.json', 'w', encoding='utf-8') as f:
+os.makedirs(GENERATED_DIR, exist_ok=True)
+with open(ROUTING_NODES_OUTPUT, 'w', encoding='utf-8') as f:
     json.dump(routing_graph, f, indent=2, ensure_ascii=False)
-with open('data/pois.json', 'w', encoding='utf-8') as f:
+with open(POIS_OUTPUT, 'w', encoding='utf-8') as f:
     json.dump(pois, f, indent=2, ensure_ascii=False)
-with open('data/slabs.json', 'w', encoding='utf-8') as f:
+with open(SLABS_OUTPUT, 'w', encoding='utf-8') as f:
     json.dump(slabs_data, f, indent=2, ensure_ascii=False)
 
 print("✅ [步驟一] 執行完畢！")

@@ -31,22 +31,22 @@ def load_campus_pois(path='data/metadata/poi_campus.csv'):
         return []
 
 try:
-    with open('data/routing_nodes.json', 'r', encoding='utf-8') as f:
+    with open('data/generated/routing_nodes.json', 'r', encoding='utf-8') as f:
         routing_data = json.load(f)
-    with open('data/pois_enriched.json', 'r', encoding='utf-8') as f:
+    with open('data/generated/pois_enriched.json', 'r', encoding='utf-8') as f:
         pois_data = json.load(f)
-    with open('data/slabs.json', 'r', encoding='utf-8') as f:
+    with open('data/generated/slabs.json', 'r', encoding='utf-8') as f:
         slabs_data = json.load(f)
     try:
-        with open('data/campus_features.json', 'r', encoding='utf-8') as f:
+        with open('data/generated/campus_features.json', 'r', encoding='utf-8') as f:
             campus_features_data = json.load(f)
     except FileNotFoundError:
         campus_features_data = {"features": []}
-    with open('data/final_connections.json', 'r', encoding='utf-8') as f:
+    with open('data/generated/final_connections.json', 'r', encoding='utf-8') as f:
         connections_data = json.load(f)
     campus_pois_data = load_campus_pois()
 except FileNotFoundError as e:
-    print(f"❌ 嚴重錯誤：找不到 {e.filename}！請確認已完成 1~3 資料融合步驟。")
+    print(f"❌ 嚴重錯誤：找不到 {e.filename}！請先從專案根目錄執行 python run_pipeline.py。")
     exit(1)
 
 base_graph = {}

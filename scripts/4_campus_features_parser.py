@@ -7,9 +7,9 @@ from bs4 import BeautifulSoup
 print("🏫 開始執行 [步驟四]: L01 校園建築與戶外色塊解析...")
 
 DATA_DIR = "data"
-L01_SVG = os.path.join(DATA_DIR, "L01_CampusLayout.svg")
-A01_SVG = os.path.join(DATA_DIR, "A01_map.svg")
-OUTPUT_JSON = os.path.join(DATA_DIR, "campus_features.json")
+L01_SVG = os.path.join(DATA_DIR, "source", "svg", "campus", "L01_CampusLayout.svg")
+A01_SVG = os.path.join(DATA_DIR, "source", "svg", "floors", "A01_map.svg")
+OUTPUT_JSON = os.path.join(DATA_DIR, "generated", "campus_features.json")
 CAMPUS_BUILDINGS_JSON = os.path.join(DATA_DIR, "metadata", "campus_buildings.json")
 
 OUTDOOR_PREFIXES = ("Court-", "Lawn-", "Pool-", "Athletic-", "Landmark-")
@@ -406,7 +406,7 @@ for el in l01_soup.find_all(lambda tag: tag.name in ("polygon", "path")):
     })
 
 payload = {
-    "source": "data/L01_CampusLayout.svg",
+    "source": L01_SVG,
     "target_coordinate_space": "A01_map.svg",
     "matched_anchors": common_anchor_ids,
     "transform": {

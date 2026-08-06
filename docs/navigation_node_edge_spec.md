@@ -119,11 +119,11 @@ T4-101
 - 顏色：橘色，現行 parser 辨識 `#ff9955`。
 - 資料型別：`poi`。
 - POI 目前不是常駐路網點；backend 只有在 POI 作為起終點時，才把它臨時接進 graph。
-- POI 與紅/綠路網點的連接關係目前由 `data/final_connections.json` 管理。
+- POI 與紅/綠路網點的連接關係目前由 `data/generated/final_connections.json` 管理。
 
 ## 3. L01 校園大尺度 Node 定義
 
-L01 node 位於 `data/L01_CampusLayout.svg`。目前 `scripts/1_svg_parser.py` 會正式掃描 `Gate-*`、`Path-*`、`CoveredPath-*`、`Building-*`、`Lawn-*`、`Pool-*`、`Court-*` 與其他黃色 circle，透過同名 `Building-*` anchor 對齊到 `A01_map.svg` 座標系，並輸出為 `scope: "campus"` 的 routing nodes。
+L01 node 位於 `data/source/svg/campus/L01_CampusLayout.svg`。目前 `scripts/1_svg_parser.py` 會正式掃描 `Gate-*`、`Path-*`、`CoveredPath-*`、`Building-*`、`Lawn-*`、`Pool-*`、`Court-*` 與其他黃色 circle，透過同名 `Building-*` anchor 對齊到 `A01_map.svg` 座標系，並輸出為 `scope: "campus"` 的 routing nodes。
 
 ### 3.1 橘色：校園大門 Gate
 
@@ -356,7 +356,7 @@ anchor 數量的意義：
 
 ## 6. Edge 定義
 
-手動 edge 目前存在 `data/raw_edges.json`，格式為：
+室內手動 edge 目前存在 `data/source/edges/indoor_edges.json`，校園手動 edge 目前存在 `data/source/edges/campus_edges.json`，格式為：
 
 ```json
 ["NODE_A", "NODE_B", "edge_type"]
@@ -364,13 +364,21 @@ anchor 數量的意義：
 
 目前 backend 會把 edge 當作無向邊，也就是 `A -> B` 與 `B -> A` 都可通行。
 
-若不想直接修改正式 `raw_edges.json`，可以將 Edge Editor 匯出的檔案放在：
+Developer Edge Editor 匯出的校園 edge 檔案請覆蓋或合併到：
 
 ```text
-data/campus_edges_draft.json
+data/source/edges/campus_edges.json
 ```
 
-`run_pipeline.py` 會在產生 `routing_nodes.json` 時自動讀取並合併這個 draft 檔，但不會回寫或覆蓋 `raw_edges.json`。合併時會略過與正式 edge 或同一 draft 檔內重複的無向邊。
+`run_pipeline.py` 會在產生 `data/generated/routing_nodes.json` 時自動讀取 `indoor_edges.json` 與 `campus_edges.json` 並合併。`data/generated/` 內的檔案是產物，不建議手動修改。
+
+如果要從零重畫 campus edge，建議流程：
+
+1. 將 `data/source/edges/campus_edges.json` 暫時改成空 draft，例如 `{"校園動線 Draft": []}`。
+2. 執行 `python run_pipeline.py`，讓舊 campus edge 從 `data/generated/routing_nodes.json` 消失。
+3. 啟動後端與前端，使用 Developer Edge Editor 重新建立 campus edge。
+4. 匯出 `campus_edges.json`，並用匯出的內容覆蓋或合併回 `data/source/edges/campus_edges.json`。
+5. 再執行 `python run_pipeline.py`，讓室內 edge 與新的 campus edge 重新合併。
 
 ### 6.1 室內 Edge Type
 
@@ -402,7 +410,7 @@ bridge
 poi_connection
 ```
 
-POI 接到附近 routing node 的邏輯連線。目前不是直接寫在 `raw_edges.json`，而是由 `data/final_connections.json` 管理。
+POI 接到附近 routing node 的邏輯連線。目前不是直接寫在 `data/source/edges/indoor_edges.json` 或 `data/source/edges/campus_edges.json`，而是由 `data/generated/final_connections.json` 管理。
 
 ### 6.2 校園 Edge Type
 

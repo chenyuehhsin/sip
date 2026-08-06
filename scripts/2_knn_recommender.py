@@ -4,14 +4,14 @@ import math
 print("🤖 開始執行 [步驟二]: KNN 智慧連線推薦器 (多樓層對齊版)...")
 
 try:
-    with open('data/routing_nodes.json', 'r', encoding='utf-8') as f:
+    with open('data/generated/routing_nodes.json', 'r', encoding='utf-8') as f:
         routing_data = json.load(f)
         routing_nodes = routing_data.get('nodes', [])
     
-    with open('data/pois.json', 'r', encoding='utf-8') as f:
+    with open('data/generated/pois.json', 'r', encoding='utf-8') as f:
         pois = json.load(f)
 except FileNotFoundError as e:
-    print(f"❌ 錯誤：找不到必要檔案 {e.filename}。請先執行 1_svg_parser.py")
+    print(f"❌ 錯誤：找不到必要檔案 {e.filename}。請先執行 1_svg_parser.py，或直接執行 python run_pipeline.py")
     exit(1)
 
 VALID_NAVIGATION_COLORS = {'#ff5555', '#87de87'} # 紅色走廊、綠色空橋
@@ -53,7 +53,7 @@ for poi in pois:
     
     draft_connections[poi_id] = target_ids
 
-with open('data/draft_connection.json', 'w', encoding='utf-8') as f:
+with open('data/generated/draft_connection.json', 'w', encoding='utf-8') as f:
     json.dump(draft_connections, f, indent=2, ensure_ascii=False)
 
 print("✅ [步驟二] 執行完畢！")

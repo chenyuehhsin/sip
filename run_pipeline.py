@@ -40,7 +40,7 @@ def main():
             
     print("\n🎉 =========================================", flush=True)
     print("   🌟 所有圖資與連線整合管線執行成功！ 🌟", flush=True)
-    print("   您的 final_connections.json 與圖資已全部更新完畢。", flush=True)
+    print("   data/generated/final_connections.json 與圖資已全部更新完畢。", flush=True)
     print("=============================================\n", flush=True)
     print("💡 提示: 您現在可以重新整理網頁，或啟動後端觀看最新連線與 2.5D 透視效果！", flush=True)
 

@@ -250,8 +250,7 @@ sip/
 |   |   |-- poi_campus.csv
 |   |   |-- dictionary.csv
 |   |   `-- campus_buildings.json
-|   |-- generated/
-|   `-- legacy/
+|   `-- generated/
 |-- docs/
 |   `-- navigation_node_edge_spec.md
 |-- run_pipeline.py

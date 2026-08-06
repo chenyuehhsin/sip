@@ -43,8 +43,6 @@ generated/
 
 `metadata/` contains CSV and JSON metadata maintained by hand.
 
-`legacy/` contains older auxiliary data that is not part of the current pipeline.
-
 ## Rebuild Campus Edges
 
 If the campus graph is wrong and you want to redraw it in Developer Edge Editor:

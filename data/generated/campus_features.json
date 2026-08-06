@@ -1,5 +1,5 @@
 {
-  "source": "data/source/svg/campus/L01_CampusLayout.svg",
+  "source": "data/source/public/svg/campus/L01_CampusLayout.svg",
   "target_coordinate_space": "A01_map.svg",
   "matched_anchors": [
     "Building-RB-1",

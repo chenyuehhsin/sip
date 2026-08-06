@@ -57,6 +57,27 @@ http://127.0.0.1:8000
 conda run --no-capture-output -n indoor python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
 ```
 
+## 公開與私有資料
+
+公開 repo 不包含 `A*_map.svg` 室內樓層 SVG。這些檔案包含向學校申請的建築圖，僅供本機學術研究使用。
+
+可公開資料：
+
+- `data/source/public/svg/campus/L01_CampusLayout.svg`
+- source edge files
+- metadata CSV files
+- generated JSON files，目前暫時保留公開
+
+本機私有資料：
+
+- `data/source/private/svg/floors/A*_map.svg`
+
+Pipeline 預設會從 `data/source/private/svg/floors/` 讀取室內樓層 SVG。這個資料夾已被 Git 忽略。若私有檔案放在其他位置，可以設定：
+
+```bash
+SIP_FLOOR_SVG_DIR=/path/to/private/floors conda run --no-capture-output -n indoor python run_pipeline.py
+```
+
 ## 常用指令
 
 重新產生所有圖資與 metadata：
@@ -114,7 +135,7 @@ conda run --no-capture-output -n indoor python run_pipeline.py
 
 如果你在 SVG 新增、刪除或移動節點：
 
-1. 編輯 `data/source/svg/floors/A*_map.svg` 或 `data/source/svg/campus/L01_CampusLayout.svg`。
+1. 編輯本機私有室內 SVG：`data/source/private/svg/floors/A*_map.svg`，或編輯可公開的校園 SVG：`data/source/public/svg/campus/L01_CampusLayout.svg`。
 2. 確認每個重要物件的 `inkscape:label` 正確。
 3. 執行：
 
@@ -213,9 +234,12 @@ sip/
 |   `-- check_poi_master.py
 |-- data/
 |   |-- source/
-|   |   |-- svg/
-|   |   |   |-- floors/
-|   |   |   `-- campus/
+|   |   |-- public/
+|   |   |   `-- svg/
+|   |   |       |-- campus/
+|   |   |       `-- floors/         # 公開 placeholder；不 commit 私有 A*.svg
+|   |   |-- private/                # Git 忽略；本機私有樓層 SVG
+|   |   |   `-- svg/floors/A*_map.svg
 |   |   |-- edges/
 |   |   `-- overrides/
 |   |-- metadata/

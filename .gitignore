@@ -12,3 +12,7 @@ __pycache__/
 
 # 如果你有不想公開的圖資原始檔或機密，也可以加在這裡
 0_raw_pdf_files/
+
+# Private licensed floor-plan SVGs. Keep campus SVGs public, but do not publish
+# the A*_map.svg indoor floor plans.
+data/source/private/

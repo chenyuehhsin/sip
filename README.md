@@ -59,6 +59,27 @@ If `--reload` fails because file watching is unavailable in the current environm
 conda run --no-capture-output -n indoor python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
 ```
 
+## Public vs Private Data
+
+The public repository intentionally does not include the licensed indoor floor-plan SVG files named `A*_map.svg`. Those files contain building drawings that are only available for local academic research use.
+
+Public data:
+
+- `data/source/public/svg/campus/L01_CampusLayout.svg`
+- source edge files
+- metadata CSV files
+- generated JSON files, for now
+
+Private local data:
+
+- `data/source/private/svg/floors/A*_map.svg`
+
+The pipeline reads private floor SVGs from `data/source/private/svg/floors/` by default. This directory is ignored by Git. If your private files live elsewhere, set:
+
+```bash
+SIP_FLOOR_SVG_DIR=/path/to/private/floors conda run --no-capture-output -n indoor python run_pipeline.py
+```
+
 ## Common Commands
 
 Rebuild all generated map and metadata files:
@@ -116,7 +137,7 @@ conda run --no-capture-output -n indoor python run_pipeline.py
 
 Use this flow when adding, deleting, or moving nodes in SVG files:
 
-1. Edit `data/source/svg/floors/A*_map.svg` or `data/source/svg/campus/L01_CampusLayout.svg`.
+1. Edit private indoor SVG files under `data/source/private/svg/floors/A*_map.svg`, or edit the public campus SVG at `data/source/public/svg/campus/L01_CampusLayout.svg`.
 2. Confirm that important objects have stable `inkscape:label` values.
 3. Run the full pipeline:
 
@@ -216,9 +237,12 @@ sip/
 |   `-- check_poi_master.py
 |-- data/
 |   |-- source/
-|   |   |-- svg/
-|   |   |   |-- floors/
-|   |   |   `-- campus/
+|   |   |-- public/
+|   |   |   `-- svg/
+|   |   |       |-- campus/
+|   |   |       `-- floors/         # Public placeholder only; private A*.svg is not committed
+|   |   |-- private/                # Ignored by Git; local licensed floor SVGs
+|   |   |   `-- svg/floors/A*_map.svg
 |   |   |-- edges/
 |   |   `-- overrides/
 |   |-- metadata/

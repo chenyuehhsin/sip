@@ -2,7 +2,7 @@
 
 更新日期：2026-07-29
 
-這份文件整理室內地圖 `A*_map.svg` 與校園大尺度地圖 `L01_CampusLayout.svg` 的 node、building footprint、edge 命名與用途。SVG 裡請以 `inkscape:label` 作為正式資料 ID；顏色只作為繪圖與 parser 分類輔助。
+這份文件整理室內地圖 `A*_map.svg` 與校園大尺度地圖 `L01_CampusLayout.svg` 的 node、building footprint、edge 命名與用途。室內 `A*_map.svg` 是本機私有研究資料，預設放在 `data/source/private/svg/floors/`，不放入公開 repo。SVG 裡請以 `inkscape:label` 作為正式資料 ID；顏色只作為繪圖與 parser 分類輔助。
 
 ## 1. 基本原則
 
@@ -15,7 +15,7 @@
 
 ## 2. 室內 Node 定義
 
-室內 node 主要位於 `A*_map.svg`，目前 `scripts/1_svg_parser.py` 已會解析 `A*_map.svg` 的 `circle` 與 `floor-*` 圖形。校園 node 來源仍與室內 node 分開，位於 `L01_CampusLayout.svg`，但會在輸出的 routing graph 中以 `scope: "campus"` 合併。
+室內 node 主要位於本機私有的 `A*_map.svg`，目前 `scripts/1_svg_parser.py` 已會解析 `data/source/private/svg/floors/A*_map.svg` 的 `circle` 與 `floor-*` 圖形。校園 node 來源仍與室內 node 分開，位於 `L01_CampusLayout.svg`，但會在輸出的 routing graph 中以 `scope: "campus"` 合併。
 
 ### 2.1 紅色：室內水平動線點
 
@@ -123,7 +123,7 @@ T4-101
 
 ## 3. L01 校園大尺度 Node 定義
 
-L01 node 位於 `data/source/svg/campus/L01_CampusLayout.svg`。目前 `scripts/1_svg_parser.py` 會正式掃描 `Gate-*`、`Path-*`、`CoveredPath-*`、`Building-*`、`Lawn-*`、`Pool-*`、`Court-*` 與其他黃色 circle，透過同名 `Building-*` anchor 對齊到 `A01_map.svg` 座標系，並輸出為 `scope: "campus"` 的 routing nodes。
+L01 node 位於 `data/source/public/svg/campus/L01_CampusLayout.svg`。目前 `scripts/1_svg_parser.py` 會正式掃描 `Gate-*`、`Path-*`、`CoveredPath-*`、`Building-*`、`Lawn-*`、`Pool-*`、`Court-*` 與其他黃色 circle，透過同名 `Building-*` anchor 對齊到 `A01_map.svg` 座標系，並輸出為 `scope: "campus"` 的 routing nodes。
 
 ### 3.1 橘色：校園大門 Gate
 

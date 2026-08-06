@@ -14,10 +14,14 @@ WATER_FOUNTAIN_COLOR = "#00ffff"
 WATER_FOUNTAIN_CATEGORY = "water_fountain"
 WATER_FOUNTAIN_PATTERN = re.compile(r'^[A-Z0-9-]+-[B]?\d+(?:-\d+)?F-WF-\d+$', re.IGNORECASE)
 DATA_DIR = "data"
-FLOOR_SVG_DIR = os.path.join(DATA_DIR, "source", "svg", "floors")
-CAMPUS_SVG_DIR = os.path.join(DATA_DIR, "source", "svg", "campus")
-INDOOR_EDGES_PATH = os.path.join(DATA_DIR, "source", "edges", "indoor_edges.json")
-CAMPUS_EDGES_PATH = os.path.join(DATA_DIR, "source", "edges", "campus_edges.json")
+SOURCE_DIR = os.path.join(DATA_DIR, "source")
+FLOOR_SVG_DIR = os.environ.get(
+    "SIP_FLOOR_SVG_DIR",
+    os.path.join(SOURCE_DIR, "private", "svg", "floors"),
+)
+CAMPUS_SVG_DIR = os.path.join(SOURCE_DIR, "public", "svg", "campus")
+INDOOR_EDGES_PATH = os.path.join(SOURCE_DIR, "edges", "indoor_edges.json")
+CAMPUS_EDGES_PATH = os.path.join(SOURCE_DIR, "edges", "campus_edges.json")
 GENERATED_DIR = os.path.join(DATA_DIR, "generated")
 ROUTING_NODES_OUTPUT = os.path.join(GENERATED_DIR, "routing_nodes.json")
 POIS_OUTPUT = os.path.join(GENERATED_DIR, "pois.json")

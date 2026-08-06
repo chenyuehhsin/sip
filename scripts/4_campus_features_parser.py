@@ -7,8 +7,12 @@ from bs4 import BeautifulSoup
 print("🏫 開始執行 [步驟四]: L01 校園建築與戶外色塊解析...")
 
 DATA_DIR = "data"
-L01_SVG = os.path.join(DATA_DIR, "source", "svg", "campus", "L01_CampusLayout.svg")
-A01_SVG = os.path.join(DATA_DIR, "source", "svg", "floors", "A01_map.svg")
+SOURCE_DIR = os.path.join(DATA_DIR, "source")
+L01_SVG = os.path.join(SOURCE_DIR, "public", "svg", "campus", "L01_CampusLayout.svg")
+A01_SVG = os.path.join(
+    os.environ.get("SIP_FLOOR_SVG_DIR", os.path.join(SOURCE_DIR, "private", "svg", "floors")),
+    "A01_map.svg",
+)
 OUTPUT_JSON = os.path.join(DATA_DIR, "generated", "campus_features.json")
 CAMPUS_BUILDINGS_JSON = os.path.join(DATA_DIR, "metadata", "campus_buildings.json")
 

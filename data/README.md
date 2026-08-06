@@ -5,14 +5,27 @@ manual edges, or POI connection overrides change.
 
 ```text
 source/
-|-- svg/
-|   |-- floors/A*_map.svg
-|   `-- campus/L01_CampusLayout.svg
+|-- public/
+|   `-- svg/
+|       |-- floors/README.md
+|       `-- campus/L01_CampusLayout.svg
+|-- private/
+|   `-- svg/floors/A*_map.svg
 |-- edges/
 |   |-- indoor_edges.json
 |   `-- campus_edges.json
 `-- overrides/connection_overrides.json
 ```
+
+The licensed indoor `A*_map.svg` floor-plan files are private local inputs and
+are intentionally not stored in the public repository. Place them under:
+
+```text
+source/private/svg/floors/A*_map.svg
+```
+
+The parser reads that private directory by default. Set `SIP_FLOOR_SVG_DIR` to
+override the private floor SVG path.
 
 `generated/` is written by `python run_pipeline.py`. Do not edit these files
 directly; regenerate them after changing files under `source/` or `metadata/`.

@@ -754,6 +754,7 @@
             stairNode: "樓梯",
             elevatorNode: "電梯",
             noSpaceResults: "沒有符合的空間",
+            spaceMatchedBy: "命中",
             noneFloor: "無",
             buildingSuffix: "大樓",
             routeButton: "開始尋路",
@@ -893,6 +894,7 @@
             stairNode: "Stair",
             elevatorNode: "Elevator",
             noSpaceResults: "No matching spaces",
+            spaceMatchedBy: "Matched",
             noneFloor: "None",
             buildingSuffix: "Building",
             routeButton: "Find Route",
@@ -1188,13 +1190,104 @@
     }
 
     function normalizeSearchText(value) {
-        return String(value || '').trim().toLowerCase();
+        return String(value || '').normalize('NFKC').trim().toLowerCase().replace(/\s+/g, ' ');
+    }
+
+    function compactSearchText(value) {
+        return normalizeSearchText(value).replace(/[\s,，、;；/／|｜()（）\[\]【】._-]+/g, '');
+    }
+
+    function getSearchValueList(value) {
+        if (value === null || value === undefined) return [];
+        if (Array.isArray(value)) return value.flatMap(item => getSearchValueList(item));
+        const raw = String(value || '').trim();
+        if (!raw) return [];
+        const parts = raw.split(/[;；,，、/／|｜]+/).map(part => part.trim()).filter(Boolean);
+        return parts.length > 1 ? [raw, ...parts] : [raw];
+    }
+
+    function buildSpaceSearchEntries(node) {
+        const entries = [];
+        const seen = new Set();
+        const add = (field, value) => {
+            getSearchValueList(value).forEach(rawValue => {
+                const text = normalizeSearchText(rawValue);
+                const compactText = compactSearchText(rawValue);
+                if (!text || !compactText) return;
+                const key = `${field}:${compactText}`;
+                if (seen.has(key)) return;
+                seen.add(key);
+                entries.push({ field, value: rawValue, text, compactText });
+            });
+        };
+
+        add('id', node.id);
+        add('display_name', getSpaceDisplayName(node));
+        add('name_zh', node.name_zh);
+        add('name_en', node.name_en);
+        add('name', node.name);
+        add('aliases', node.aliases || node.alias);
+        add('faculty_leads', node.faculty_leads);
+        add('occupants', node.occupants);
+        add('department', node.department);
+        add('category', node.category);
+        add('building', node.building);
+        add('floor_name', node.floor_name);
+
+        return entries;
+    }
+
+    const SPACE_SEARCH_FIELD_PRIORITY = {
+        id: 0,
+        occupants: 0.2,
+        faculty_leads: 0.4,
+        aliases: 0.8,
+        name_zh: 1,
+        name_en: 1.2,
+        display_name: 1.4,
+        name: 1.6,
+        department: 3,
+        category: 4,
+        building: 5,
+        floor_name: 6
+    };
+
+    function scoreSpaceSearchEntry(entry, normalizedQuery, compactQuery) {
+        const priority = SPACE_SEARCH_FIELD_PRIORITY[entry.field] ?? 10;
+        if (entry.text === normalizedQuery) return priority;
+        if (entry.compactText === compactQuery) return priority + 0.05;
+        if (entry.text.startsWith(normalizedQuery)) return priority + 10;
+        if (entry.compactText.startsWith(compactQuery)) return priority + 10.05;
+        if (entry.text.includes(normalizedQuery)) return priority + 20;
+        if (entry.compactText.includes(compactQuery)) return priority + 20.05;
+        return Infinity;
+    }
+
+    function getSpaceSearchMatch(item, query) {
+        const normalizedQuery = normalizeSearchText(query);
+        const compactQuery = compactSearchText(query);
+        if (!normalizedQuery || !compactQuery) return { score: 0, entry: null };
+
+        let best = { score: Infinity, entry: null };
+        item.searchEntries.forEach(entry => {
+            const score = scoreSpaceSearchEntry(entry, normalizedQuery, compactQuery);
+            if (score < best.score) best = { score, entry };
+        });
+        return best;
+    }
+
+    function compareSpaceSearchMatches(a, b) {
+        if (a.matchScore !== b.matchScore) return a.matchScore - b.matchScore;
+        if (a.isPoi !== b.isPoi) return a.isPoi ? -1 : 1;
+        return a.id.localeCompare(b.id);
     }
 
     function getSpaceDisplayName(node) {
         if (isCampusNode(node)) return getCampusReadableNodeLabel(node);
         const verticalName = getVerticalNodeDisplayName(node);
         if (verticalName) return verticalName;
+        const nodeName = String(node && (node.name_zh || node.name_en || node.name) || '').trim();
+        if (nodeName) return nodeName;
         const meta = POI_METADATA_DB[node.id];
         return meta && meta.name ? meta.name : node.id;
     }
@@ -1238,17 +1331,27 @@
     }
 
     function getSpaceResultMetaLabel(item) {
+        const baseLabel = getSpaceBaseMetaLabel(item);
+        if (!item.matchEntry) return baseLabel;
+        return `${baseLabel} · ${t('spaceMatchedBy')}：${item.matchEntry.value}`;
+    }
+
+    function getSpaceBaseMetaLabel(item) {
         if (isStairNode(item.node) || isElevatorNode(item.node)) return getSpaceLocationLabel(item.node);
         return `${item.id} · ${getSpaceMetaLabel(item.node)}`;
     }
 
     function rebuildSpaceSearchItems() {
-        spaceSearchItems = [...poisData, ...nodesData].map(node => ({
-            node,
-            id: node.id,
-            isPoi: node.type === 'poi',
-            searchText: normalizeSearchText(`${node.id} ${getSpaceDisplayName(node)} ${node.building} ${node.floor_name}`)
-        })).sort((a, b) => {
+        spaceSearchItems = [...poisData, ...nodesData].map(node => {
+            const searchEntries = buildSpaceSearchEntries(node);
+            return {
+                node,
+                id: node.id,
+                isPoi: node.type === 'poi',
+                searchEntries,
+                searchText: searchEntries.map(entry => `${entry.text} ${entry.compactText}`).join(' ')
+            };
+        }).sort((a, b) => {
             if (a.isPoi !== b.isPoi) return a.isPoi ? -1 : 1;
             return a.id.localeCompare(b.id);
         });
@@ -1274,10 +1377,16 @@
         if (selectedSpaceIds[type] && nodeMap[selectedSpaceIds[type]]) return selectedSpaceIds[type];
 
         const query = normalizeSearchText(input.value);
-        const exact = spaceSearchItems.find(item => {
+        const compactQuery = compactSearchText(query);
+        const exactMatches = spaceSearchItems.map(item => {
             const node = item.node;
-            return normalizeSearchText(item.id) === query || normalizeSearchText(getSpaceInputLabel(node)) === query;
-        });
+            const exactEntry = item.searchEntries.find(entry => entry.text === query || entry.compactText === compactQuery);
+            const inputLabelExact = normalizeSearchText(item.id) === query || normalizeSearchText(getSpaceInputLabel(node)) === query;
+            if (!exactEntry && !inputLabelExact) return null;
+            const matchScore = exactEntry ? scoreSpaceSearchEntry(exactEntry, query, compactQuery) : 0;
+            return { ...item, matchScore, matchEntry: exactEntry };
+        }).filter(Boolean).sort(compareSpaceSearchMatches);
+        const exact = exactMatches[0];
         if (exact) {
             selectedSpaceIds[type] = exact.id;
             input.value = getSpaceInputLabel(exact.node);
@@ -1290,9 +1399,24 @@
         const { input, menu } = getPickerElements(type);
         const query = normalizeSearchText(input.value);
         const maxResults = 30;
-        const poiMatches = spaceSearchItems.filter(item => item.isPoi && (!query || item.searchText.includes(query))).slice(0, maxResults);
+        const getMatches = item => {
+            const match = getSpaceSearchMatch(item, input.value);
+            if (match.score === Infinity) return null;
+            return { ...item, matchScore: match.score, matchEntry: match.entry };
+        };
+        const poiMatches = spaceSearchItems
+            .filter(item => item.isPoi)
+            .map(getMatches)
+            .filter(Boolean)
+            .sort(compareSpaceSearchMatches)
+            .slice(0, maxResults);
         const nodeMatches = query.length >= 2
-            ? spaceSearchItems.filter(item => !item.isPoi && item.searchText.includes(query)).slice(0, Math.max(0, maxResults - poiMatches.length))
+            ? spaceSearchItems
+                .filter(item => !item.isPoi)
+                .map(getMatches)
+                .filter(Boolean)
+                .sort(compareSpaceSearchMatches)
+                .slice(0, Math.max(0, maxResults - poiMatches.length))
             : [];
         const matches = [...poiMatches, ...nodeMatches];
 

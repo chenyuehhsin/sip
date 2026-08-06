@@ -108,15 +108,36 @@ def run_dijkstra(graph, start, end):
     path.reverse()
     return path, round(distances[end], 2)
 
+CAMPUS_ROUTE_PREFIXES = ("Gate-", "Path-", "CoveredPath-", "Building-", "Lawn-", "Pool-", "Court-")
+
+
+def get_rainy_edge_weight(edge):
+    weight = edge['distance']
+    edge_type = edge.get('type', '')
+    source = edge.get('from', '')
+    target = edge.get('to', '')
+    # Experimental route preference: only campus covered-path weights are adjusted.
+    # Indoor routing behavior and source edge data stay unchanged.
+    is_covered = edge_type == "covered_walkway" or source.startswith("CoveredPath-") or target.startswith("CoveredPath-")
+    is_campus = source.startswith(CAMPUS_ROUTE_PREFIXES) and target.startswith(CAMPUS_ROUTE_PREFIXES)
+
+    if is_covered:
+        return weight * 0.45
+    if is_campus:
+        return weight * 1.35
+    return weight
+
+
 def build_route_graph(mode):
     if mode == "shortest":
         return {node: neighbors.copy() for node, neighbors in base_graph.items()}
 
     graph = {node: {} for node in base_graph}
     for edge in routing_data['edges']:
-        if edge.get('type') == "stair":
+        if mode == "elevator_preferred" and edge.get('type') == "stair":
             continue
-        u, v, w = edge['from'], edge['to'], edge['distance']
+        u, v = edge['from'], edge['to']
+        w = get_rainy_edge_weight(edge) if mode == "rainy_preferred" else edge['distance']
         if u in graph and v in graph:
             graph[u][v] = w
             graph[v][u] = w
@@ -124,14 +145,15 @@ def build_route_graph(mode):
 
 @app.get("/api/route")
 def get_shortest_path(start: str, end: str, mode: str = "shortest"):
-    if mode not in {"shortest", "elevator_preferred"}:
+    supported_modes = ["shortest", "elevator_preferred", "rainy_preferred"]
+    if mode not in set(supported_modes):
         raise HTTPException(
             status_code=400,
             detail={
                 "error": "invalid_route_mode",
                 "message": "Unsupported route mode",
                 "mode": mode,
-                "supported_modes": ["shortest", "elevator_preferred"]
+                "supported_modes": supported_modes
             }
         )
 
@@ -168,6 +190,8 @@ def get_shortest_path(start: str, end: str, mode: str = "shortest"):
         raise HTTPException(status_code=400, detail="這兩個點之間無法連通")
 
     directions = [f"🚶 從 {start} 出發"]
+    if mode == "rainy_preferred":
+        directions.append("☔ 雨天路徑：優先使用風雨走廊與遮蔽動線")
     for i in range(1, len(main_path) - 1):
         curr = main_path[i]
         prev = main_path[i-1]

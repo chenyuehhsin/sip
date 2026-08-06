@@ -130,11 +130,12 @@
             position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
             display: flex; background: rgba(255,255,255,0.92); padding: 6px; border-radius: 16px;
             box-shadow: var(--shadow-md); z-index: 30; border: 1px solid rgba(47,125,104,0.14);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px); gap: 4px;
         }
         .route-select-btn {
-            min-height: 38px; padding: 9px 24px; border: none; background: transparent; border-radius: 10px;
+            min-height: 38px; padding: 9px 18px; border: none; background: transparent; border-radius: 10px;
             font-size: 0.88rem; font-weight: 800; cursor: pointer; color: var(--text-muted); transition: all 0.2s;
+            white-space: nowrap;
         }
         .route-select-btn:hover { background: var(--bg-soft); }
         .route-select-btn.active { background: var(--primary); color: white; box-shadow: 0 8px 18px rgba(47,125,104,0.22); }
@@ -584,6 +585,7 @@
         <div id="route-selector" class="route-selector">
             <button id="btn-mode-shortest" class="route-select-btn active" onclick="setRouteMode('shortest')" data-i18n="modeShortest">最短距離</button>
             <button id="btn-mode-elevator" class="route-select-btn" onclick="setRouteMode('elevator_preferred')" data-i18n="modeElevatorPreferred">電梯優先</button>
+            <button id="btn-mode-rainy" class="route-select-btn" onclick="setRouteMode('rainy_preferred')" data-i18n="modeRainyPreferred">雨天路徑</button>
         </div>
 
         <div id="angle-hint" class="angle-hint" data-i18n="angleHint">Windows：Ctrl + 滑鼠拖曳；Mac：Option + 滑鼠拖曳，可自由變換角度。</div>
@@ -758,6 +760,7 @@
             clearButton: "清除",
             modeShortest: "最短距離",
             modeElevatorPreferred: "電梯優先",
+            modeRainyPreferred: "雨天路徑",
             infoInitial: "選擇起點與終點後開始尋路。",
             legendMain: "目前路線",
             legendHorizontal: "水平主幹道",
@@ -896,6 +899,7 @@
             clearButton: "Clear",
             modeShortest: "Shortest Distance",
             modeElevatorPreferred: "Elevator Preferred",
+            modeRainyPreferred: "Rainy Route",
             infoInitial: "Select a start and destination to begin routing.",
             legendMain: "Current route",
             legendHorizontal: "Horizontal corridor",
@@ -1578,16 +1582,19 @@
     }
 
     function getRouteModeLabel(mode) {
-        return mode === 'elevator_preferred' ? t('modeElevatorPreferred') : t('modeShortest');
+        if (mode === 'elevator_preferred') return t('modeElevatorPreferred');
+        if (mode === 'rainy_preferred') return t('modeRainyPreferred');
+        return t('modeShortest');
     }
 
     function updateRouteModeButtons() {
         document.getElementById('btn-mode-shortest').classList.toggle('active', currentRouteMode === 'shortest');
         document.getElementById('btn-mode-elevator').classList.toggle('active', currentRouteMode === 'elevator_preferred');
+        document.getElementById('btn-mode-rainy').classList.toggle('active', currentRouteMode === 'rainy_preferred');
     }
 
     function setRouteMode(mode) {
-        if (!['shortest', 'elevator_preferred'].includes(mode)) return;
+        if (!['shortest', 'elevator_preferred', 'rainy_preferred'].includes(mode)) return;
         currentRouteMode = mode;
         updateRouteModeButtons();
 

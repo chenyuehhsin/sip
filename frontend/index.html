@@ -281,9 +281,31 @@
             min-height: 42px; padding: 10px 12px; font-size: 0.9rem; font-weight: 850;
             background: #e4f4ec; border-color: rgba(47,125,104,0.2); color: #256754;
         }
+        .view-btn.department-view,
+        .view-btn.campus-view {
+            background: #e4f4ec; border-color: rgba(47,125,104,0.2); color: #256754;
+        }
         .view-btn.secondary-view { min-height: 31px; padding: 5px 8px; font-size: 0.73rem; border-radius: 9px; }
         .view-btn:hover { border-color: rgba(47,125,104,0.22); background: var(--primary-soft); color: var(--primary); }
+        .view-btn.department-view:hover,
+        .view-btn.campus-view:hover { background: var(--primary-soft); border-color: rgba(47,125,104,0.22); color: var(--primary); }
         .view-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 8px 16px rgba(47,125,104,0.18); }
+        .view-btn.department-view.active,
+        .view-btn.campus-view.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 8px 16px rgba(47,125,104,0.18); }
+
+        .community-panel { display: none; }
+        .community-panel.open { display: grid; gap: 9px; }
+        .community-controls { display: grid; gap: 8px; }
+        .community-toggle {
+            display: inline-flex; align-items: center; gap: 8px; font-size: 0.78rem;
+            font-weight: 780; color: var(--text-main);
+        }
+        .community-action-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; }
+        .community-reset-btn {
+            min-height: 34px; padding: 7px 10px; border-radius: 10px; border: 1px solid rgba(217,119,6,0.18);
+            background: #fffbeb; color: #92400e; font-size: 0.76rem; font-weight: 820; cursor: pointer;
+        }
+        .community-summary { font-size: 0.73rem; line-height: 1.42; color: var(--text-muted); }
 
         .select-group { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 8px; }
         select, input.space-search {
@@ -399,16 +421,46 @@
                     </div>
                     <div class="view-mode-secondary">
                         <button id="btn-view-points" class="view-btn secondary-view" onclick="setViewMode('point_select')" data-i18n="viewPointSelect">室內服務</button>
-                        <button id="btn-view-main" class="view-btn secondary-view" onclick="setViewMode('main_only')" data-i18n="viewMain">水平動線</button>
-                        <button id="btn-view-vert" class="view-btn secondary-view" onclick="setViewMode('vertical_only')" data-i18n="viewVertical">垂直動線</button>
                         <button id="btn-view-volume" class="view-btn secondary-view" onclick="setViewMode('volume_only')" data-i18n="viewVolume">量體模式</button>
+                        <button id="btn-view-vert" class="view-btn secondary-view" onclick="setViewMode('vertical_only')" data-i18n="viewVertical">垂直動線</button>
+                        <button id="btn-view-main" class="view-btn secondary-view" onclick="setViewMode('main_only')" data-i18n="viewMain">水平動線</button>
                     </div>
                 </div>
                 <div class="view-mode-group">
                     <div class="view-mode-heading" data-i18n="viewCampusGroup">校園配置</div>
                     <div class="view-mode-primary">
-                        <button id="btn-view-campus" class="view-btn primary-view" onclick="setViewMode('campus_only')" data-i18n="viewCampus">校園模式</button>
+                        <button id="btn-view-campus" class="view-btn primary-view campus-view" onclick="setViewMode('campus_only')" data-i18n="viewCampus">校園模式</button>
                     </div>
+                </div>
+                <div class="view-mode-group">
+                    <div class="view-mode-heading" data-i18n="viewDepartmentGroup">科系屬性</div>
+                    <div class="view-mode-primary">
+                        <button id="btn-view-department" class="view-btn primary-view department-view" onclick="setViewMode('department_only')" data-i18n="viewDepartment">科系分類</button>
+                        <button id="btn-view-academic-community" class="view-btn primary-view department-view" onclick="setViewMode('academic_community')" data-i18n="viewAcademicCommunity">學術社群</button>
+                    </div>
+                    <div class="view-mode-secondary">
+                        <button class="view-btn secondary-view dept-mode-btn active" type="button" data-dept-mode="points" data-i18n="deptModePoints">點</button>
+                        <button class="view-btn secondary-view dept-mode-btn" type="button" data-dept-mode="design" data-i18n="deptModeDesign">設計</button>
+                        <button class="view-btn secondary-view dept-mode-btn" type="button" data-dept-mode="architecture" data-i18n="deptModeArchitecture">建築</button>
+                        <button class="view-btn secondary-view dept-mode-btn" type="button" data-dept-mode="cs" data-i18n="deptModeCs">資工</button>
+                        <button class="view-btn secondary-view dept-mode-btn" type="button" data-dept-mode="afl" data-i18n="deptModeAfl">應外</button>
+                        <button class="view-btn secondary-view dept-mode-btn" type="button" data-dept-mode="other" data-i18n="deptModeOther">其他</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="academic-community-controls" class="panel-section community-panel">
+            <div class="section-title" data-i18n="academicControlsTitle">學術社群測試版</div>
+            <div class="community-controls">
+                <select id="community-department-filter" aria-label="Department filter"></select>
+                <label class="community-toggle">
+                    <input id="community-show-all-pois" type="checkbox">
+                    <span data-i18n="communityShowAllPois">顯示一般教室／全部 POI</span>
+                </label>
+                <div class="community-action-row">
+                    <div id="community-summary" class="community-summary"></div>
+                    <button id="community-reset-layout" class="community-reset-btn" type="button" data-i18n="communityResetLayout">Reset Layout</button>
                 </div>
             </div>
         </div>
@@ -607,7 +659,14 @@
     const edgeImportFileInput = document.getElementById('edge-import-file');
     const edgeExportDraftBtn = document.getElementById('edge-export-draft');
     const edgeDraftList = document.getElementById('edge-draft-list');
+    const academicCommunityControls = document.getElementById('academic-community-controls');
+    const communityDepartmentFilter = document.getElementById('community-department-filter');
+    const communityShowAllPoisInput = document.getElementById('community-show-all-pois');
+    const communityResetLayoutBtn = document.getElementById('community-reset-layout');
+    const communitySummary = document.getElementById('community-summary');
     const DEBUG_MODE = new URLSearchParams(window.location.search).get('debug') === '1';
+    // Experimental feature paused from the public view menu; expose only for debug/beta review.
+    const ACADEMIC_COMMUNITY_BETA = DEBUG_MODE || new URLSearchParams(window.location.search).get('academic_beta') === '1';
     const CAMPUS_EDGE_TYPES = ['backbone', 'secondary', 'entrance_connector', 'covered_walkway', 'outdoor_stair', 'ramp'];
     const CAMPUS_EDGE_TYPE_COLORS = {
         backbone: 'rgba(224, 116, 116, 0.92)',
@@ -631,7 +690,16 @@
             viewSection: "視圖",
             viewIndoorGroup: "建築室內",
             viewCampusGroup: "校園配置",
+            viewDepartmentGroup: "科系屬性",
             viewAll: "建築空間",
+            viewDepartment: "科系分類",
+            viewAcademicCommunity: "學術社群",
+            deptModePoints: "點",
+            deptModeDesign: "設計",
+            deptModeArchitecture: "建築",
+            deptModeCs: "資工",
+            deptModeAfl: "應外",
+            deptModeOther: "其他",
             viewMain: "水平動線",
             viewVertical: "垂直動線",
             viewCampus: "校園模式",
@@ -736,7 +804,17 @@
             poiFacultyLeads: "負責教師",
             poiOccupants: "使用者",
             poiDescription: "說明",
-            poiPublicAccess: "開放狀態"
+            poiPublicAccess: "開放狀態",
+            academicControlsTitle: "學術社群測試版",
+            communityShowAllPois: "顯示一般教室／全部 POI",
+            communityResetLayout: "Reset Layout",
+            communityFilterAll: "全部科系",
+            communityNodeType: "類型: ",
+            communityNodeDepartment: "科系: ",
+            communityNodeCategory: "分類: ",
+            communityNodeLocation: "位置: ",
+            communityNodeFacultyLeads: "負責教師: ",
+            communityNodeOccupants: "使用者: "
         },
         en: {
             documentTitle: "Smart Indoor Navigation System (SIP) | 3D BIM Dashboard",
@@ -750,7 +828,16 @@
             viewSection: "View",
             viewIndoorGroup: "Indoor Buildings",
             viewCampusGroup: "Campus Layout",
+            viewDepartmentGroup: "Department Attributes",
             viewAll: "Building Spaces",
+            viewDepartment: "Departments",
+            viewAcademicCommunity: "Academic Community",
+            deptModePoints: "Points",
+            deptModeDesign: "Design",
+            deptModeArchitecture: "Architecture",
+            deptModeCs: "CS",
+            deptModeAfl: "AFL",
+            deptModeOther: "Other",
             viewMain: "Horizontal Routes",
             viewVertical: "Vertical Links",
             viewCampus: "Campus Mode",
@@ -855,12 +942,33 @@
             poiFacultyLeads: "Faculty Leads",
             poiOccupants: "Occupants",
             poiDescription: "Description",
-            poiPublicAccess: "Public Access"
+            poiPublicAccess: "Public Access",
+            academicControlsTitle: "Academic Community Beta",
+            communityShowAllPois: "Show classrooms / all POIs",
+            communityResetLayout: "Reset Layout",
+            communityFilterAll: "All departments",
+            communityNodeType: "Type: ",
+            communityNodeDepartment: "Department: ",
+            communityNodeCategory: "Category: ",
+            communityNodeLocation: "Location: ",
+            communityNodeFacultyLeads: "Faculty leads: ",
+            communityNodeOccupants: "Occupants: "
         }
     };
 
     let currentLang = "zh";
     let renderInfoBox = () => t('infoInitial');
+
+    function applyAcademicCommunityVisibility() {
+        const button = document.getElementById('btn-view-academic-community');
+        if (button) {
+            button.style.display = ACADEMIC_COMMUNITY_BETA ? '' : 'none';
+            button.title = ACADEMIC_COMMUNITY_BETA ? 'Experimental feature: paused from public menu' : '';
+        }
+        if (academicCommunityControls && !ACADEMIC_COMMUNITY_BETA) {
+            academicCommunityControls.classList.remove('open');
+        }
+    }
 
     function t(key) {
         return (I18N[currentLang] && I18N[currentLang][key]) || I18N.zh[key] || key;
@@ -914,6 +1022,7 @@
         updateRouteSummary();
         renderPoiDetailCard();
         renderEdgeEditor();
+        updateCommunityControls();
         drawMap();
     }
 
@@ -927,6 +1036,8 @@
     let is3DMode = true;
 
     let currentViewMode = 'all';
+    let previousViewMode = 'all';
+    let departmentAttributeMode = 'points';
     const showGlGrid = true;
     let currentBuildingFilter = 'General';
     let activeRoute = 'main';
@@ -936,6 +1047,16 @@
     const DEFAULT_2D_MAP_ZOOM = 0.74;
     const DEFAULT_3D_OFFSET_Y = 20;
     let mapOffsetX = 0, mapOffsetY = DEFAULT_3D_OFFSET_Y, mapZoom = DEFAULT_3D_MAP_ZOOM, mapRotation = 0;
+    let communityGraph = null;
+    let communityDepartmentSelection = 'all';
+    let communityShowAllPois = false;
+    let communitySelectedNodeId = null;
+    let communityHoveredNodeId = null;
+    let communityAnimationFrame = null;
+    let communityIterations = 0;
+    let preCommunityInfoRenderer = null;
+    const COMMUNITY_MAX_ITERATIONS = 420;
+    const communityViewport = { zoom: 1, offsetX: 0, offsetY: 0 };
     let mouseX = -1000, mouseY = -1000;
     const zScale = 0.2;
     let clickState = 0, tempStart = null, tempEnd = null;
@@ -1028,6 +1149,7 @@
 
     document.addEventListener("DOMContentLoaded", () => {
         toggle3DBtn.style.backgroundColor = 'var(--vertical-color)';
+        applyAcademicCommunityVisibility();
         if (DEBUG_MODE) edgeEditorPanel.style.display = 'flex';
         applyI18n();
     });
@@ -1369,25 +1491,83 @@
         );
     }
 
-    function changeZoom(factor) { mapZoom = Math.min(Math.max(mapZoom * factor, 0.2), 5); drawMap(); }
-    function setAngle(angleRadian) { mapRotation = angleRadian; drawMap(); }
-    function changeAngle(deltaRadian) { mapRotation += deltaRadian; drawMap(); }
-    function resetCamera() { mapZoom = is3DMode ? DEFAULT_3D_MAP_ZOOM : DEFAULT_2D_MAP_ZOOM; mapOffsetX = 0; mapOffsetY = is3DMode ? DEFAULT_3D_OFFSET_Y : 0; mapRotation = 0; drawMap(); }
+    function changeZoom(factor) {
+        if (isAcademicCommunityMode()) {
+            communityViewport.zoom = Math.min(Math.max(communityViewport.zoom * factor, 0.45), 2.8);
+            drawMap();
+            return;
+        }
+        mapZoom = Math.min(Math.max(mapZoom * factor, 0.2), 5); drawMap();
+    }
+    function setAngle(angleRadian) {
+        if (isAcademicCommunityMode()) return;
+        mapRotation = angleRadian; drawMap();
+    }
+    function changeAngle(deltaRadian) {
+        if (isAcademicCommunityMode()) return;
+        mapRotation += deltaRadian; drawMap();
+    }
+    function resetCamera() {
+        if (isAcademicCommunityMode()) {
+            communityViewport.zoom = 1;
+            communityViewport.offsetX = 0;
+            communityViewport.offsetY = 0;
+            drawMap();
+            return;
+        }
+        mapZoom = is3DMode ? DEFAULT_3D_MAP_ZOOM : DEFAULT_2D_MAP_ZOOM; mapOffsetX = 0; mapOffsetY = is3DMode ? DEFAULT_3D_OFFSET_Y : 0; mapRotation = 0; drawMap();
+    }
 
     function setViewMode(mode) {
+        // Academic Community View is an experimental feature paused from public display.
+        // Keep the implementation intact, but only allow entry during debug/beta review.
+        if (mode === 'academic_community' && !ACADEMIC_COMMUNITY_BETA) {
+            mode = 'all';
+        }
         currentViewMode = mode;
+        if (mode === 'department_only' && departmentAttributeMode !== 'all') {
+            departmentAttributeMode = 'all';
+        }
         document.getElementById('btn-view-all').classList.remove('active');
+        document.getElementById('btn-view-department').classList.remove('active');
+        document.getElementById('btn-view-academic-community').classList.remove('active');
         document.getElementById('btn-view-main').classList.remove('active');
         document.getElementById('btn-view-vert').classList.remove('active');
         document.getElementById('btn-view-campus').classList.remove('active');
         document.getElementById('btn-view-volume').classList.remove('active');
         document.getElementById('btn-view-points').classList.remove('active');
         if(mode === 'all') document.getElementById('btn-view-all').classList.add('active');
+        if(mode === 'department_only') document.getElementById('btn-view-department').classList.add('active');
+        if(mode === 'academic_community') document.getElementById('btn-view-academic-community').classList.add('active');
         if(mode === 'main_only') document.getElementById('btn-view-main').classList.add('active');
         if(mode === 'vertical_only') document.getElementById('btn-view-vert').classList.add('active');
         if(mode === 'campus_only') document.getElementById('btn-view-campus').classList.add('active');
         if(mode === 'volume_only') document.getElementById('btn-view-volume').classList.add('active');
         if(mode === 'point_select') document.getElementById('btn-view-points').classList.add('active');
+        document.querySelectorAll('.dept-mode-btn').forEach(btn => {
+            btn.classList.toggle('active', isDepartmentMode() && btn.dataset.deptMode === departmentAttributeMode);
+        });
+        if (previousViewMode !== 'academic_community' && mode === 'academic_community') {
+            preCommunityInfoRenderer = renderInfoBox;
+        }
+        if (previousViewMode === 'academic_community' && mode !== 'academic_community') {
+            stopCommunitySimulation();
+            if (preCommunityInfoRenderer) {
+                setInfoBox(preCommunityInfoRenderer);
+                preCommunityInfoRenderer = null;
+            }
+        }
+        if (mode === 'academic_community') {
+            ensureCommunityGraph();
+            updateCommunityControls();
+            startCommunitySimulation(false);
+        } else {
+            communityHoveredNodeId = null;
+            hoverTooltip.style.display = 'none';
+            if (previousViewMode === 'academic_community') closePoiDetailCard();
+            updateCommunityControls();
+        }
+        previousViewMode = mode;
         drawMap();
     }
 
@@ -1431,6 +1611,8 @@
             // 如果後端有吐出自定義 SVG 樓板邊界，則取代預設形狀
             if (data.slabs) BLDG_SHAPES = data.slabs;
             [...nodesData, ...poisData].forEach(n => { n.z = getNodeElevation(n.building, n.floor_name); nodeMap[n.id] = n; });
+            communityGraph = null;
+            ensureCommunityGraph();
             generateGroupedFloorCheckboxes(); initSpaceSearch(); initEdgeEditor(); drawMap();
         })
         .catch(e => { drawMap(); });
@@ -1495,6 +1677,14 @@
 
     function isCampusMode() {
         return currentViewMode === 'campus_only';
+    }
+
+    function isDepartmentMode() {
+        return currentViewMode === 'department_only';
+    }
+
+    function isAcademicCommunityMode() {
+        return currentViewMode === 'academic_community';
     }
 
     function getCampusMetadataMatch(nodeOrId) {
@@ -1584,6 +1774,760 @@
         return node.type === 'poi' || normalizeColor(node.color) === '#ff9955';
     }
 
+    const DEPARTMENT_NODE_COLORS = [
+        { keys: ['設計系', 'Design'], color: '#f9a8d4' },
+        { keys: ['應用外語系', '通識', 'Applied Foreign', 'General Education'], color: '#facc15' },
+        { keys: ['建築系', 'Architecture'], color: '#ef4444' },
+        { keys: ['資訊工程系', 'Computer Science'], color: '#60a5fa' },
+        { keys: ['演講廳', 'Auditorium'], color: '#f97316' },
+        { keys: ['電子計算中心', 'Computer Center'], color: '#94a3b8' },
+        { keys: ['圖書館', 'Library'], color: '#fb923c' },
+        { keys: ['暫不分類', 'Uncategorized'], color: '#cbd5e1' }
+    ];
+
+    const DEPARTMENT_SLAB_COLORS = [
+        { keys: ['設計系', 'Design'], color: 'rgba(249, 168, 212, 0.24)' },
+        { keys: ['應用外語系', '通識', 'Applied Foreign', 'General Education'], color: 'rgba(250, 204, 21, 0.22)' },
+        { keys: ['建築系', 'Architecture'], color: 'rgba(239, 68, 68, 0.22)' },
+        { keys: ['資訊工程系', 'Computer Science'], color: 'rgba(96, 165, 250, 0.22)' },
+        { keys: ['演講廳', 'Auditorium'], color: 'rgba(249, 115, 22, 0.23)' },
+        { keys: ['電子計算中心', 'Computer Center'], color: 'rgba(148, 163, 184, 0.22)' },
+        { keys: ['圖書館', 'Library'], color: 'rgba(251, 146, 60, 0.23)' },
+        { keys: ['暫不分類', 'Uncategorized'], color: 'rgba(203, 213, 225, 0.20)' }
+    ];
+
+    const DEPARTMENT_ATTRIBUTE_MODE_DEPARTMENTS = {
+        design: ['設計系'],
+        architecture: ['建築系'],
+        cs: ['資訊工程系'],
+        afl: ['應用外語系'],
+        other: ['電子計算中心', '演講廳', '圖書館']
+    };
+
+    function isDepartmentAttributeMode() {
+        return isDepartmentMode() || isAcademicCommunityMode();
+    }
+
+    function getPoiDepartmentText(node) {
+        return [
+            formatPoiValue(node && node.department),
+            formatPoiValue(node && node.name_zh),
+            formatPoiValue(node && node.name),
+            formatPoiValue(node && node.category)
+        ].filter(Boolean).join(' ');
+    }
+
+    function getDepartmentNodeColor(node) {
+        const text = getPoiDepartmentText(node);
+        if (!text) return '#cbd5e1';
+        const match = DEPARTMENT_NODE_COLORS.find(item => item.keys.some(key => text.includes(key)));
+        return match ? match.color : '#cbd5e1';
+    }
+
+    function getDepartmentSlabColorByText(text) {
+        if (!text) return 'rgba(203, 213, 225, 0.20)';
+        const match = DEPARTMENT_SLAB_COLORS.find(item => item.keys.some(key => text.includes(key)));
+        return match ? match.color : 'rgba(203, 213, 225, 0.20)';
+    }
+
+    function getDepartmentCapsuleStyleByText(text) {
+        const color = getDepartmentNodeColor({department: text});
+        return {
+            bgColor: getDepartmentSlabColorByText(text).replace(/0\.\d+\)/, '0.72)'),
+            textColor: color === '#cbd5e1' ? '#475569' : '#0f172a'
+        };
+    }
+
+    function getDominantDepartmentTextForFloor(building, floorName, allowedDepartments = null) {
+        const floorPois = poisData.filter(poi =>
+            poi.building === building &&
+            String(poi.floor_name) === String(floorName)
+        );
+        const counts = new Map();
+        floorPois.forEach(poi => {
+            const text = formatPoiValue(poi.department) || '暫不分類';
+            if (allowedDepartments && allowedDepartments.length && !allowedDepartments.some(value => text.includes(value))) return;
+            counts.set(text, (counts.get(text) || 0) + 1);
+        });
+        let dominant = '';
+        let dominantCount = 0;
+        counts.forEach((count, text) => {
+            if (count > dominantCount) {
+                dominant = text;
+                dominantCount = count;
+            }
+        });
+        return dominant;
+    }
+
+    function getDepartmentSlabColor(slab) {
+        if (slab.b === 'T4' && ['7', '8'].includes(String(slab.f))) {
+            return getDepartmentSlabColorByText('應用外語系 通識');
+        }
+        return getDepartmentSlabColorByText(getDominantDepartmentTextForFloor(slab.b, slab.f, getDepartmentAttributeDepartments()));
+    }
+
+    function getDepartmentLabelForSlab(slab) {
+        if (departmentAttributeMode === 'all') {
+            return getDominantDepartmentTextForFloor(slab.b, slab.f) || '暫不分類';
+        }
+        if (departmentAttributeMode === 'afl' && slab.b === 'T4' && ['7', '8'].includes(String(slab.f))) return '應用外語系';
+        const departments = getDepartmentAttributeDepartments();
+        if (departments.length === 1) return departments[0];
+        if (departments.length > 1) {
+            const dominant = getDominantDepartmentTextForFloor(slab.b, slab.f, departments);
+            return dominant || departments.join(' / ');
+        }
+        return '暫不分類';
+    }
+
+    function getDepartmentLabelForPoi(poi) {
+        return formatPoiValue(poi && poi.department) || '暫不分類';
+    }
+
+    function getDepartmentAttributeDepartments() {
+        return DEPARTMENT_ATTRIBUTE_MODE_DEPARTMENTS[departmentAttributeMode] || [];
+    }
+
+    function isSlabInDepartmentAttributeScope(slab) {
+        if (!slab) return false;
+        if (departmentAttributeMode === 'points') return false;
+        if (departmentAttributeMode === 'all') return true;
+        const allowedDepartments = getDepartmentAttributeDepartments();
+        if (!allowedDepartments.length) return true;
+        if (departmentAttributeMode === 'afl' && slab.b === 'T4' && ['7', '8'].includes(String(slab.f))) return true;
+        return poisData.some(poi =>
+            poi.building === slab.b &&
+            String(poi.floor_name) === String(slab.f) &&
+            allowedDepartments.some(value => formatPoiValue(poi.department).includes(value))
+        );
+    }
+
+    function isFloorInDepartmentAttributeScope(building, floorName) {
+        if (departmentAttributeMode === 'all') return true;
+        if (departmentAttributeMode === 'points') return true;
+        const allowedDepartments = getDepartmentAttributeDepartments();
+        if (!allowedDepartments.length) return true;
+        if (departmentAttributeMode === 'afl' && building === 'T4' && ['7', '8'].includes(String(floorName))) return true;
+        return poisData.some(poi =>
+            poi.building === building &&
+            String(poi.floor_name) === String(floorName) &&
+            allowedDepartments.some(value => formatPoiValue(poi.department).includes(value))
+        );
+    }
+
+    function isPoiInDepartmentAttributeScope(poi) {
+        if (!poi || !isOrangeNode(poi)) return false;
+        if (departmentAttributeMode === 'all') return true;
+        if (departmentAttributeMode === 'points') return true;
+        return isFloorInDepartmentAttributeScope(poi.building, poi.floor_name);
+    }
+
+    function setDepartmentAttributeMode(mode) {
+        if (!Object.prototype.hasOwnProperty.call(DEPARTMENT_ATTRIBUTE_MODE_DEPARTMENTS, mode) && !['all', 'points'].includes(mode)) return;
+        if (!isDepartmentMode()) setViewMode('department_only');
+        departmentAttributeMode = mode;
+        document.querySelectorAll('.dept-mode-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.deptMode === departmentAttributeMode);
+        });
+        drawMap();
+    }
+
+    function normalizeCommunityText(value) {
+        return String(value || '')
+            .normalize('NFKC')
+            .replace(/[；]/g, ';')
+            .replace(/[，、]/g, ',')
+            .replace(/[｜]/g, '|')
+            .replace(/[　\s]+/g, ' ')
+            .trim();
+    }
+
+    function getCommunityKey(value) {
+        const normalized = normalizeCommunityText(value);
+        if (/[\u3400-\u9fff]/.test(normalized)) return normalized.replace(/\s+/g, '');
+        return normalized.toLowerCase();
+    }
+
+    function splitCommunityValues(value) {
+        const rawValues = Array.isArray(value) ? value : [value];
+        return rawValues
+            .flatMap(raw => normalizeCommunityText(raw).split(/[;,|/]/))
+            .map(item => item.trim())
+            .filter(Boolean);
+    }
+
+    function makeCommunityId(prefix, label) {
+        return `${prefix}::${getCommunityKey(label)}`;
+    }
+
+    function getPoiDisplayName(poi) {
+        return String(poi && (poi.name_zh || poi.name_en || poi.name || poi.id) || '').trim();
+    }
+
+    function isCommunityPriorityPoi(poi) {
+        const category = String(poi && poi.category || '').toLowerCase();
+        const name = getPoiDisplayName(poi);
+        return (
+            category === 'laboratory' ||
+            category === 'department_office' ||
+            category === 'office' ||
+            /系辦公室|中心辦公室|院辦公室|主任辦公室|老師辦公室|研究室|辦公室/i.test(name)
+        );
+    }
+
+    function getCommunityNodeRadius(node) {
+        if (node.kind === 'department') return 28;
+        if (node.kind === 'faculty') return 17;
+        if (node.category === 'department_office') return 16;
+        if (node.category === 'office') return 14;
+        if (node.category === 'laboratory') return 12;
+        return 9;
+    }
+
+    function getCommunityDepartmentText(node) {
+        if (!node) return '';
+        if (node.kind === 'department') return node.label;
+        if (node.departments && node.departments.size) return Array.from(node.departments)[0];
+        if (node.poi) return formatPoiValue(node.poi.department);
+        return '';
+    }
+
+    function getCommunityPalette(node) {
+        const dept = getCommunityDepartmentText(node);
+        const base = getDepartmentNodeColor({department: dept});
+        if (node.kind === 'department') return { fill: base, stroke: 'rgba(15, 23, 42, 0.28)', text: '#0f172a' };
+        if (node.kind === 'faculty') return { fill: base, stroke: 'rgba(15, 23, 42, 0.22)', text: '#0f172a' };
+        return { fill: base, stroke: 'rgba(255, 255, 255, 0.96)', text: '#0f172a' };
+    }
+
+    function addCommunityWarning(warnings, type, detail) {
+        warnings.push({type, ...detail});
+    }
+
+    function buildAcademicCommunityGraph() {
+        const nodes = [];
+        const edges = [];
+        const nodeById = new Map();
+        const warnings = [];
+        const departmentRawByKey = new Map();
+        const facultyRawByKey = new Map();
+
+        function addNode(node) {
+            if (nodeById.has(node.id)) return nodeById.get(node.id);
+            node.departments = node.departments || new Set();
+            node.r = getCommunityNodeRadius(node);
+            node.vx = 0;
+            node.vy = 0;
+            nodeById.set(node.id, node);
+            nodes.push(node);
+            return node;
+        }
+
+        function rememberRaw(map, key, raw, type) {
+            const previous = map.get(key);
+            if (previous && previous !== raw) addCommunityWarning(warnings, `${type}_normalized_collision`, {key, values: [previous, raw]});
+            if (!previous) map.set(key, raw);
+        }
+
+        function addDepartment(rawDepartment) {
+            const label = normalizeCommunityText(rawDepartment);
+            const key = getCommunityKey(label);
+            rememberRaw(departmentRawByKey, key, label, 'department');
+            const id = makeCommunityId('DEPT', label);
+            return addNode({ id, kind: 'department', label, category: 'department' });
+        }
+
+        function addFaculty(rawName, sourceField) {
+            const label = normalizeCommunityText(rawName);
+            const key = getCommunityKey(label);
+            rememberRaw(facultyRawByKey, key, label, 'faculty');
+            const id = makeCommunityId('FACULTY', label);
+            const node = addNode({ id, kind: 'faculty', label, category: 'faculty', sourceField });
+            return node;
+        }
+
+        function addEdge(source, target, type, evidenceField, evidenceValue) {
+            edges.push({
+                source,
+                target,
+                type,
+                evidence_field: evidenceField,
+                evidence_value: evidenceValue
+            });
+        }
+
+        poisData.forEach(poi => {
+            const departments = splitCommunityValues(poi.department);
+            const facultyLeads = splitCommunityValues(poi.faculty_leads);
+            const occupants = splitCommunityValues(poi.occupants);
+            if (departments.length > 1) addCommunityWarning(warnings, 'poi_multiple_departments', { poi_id: poi.id, value: poi.department });
+            if (!departments.length && !facultyLeads.length && !occupants.length) return;
+
+            const poiNode = addNode({
+                id: poi.id,
+                kind: 'poi',
+                label: getPoiDisplayName(poi),
+                category: poi.category || 'poi',
+                poi,
+                visibleDefault: isCommunityPriorityPoi(poi)
+            });
+
+            departments.forEach(department => {
+                const deptNode = addDepartment(department);
+                poiNode.departments.add(deptNode.label);
+                addEdge(poiNode.id, deptNode.id, 'belongs_to', 'department', department);
+            });
+
+            if (String(poi.category || '').toLowerCase() === 'laboratory') {
+                facultyLeads.forEach(name => {
+                    const facultyNode = addFaculty(name, 'faculty_leads');
+                    departments.forEach(department => facultyNode.departments.add(department));
+                    addEdge(poiNode.id, facultyNode.id, 'led_by', 'faculty_leads', name);
+                });
+            } else if (facultyLeads.length) {
+                addCommunityWarning(warnings, 'faculty_leads_on_non_laboratory_poi', { poi_id: poi.id, category: poi.category, value: facultyLeads.join('; ') });
+            }
+
+            if (String(poi.category || '').toLowerCase().includes('office')) {
+                occupants.forEach(name => {
+                    const facultyNode = addFaculty(name, 'occupants');
+                    departments.forEach(department => facultyNode.departments.add(department));
+                    addEdge(facultyNode.id, poiNode.id, 'has_office', 'occupants', name);
+                });
+            } else if (occupants.length) {
+                addCommunityWarning(warnings, 'occupants_on_non_office_poi', { poi_id: poi.id, category: poi.category, value: occupants.join('; ') });
+            }
+        });
+
+        const departmentLabels = Array.from(departmentRawByKey.values());
+        if (departmentLabels.includes('資工系') && departmentLabels.includes('資訊工程系')) {
+            addCommunityWarning(warnings, 'department_possible_alias_not_merged', { values: ['資工系', '資訊工程系'] });
+        }
+
+        const edgeKeys = new Set();
+        const dedupedEdges = [];
+        let duplicateEdges = 0;
+        edges.forEach(edge => {
+            const key = `${edge.source}->${edge.target}->${edge.type}->${edge.evidence_field}->${edge.evidence_value}`;
+            if (edgeKeys.has(key)) {
+                duplicateEdges += 1;
+                return;
+            }
+            edgeKeys.add(key);
+            dedupedEdges.push(edge);
+        });
+        if (duplicateEdges) addCommunityWarning(warnings, 'duplicate_edges_removed', { count: duplicateEdges });
+
+        const adjacency = new Map(nodes.map(node => [node.id, new Set()]));
+        const edgeCounts = {};
+        let badEdgeRefs = 0;
+        dedupedEdges.forEach(edge => {
+            edgeCounts[edge.type] = (edgeCounts[edge.type] || 0) + 1;
+            if (!nodeById.has(edge.source) || !nodeById.has(edge.target)) {
+                badEdgeRefs += 1;
+                return;
+            }
+            adjacency.get(edge.source).add(edge.target);
+            adjacency.get(edge.target).add(edge.source);
+        });
+        if (badEdgeRefs) addCommunityWarning(warnings, 'edge_refs_missing_node', { count: badEdgeRefs });
+
+        const isolatedNodes = nodes.filter(node => !(adjacency.get(node.id) && adjacency.get(node.id).size));
+        if (isolatedNodes.length) addCommunityWarning(warnings, 'isolated_nodes', { count: isolatedNodes.length });
+
+        const facultyLeadSet = new Set();
+        const occupantSet = new Set();
+        dedupedEdges.forEach(edge => {
+            if (edge.type === 'led_by') facultyLeadSet.add(edge.target);
+            if (edge.type === 'has_office') occupantSet.add(edge.source);
+        });
+        const onlyLead = Array.from(facultyLeadSet).filter(id => !occupantSet.has(id)).map(id => nodeById.get(id).label).sort();
+        const onlyOccupant = Array.from(occupantSet).filter(id => !facultyLeadSet.has(id)).map(id => nodeById.get(id).label).sort();
+        const both = Array.from(facultyLeadSet).filter(id => occupantSet.has(id)).map(id => nodeById.get(id).label).sort();
+
+        return {
+            nodes,
+            edges: dedupedEdges,
+            nodeById,
+            adjacency,
+            departments: departmentLabels.sort(),
+            warnings,
+            stats: {
+                departmentNodes: nodes.filter(node => node.kind === 'department').length,
+                facultyNodes: nodes.filter(node => node.kind === 'faculty').length,
+                poiNodes: nodes.filter(node => node.kind === 'poi').length,
+                edgeCounts,
+                edgeTotal: dedupedEdges.length,
+                warningCount: warnings.length,
+                facultyOnlyLeads: onlyLead,
+                facultyOnlyOccupants: onlyOccupant,
+                facultyBoth: both,
+                facultyWithLabNoOffice: onlyLead,
+                facultyOfficeNoLab: onlyOccupant
+            }
+        };
+    }
+
+    function ensureCommunityGraph() {
+        if (!communityGraph) {
+            communityGraph = buildAcademicCommunityGraph();
+            initializeCommunityLayout();
+            updateCommunityControls();
+        }
+        return communityGraph;
+    }
+
+    function getVisibleCommunityNodes() {
+        const graph = ensureCommunityGraph();
+        return graph.nodes.filter(node => {
+            if (!communityShowAllPois && node.kind === 'poi' && !node.visibleDefault) return false;
+            if (communityDepartmentSelection === 'all') return true;
+            if (node.kind === 'department') return node.label === communityDepartmentSelection;
+            return node.departments && node.departments.has(communityDepartmentSelection);
+        });
+    }
+
+    function getVisibleCommunityNodeIds() {
+        return new Set(getVisibleCommunityNodes().map(node => node.id));
+    }
+
+    function getVisibleCommunityEdges() {
+        const visibleIds = getVisibleCommunityNodeIds();
+        return ensureCommunityGraph().edges.filter(edge => visibleIds.has(edge.source) && visibleIds.has(edge.target));
+    }
+
+    function initializeCommunityLayout() {
+        const graph = ensureCommunityGraph();
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const deptNodes = graph.nodes.filter(node => node.kind === 'department');
+        const anchors = new Map();
+        const radius = Math.min(canvas.width, canvas.height) * 0.32;
+        deptNodes.forEach((node, index) => {
+            const angle = -Math.PI / 2 + (Math.PI * 2 * index / Math.max(1, deptNodes.length));
+            const anchor = {
+                x: centerX + Math.cos(angle) * radius,
+                y: centerY + Math.sin(angle) * radius
+            };
+            anchors.set(node.label, anchor);
+            node.x = anchor.x;
+            node.y = anchor.y;
+            node.vx = 0;
+            node.vy = 0;
+        });
+
+        graph.nodes.filter(node => node.kind !== 'department').forEach((node, index) => {
+            const dept = getCommunityDepartmentText(node);
+            const anchor = anchors.get(dept) || {x: centerX, y: centerY};
+            const angle = index * 2.3999632297;
+            const spread = node.kind === 'faculty' ? 76 : 128;
+            node.x = anchor.x + Math.cos(angle) * spread + ((index % 5) - 2) * 8;
+            node.y = anchor.y + Math.sin(angle) * spread + ((index % 7) - 3) * 8;
+            node.vx = 0;
+            node.vy = 0;
+        });
+
+        graph.departmentAnchors = anchors;
+        communityIterations = 0;
+    }
+
+    function resetCommunityLayout() {
+        ensureCommunityGraph();
+        initializeCommunityLayout();
+        communitySelectedNodeId = null;
+        startCommunitySimulation(true);
+        drawMap();
+    }
+
+    function communityToScreen(node) {
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        return {
+            x: cx + (node.x - cx) * communityViewport.zoom + communityViewport.offsetX,
+            y: cy + (node.y - cy) * communityViewport.zoom + communityViewport.offsetY
+        };
+    }
+
+    function findCommunityNodeAt(x, y) {
+        const nodes = getVisibleCommunityNodes().slice().sort((a, b) => b.r - a.r);
+        for (const node of nodes) {
+            const p = communityToScreen(node);
+            const radius = (node.r + 6) * communityViewport.zoom;
+            if (Math.hypot(p.x - x, p.y - y) <= radius) return node;
+        }
+        return null;
+    }
+
+    function isCommunityNodeHighlighted(node) {
+        if (!communitySelectedNodeId) return true;
+        if (node.id === communitySelectedNodeId) return true;
+        const neighbors = ensureCommunityGraph().adjacency.get(communitySelectedNodeId);
+        return neighbors && neighbors.has(node.id);
+    }
+
+    function isCommunityEdgeHighlighted(edge) {
+        if (!communitySelectedNodeId) return true;
+        return edge.source === communitySelectedNodeId || edge.target === communitySelectedNodeId;
+    }
+
+    function getCommunityLinkDistance(edge) {
+        if (edge.type === 'belongs_to') return 125;
+        if (edge.type === 'led_by') return 95;
+        return 82;
+    }
+
+    function tickCommunityLayout() {
+        const graph = ensureCommunityGraph();
+        const nodes = getVisibleCommunityNodes();
+        const nodeIds = new Set(nodes.map(node => node.id));
+        const edges = graph.edges.filter(edge => nodeIds.has(edge.source) && nodeIds.has(edge.target));
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const damping = 0.82;
+
+        nodes.forEach(node => {
+            node.vx *= damping;
+            node.vy *= damping;
+            const dept = getCommunityDepartmentText(node);
+            const anchor = graph.departmentAnchors && graph.departmentAnchors.get(dept);
+            if (node.kind === 'department' && anchor) {
+                node.vx += (anchor.x - node.x) * 0.025;
+                node.vy += (anchor.y - node.y) * 0.025;
+            } else if (anchor) {
+                node.vx += (anchor.x - node.x) * 0.0026;
+                node.vy += (anchor.y - node.y) * 0.0026;
+            } else {
+                node.vx += (centerX - node.x) * 0.0015;
+                node.vy += (centerY - node.y) * 0.0015;
+            }
+        });
+
+        edges.forEach(edge => {
+            const source = graph.nodeById.get(edge.source);
+            const target = graph.nodeById.get(edge.target);
+            if (!source || !target) return;
+            const dx = target.x - source.x;
+            const dy = target.y - source.y;
+            const distance = Math.max(1, Math.hypot(dx, dy));
+            const desired = getCommunityLinkDistance(edge);
+            const force = (distance - desired) * 0.012;
+            const fx = dx / distance * force;
+            const fy = dy / distance * force;
+            source.vx += fx;
+            source.vy += fy;
+            target.vx -= fx;
+            target.vy -= fy;
+        });
+
+        for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+                const a = nodes[i], b = nodes[j];
+                const dx = b.x - a.x;
+                const dy = b.y - a.y;
+                const distance = Math.max(1, Math.hypot(dx, dy));
+                const minDistance = a.r + b.r + 18;
+                const charge = Math.min(3.2, 280 / (distance * distance));
+                const rx = dx / distance * charge;
+                const ry = dy / distance * charge;
+                a.vx -= rx;
+                a.vy -= ry;
+                b.vx += rx;
+                b.vy += ry;
+                if (distance < minDistance) {
+                    const push = (minDistance - distance) * 0.035;
+                    const px = dx / distance * push;
+                    const py = dy / distance * push;
+                    a.vx -= px;
+                    a.vy -= py;
+                    b.vx += px;
+                    b.vy += py;
+                }
+            }
+        }
+
+        let totalVelocity = 0;
+        nodes.forEach(node => {
+            node.x += Math.max(-7, Math.min(7, node.vx));
+            node.y += Math.max(-7, Math.min(7, node.vy));
+            node.x = Math.max(80, Math.min(canvas.width - 80, node.x));
+            node.y = Math.max(70, Math.min(canvas.height - 70, node.y));
+            totalVelocity += Math.abs(node.vx) + Math.abs(node.vy);
+        });
+
+        communityIterations += 1;
+        return totalVelocity / Math.max(1, nodes.length);
+    }
+
+    function startCommunitySimulation(forceRestart = false) {
+        if (!isAcademicCommunityMode()) return;
+        if (forceRestart) stopCommunitySimulation();
+        if (communityAnimationFrame) return;
+        const step = () => {
+            if (!isAcademicCommunityMode()) {
+                stopCommunitySimulation();
+                return;
+            }
+            const avgVelocity = tickCommunityLayout();
+            drawMap();
+            if (communityIterations < COMMUNITY_MAX_ITERATIONS && avgVelocity > 0.012) {
+                communityAnimationFrame = requestAnimationFrame(step);
+            } else {
+                communityAnimationFrame = null;
+            }
+        };
+        communityAnimationFrame = requestAnimationFrame(step);
+    }
+
+    function stopCommunitySimulation() {
+        if (communityAnimationFrame) {
+            cancelAnimationFrame(communityAnimationFrame);
+            communityAnimationFrame = null;
+        }
+    }
+
+    function updateCommunityControls() {
+        if (!academicCommunityControls) return;
+        const isOpen = ACADEMIC_COMMUNITY_BETA && isAcademicCommunityMode();
+        academicCommunityControls.classList.toggle('open', isOpen);
+        if (!communityGraph || !communityDepartmentFilter) return;
+        const previous = communityDepartmentFilter.value || communityDepartmentSelection;
+        communityDepartmentFilter.innerHTML = '';
+        communityDepartmentFilter.add(new Option(t('communityFilterAll'), 'all'));
+        communityGraph.departments.forEach(department => {
+            communityDepartmentFilter.add(new Option(department, department));
+        });
+        communityDepartmentFilter.value = communityGraph.departments.includes(previous) ? previous : 'all';
+        communityDepartmentSelection = communityDepartmentFilter.value;
+        if (communityShowAllPoisInput) communityShowAllPoisInput.checked = communityShowAllPois;
+        if (communitySummary) {
+            const visibleNodeCount = getVisibleCommunityNodes().length;
+            const visibleEdgeCount = getVisibleCommunityEdges().length;
+            communitySummary.textContent = `Nodes ${visibleNodeCount}/${communityGraph.nodes.length} · Edges ${visibleEdgeCount}/${communityGraph.edges.length} · Warnings ${communityGraph.warnings.length}`;
+        }
+    }
+
+    function getCommunityEdgeStyle(type) {
+        if (type === 'led_by') return { color: 'rgba(100, 116, 139, 0.42)', width: 1.4, dash: [8, 6] };
+        if (type === 'has_office') return { color: 'rgba(100, 116, 139, 0.34)', width: 1.1, dash: [2, 5] };
+        return { color: 'rgba(100, 116, 139, 0.34)', width: 1.2, dash: [] };
+    }
+
+    function drawCommunityView() {
+        const graph = ensureCommunityGraph();
+        const nodes = getVisibleCommunityNodes();
+        const visibleIds = new Set(nodes.map(node => node.id));
+        const edges = graph.edges.filter(edge => visibleIds.has(edge.source) && visibleIds.has(edge.target));
+
+        ctx.save();
+        ctx.fillStyle = '#f8fbfa';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        edges.forEach(edge => {
+            const source = graph.nodeById.get(edge.source);
+            const target = graph.nodeById.get(edge.target);
+            if (!source || !target) return;
+            const p1 = communityToScreen(source);
+            const p2 = communityToScreen(target);
+            const style = getCommunityEdgeStyle(edge.type);
+            ctx.globalAlpha = isCommunityEdgeHighlighted(edge) ? 1 : 0.14;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = style.color;
+            ctx.lineWidth = style.width * communityViewport.zoom;
+            ctx.setLineDash(style.dash.map(value => value * communityViewport.zoom));
+            ctx.stroke();
+        });
+        ctx.setLineDash([]);
+
+        nodes.forEach(node => {
+            const p = communityToScreen(node);
+            const palette = getCommunityPalette(node);
+            const highlighted = isCommunityNodeHighlighted(node);
+            const hovered = node.id === communityHoveredNodeId;
+            const selected = node.id === communitySelectedNodeId;
+            ctx.globalAlpha = highlighted ? 1 : 0.18;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, node.r * communityViewport.zoom, 0, Math.PI * 2);
+            ctx.fillStyle = palette.fill;
+            ctx.fill();
+            ctx.strokeStyle = selected ? '#0f172a' : (hovered ? '#334155' : palette.stroke);
+            ctx.lineWidth = (selected ? 3 : hovered ? 2.4 : 1.4) * communityViewport.zoom;
+            ctx.stroke();
+
+            const shouldLabel = node.kind === 'department' || selected || hovered || (communityViewport.zoom > 1.55 && node.kind === 'faculty');
+            if (shouldLabel) {
+                ctx.globalAlpha = highlighted ? 1 : 0.24;
+                ctx.font = `${node.kind === 'department' ? 850 : 760} ${Math.max(11, (node.kind === 'department' ? 14 : 11) * communityViewport.zoom)}px 'Segoe UI', Arial`;
+                ctx.fillStyle = palette.text;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                ctx.fillText(node.label, p.x, p.y + (node.r + 5) * communityViewport.zoom);
+            }
+        });
+
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = 'rgba(71, 85, 105, 0.72)';
+        ctx.font = "800 13px 'Segoe UI', Arial";
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        ctx.fillText('Academic Community View · Beta', 24, 22);
+        ctx.restore();
+    }
+
+    function getCommunityNodeTypeLabel(node) {
+        if (node.kind === 'department') return 'Department';
+        if (node.kind === 'faculty') return 'Faculty';
+        return 'POI';
+    }
+
+    function renderCommunityHoverTooltip(node, event) {
+        document.getElementById('tt-name').innerText = node.label;
+        const poi = node.poi || {};
+        const rows = [
+            buildTooltipRow('communityNodeType', getCommunityNodeTypeLabel(node)),
+            buildTooltipRow('communityNodeDepartment', getCommunityDepartmentText(node)),
+            buildTooltipRow('communityNodeCategory', node.category),
+            node.kind === 'poi' ? buildTooltipRow('communityNodeLocation', getPoiLocationLabel(poi)) : '',
+            node.kind === 'poi' ? buildTooltipRow('communityNodeFacultyLeads', poi.faculty_leads) : '',
+            node.kind === 'poi' ? buildTooltipRow('communityNodeOccupants', poi.occupants) : ''
+        ];
+        hoverTooltipMeta.innerHTML = rows.join('');
+        hoverTooltip.style.display = 'block';
+        hoverTooltip.style.left = (event.clientX + 15) + 'px';
+        hoverTooltip.style.top = (event.clientY + 15) + 'px';
+    }
+
+    function renderCommunitySelectionInfo(node) {
+        if (!node) {
+            setInfoBox(() => t('infoInitial'));
+            return;
+        }
+        const graph = ensureCommunityGraph();
+        const neighbors = graph.adjacency.get(node.id) || new Set();
+        const relatedEdges = graph.edges.filter(edge => edge.source === node.id || edge.target === node.id);
+        setInfoBox(() => {
+            const lines = [
+                `<b>${escapeHtml(node.label)}</b>`,
+                `${escapeHtml(t('communityNodeType'))}<b>${escapeHtml(getCommunityNodeTypeLabel(node))}</b>`
+            ];
+            const dept = getCommunityDepartmentText(node);
+            if (dept) lines.push(`${escapeHtml(t('communityNodeDepartment'))}<b>${escapeHtml(dept)}</b>`);
+            if (node.kind === 'poi') {
+                const poi = node.poi || {};
+                if (poi.category) lines.push(`${escapeHtml(t('communityNodeCategory'))}<b>${escapeHtml(poi.category)}</b>`);
+                const location = getPoiLocationLabel(poi);
+                if (location) lines.push(`${escapeHtml(t('communityNodeLocation'))}<b>${escapeHtml(location)}</b>`);
+                if (!isBlankPoiValue(poi.faculty_leads)) lines.push(`${escapeHtml(t('communityNodeFacultyLeads'))}<b>${escapeHtml(formatPoiValue(poi.faculty_leads))}</b>`);
+                if (!isBlankPoiValue(poi.occupants)) lines.push(`${escapeHtml(t('communityNodeOccupants'))}<b>${escapeHtml(formatPoiValue(poi.occupants))}</b>`);
+            }
+            lines.push(`Neighbors: <b>${neighbors.size}</b>`);
+            lines.push(`Edges: <b>${relatedEdges.length}</b>`);
+            return lines.join('\n');
+        });
+    }
+
     function isPointSelectNode(node) {
         return isOrangeNode(node) || isBlueNode(node);
     }
@@ -1615,6 +2559,7 @@
             return true;
         }
         if (isCampusNode(node)) return false;
+        if (isDepartmentMode()) return isPoiInDepartmentAttributeScope(node);
         if (isRouteNode(node)) return true;
         if (currentViewMode === 'vertical_only') return isVerticalNode(node);
         if (currentViewMode === 'point_select') return isPointSelectNode(node);
@@ -1624,6 +2569,7 @@
     function isEdgeDrawableForMode(edge, n1, n2) {
         const isCampusEdge = isCampusNode(n1) && isCampusNode(n2);
         if (isCampusMode()) return isCampusEdge && isEdgeOnRoute(edge);
+        if (isDepartmentMode()) return false;
         return !isCampusNode(n1) && !isCampusNode(n2);
     }
 
@@ -2474,8 +3420,46 @@
         ctx.setLineDash([]);
     }
 
+    function addPointModeDepartmentCapsules(topLayerCapsules) {
+        if (!isDepartmentMode() || departmentAttributeMode !== 'points') return;
+        const groups = new Map();
+        poisData.forEach(poi => {
+            if (!isNodeVisible(poi) || !isPoiInDepartmentAttributeScope(poi)) return;
+            const label = getDepartmentLabelForPoi(poi);
+            const group = groups.get(label) || { x: 0, y: 0, z: 0, count: 0 };
+            group.x += poi.x;
+            group.y += poi.y;
+            group.z += poi.z || 0;
+            group.count += 1;
+            groups.set(label, group);
+        });
+        groups.forEach((group, label) => {
+            if (!group.count) return;
+            const p = getProjectedCoords(
+                { x: group.x / group.count, y: group.y / group.count },
+                group.z / group.count
+            );
+            const style = getDepartmentCapsuleStyleByText(label);
+            topLayerCapsules.push({
+                lines: [label],
+                x: p.x,
+                y: p.y - 36 * mapZoom,
+                bgColor: style.bgColor,
+                textColor: style.textColor,
+                isHovered: false
+            });
+        });
+    }
+
     function drawMap() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (isAcademicCommunityMode()) {
+            minimapWrapper.style.display = 'none';
+            angleHint.style.display = 'none';
+            updateHUD();
+            drawCommunityView();
+            return;
+        }
         let topLayerCapsules = [];
         const isVolumeMode = currentViewMode === 'volume_only';
         const campusMode = isCampusMode();
@@ -2530,8 +3514,13 @@
         }
 
         slabsToDraw.forEach(slab => {
+            if (isDepartmentMode() && departmentAttributeMode === 'points') return;
             let finalColor = slab.color;
-            if (slab.f === '1') {
+            if (isDepartmentMode()) {
+                finalColor = isSlabInDepartmentAttributeScope(slab)
+                    ? getDepartmentSlabColor(slab)
+                    : 'rgba(255, 255, 255, 0.12)';
+            } else if (slab.f === '1') {
                 if (slab.b === 'RB' || slab.b === 'RB-STACK') finalColor = 'rgba(100, 160, 200, 0.40)';
                 if (slab.b === 'T4') finalColor = 'rgba(100, 190, 100, 0.40)';
                 if (slab.b === 'T1') finalColor = 'rgba(255, 210, 90, 0.40)';
@@ -2553,7 +3542,7 @@
             ctx.strokeStyle = isBldgActive ? 'rgba(255,255,255,0.7)' : 'rgba(200,200,200,0.3)';
             ctx.lineWidth = 1; ctx.stroke();
 
-            if (is3DMode && isBldgActive && !isVolumeMode && mapZoom >= 0.48) {
+            if (is3DMode && isBldgActive && !isVolumeMode && !isDepartmentMode() && mapZoom >= 0.48) {
                 const labelOnRight = slab.b === 'T4';
                 let labelPt = null; let labelX = labelOnRight ? -Infinity : Infinity;
                 slab.path.forEach(pt => {
@@ -2582,43 +3571,54 @@
             }
         });
 
+        addPointModeDepartmentCapsules(topLayerCapsules);
+
         let hoveredBldg = null;
         if (is3DMode) {
-            let highestZ = {}, highestPt = {};
+            let highestZ = {}, highestPt = {}, highestDeptLabel = {};
             slabsToDraw.forEach(slab => {
                 let isBldgActive = currentBuildingFilter === 'General' || slab.b === currentBuildingFilter || (currentBuildingFilter === 'RB' && slab.b === 'RB-STACK');
                 if (!isBldgActive) return;
+                if (isDepartmentMode() && !isSlabInDepartmentAttributeScope(slab)) return;
+                const capsuleKey = isDepartmentMode() ? `${slab.b}-${getDepartmentLabelForSlab(slab)}` : slab.b;
 
-                if (!(slab.b in highestZ) || slab.z > highestZ[slab.b]) {
-                    highestZ[slab.b] = slab.z;
-                    if (slab.b === 'RB') highestPt[slab.b] = {x: 800, y: 650};
-                    else if (slab.b === 'RB-STACK') highestPt[slab.b] = {x: 180, y: 650};
+                if (!(capsuleKey in highestZ) || slab.z > highestZ[capsuleKey]) {
+                    highestZ[capsuleKey] = slab.z;
+                    highestDeptLabel[capsuleKey] = getDepartmentLabelForSlab(slab);
+                    if (!isDepartmentMode() && slab.b === 'RB') highestPt[capsuleKey] = {x: 800, y: 650};
+                    else if (!isDepartmentMode() && slab.b === 'RB-STACK') highestPt[capsuleKey] = {x: 180, y: 650};
                     else {
                         let sumX = 0, sumY = 0;
                         slab.path.forEach(pt => { sumX+=pt[0]; sumY+=pt[1]; });
-                        highestPt[slab.b] = {x: sumX/slab.path.length, y: sumY/slab.path.length - 120};
+                        highestPt[capsuleKey] = {x: sumX/slab.path.length, y: sumY/slab.path.length - 120};
                     }
                 }
             });
 
-            for (let b in highestPt) {
-                if (b === 'RB-STACK') continue;
-                let p = getProjectedCoords({x: highestPt[b].x, y: highestPt[b].y}, highestZ[b]);
+            for (let key in highestPt) {
+                if (!isDepartmentMode() && key === 'RB-STACK') continue;
+                let p = getProjectedCoords({x: highestPt[key].x, y: highestPt[key].y}, highestZ[key]);
                 p.y -= 50 * mapZoom; let cy = p.y - 30 * mapZoom;
-                if (Math.abs(p.x - mouseX) < 140 * mapZoom && Math.abs(cy - mouseY) < 100 * mapZoom) { hoveredBldg = b; break; }
+                if (Math.abs(p.x - mouseX) < 140 * mapZoom && Math.abs(cy - mouseY) < 100 * mapZoom) { hoveredBldg = key; break; }
             }
 
-            for (let b in highestZ) {
-                if (b === 'RB-STACK') continue;
-                let p = getProjectedCoords({x: highestPt[b].x, y: highestPt[b].y}, highestZ[b]);
-                p.y -= 50 * mapZoom;
-                let isHovered = (hoveredBldg === b);
-                const hoverLines = getBuildingHoverInfo(b);
-                let lines = !isVolumeMode && isHovered && hoverLines ? hoverLines : [getBuildingFullName(b)];
+            for (let key in highestZ) {
+                if (!isDepartmentMode() && key === 'RB-STACK') continue;
+                let p = getProjectedCoords({x: highestPt[key].x, y: highestPt[key].y}, highestZ[key]);
+                p.y -= (isDepartmentMode() ? 6 : 50) * mapZoom;
+                let isHovered = (hoveredBldg === key);
+                const departmentLabel = highestDeptLabel[key];
+                const hoverLines = isDepartmentMode() ? null : getBuildingHoverInfo(key);
+                let lines = isDepartmentMode()
+                    ? [departmentLabel || '暫不分類']
+                    : (!isVolumeMode && isHovered && hoverLines ? hoverLines : [getBuildingFullName(key)]);
+                const departmentStyle = isDepartmentMode() ? getDepartmentCapsuleStyleByText(departmentLabel) : null;
 
                 topLayerCapsules.push({
                     lines: lines, x: p.x, y: p.y,
-                    bgColor: BLDG_PASTEL_COLORS[b] || '#ffffff', textColor: BLDG_TEXT_COLORS[b] || '#1e293b', isHovered: !isVolumeMode && isHovered
+                    bgColor: departmentStyle ? departmentStyle.bgColor : (BLDG_PASTEL_COLORS[key] || '#ffffff'),
+                    textColor: departmentStyle ? departmentStyle.textColor : (BLDG_TEXT_COLORS[key] || '#1e293b'),
+                    isHovered: !isVolumeMode && isHovered
                 });
             }
         }
@@ -2667,7 +3667,7 @@
         });
         ctx.setLineDash([]);
 
-        if (vMode !== 'vertical_only' && !campusMode) {
+        if (vMode !== 'vertical_only' && !campusMode && !isDepartmentMode()) {
             poisData.forEach(poi => {
                 if (isNodeVisible(poi)) {
                     let poiOnPath = currentPath.includes(poi.id) || altPath.includes(poi.id);
@@ -2709,8 +3709,13 @@
 
             let p = getProjectedCoords(node);
             let nodeColor = node.color || '#94a3b8';
-            if (vMode !== 'point_select' && isNavigating && !onActivePath) nodeColor = '#dbe5e1';
-            else if (!isBldgActive && !isSelected && !onPath) nodeColor = '#dbe5e1';
+            if (isDepartmentMode() && isOrangeNode(node)) {
+                nodeColor = getDepartmentNodeColor(node);
+            } else if (vMode !== 'point_select' && isNavigating && !onActivePath) {
+                nodeColor = '#dbe5e1';
+            } else if (!isBldgActive && !isSelected && !onPath) {
+                nodeColor = '#dbe5e1';
+            }
 
             let radius = node.type === 'poi' ? 5.0 : 7.0;
             if (isCampusNode(node)) radius = isCampusPathNode(node) ? 8.0 : 9.5;
@@ -2812,6 +3817,26 @@
     poiDetailClose.addEventListener('click', closePoiDetailCard);
     poiSetStartBtn.addEventListener('click', () => setPoiEndpoint('start'));
     poiSetEndBtn.addEventListener('click', () => setPoiEndpoint('end'));
+    document.querySelectorAll('.dept-mode-btn').forEach(button => {
+        button.addEventListener('click', () => setDepartmentAttributeMode(button.dataset.deptMode));
+    });
+    communityDepartmentFilter.addEventListener('change', () => {
+        communityDepartmentSelection = communityDepartmentFilter.value || 'all';
+        communitySelectedNodeId = null;
+        initializeCommunityLayout();
+        updateCommunityControls();
+        startCommunitySimulation(true);
+        drawMap();
+    });
+    communityShowAllPoisInput.addEventListener('change', () => {
+        communityShowAllPois = communityShowAllPoisInput.checked;
+        communitySelectedNodeId = null;
+        initializeCommunityLayout();
+        updateCommunityControls();
+        startCommunitySimulation(true);
+        drawMap();
+    });
+    communityResetLayoutBtn.addEventListener('click', resetCommunityLayout);
 
     document.getElementById('clear-btn').addEventListener('click', () => {
         currentPath = []; altPath = []; currentRouteDistance = null; tempStart = null; tempEnd = null; clickState = 0;
@@ -2830,7 +3855,13 @@
 
     canvas.addEventListener('mousedown', e => {
         isDragging = true; isMoved = false; dragStartX = e.clientX; dragStartY = e.clientY;
-        initOffsetX = mapOffsetX; initOffsetY = mapOffsetY; initRot = mapRotation;
+        if (isAcademicCommunityMode()) {
+            initOffsetX = communityViewport.offsetX;
+            initOffsetY = communityViewport.offsetY;
+            initRot = 0;
+        } else {
+            initOffsetX = mapOffsetX; initOffsetY = mapOffsetY; initRot = mapRotation;
+        }
     });
 
     window.addEventListener('mousemove', e => {
@@ -2841,13 +3872,25 @@
         if (isDragging) {
             const dx = e.clientX - dragStartX, dy = e.clientY - dragStartY;
             if (Math.abs(dx) > 3 || Math.abs(dy) > 3) isMoved = true;
-            if (e.altKey || e.ctrlKey || e.metaKey) {
+            if (isAcademicCommunityMode()) {
+                communityViewport.offsetX = initOffsetX + dx;
+                communityViewport.offsetY = initOffsetY + dy;
+            } else if (e.altKey || e.ctrlKey || e.metaKey) {
                 mapRotation = initRot + (dx * 0.01);
             } else {
                 mapOffsetX = initOffsetX + dx; mapOffsetY = initOffsetY + dy;
             }
             hoverTooltip.style.display = 'none'; drawMap();
         } else {
+            if (isAcademicCommunityMode()) {
+                const hovered = findCommunityNodeAt(mouseX, mouseY);
+                communityHoveredNodeId = hovered ? hovered.id : null;
+                if (hovered) renderCommunityHoverTooltip(hovered, e);
+                else hoverTooltip.style.display = 'none';
+                drawMap();
+                return;
+            }
+
             if (currentViewMode === 'volume_only') {
                 hoverTooltip.style.display = 'none';
                 drawMap();
@@ -2868,10 +3911,36 @@
     });
 
     window.addEventListener('mouseup', () => isDragging = false);
-    canvas.addEventListener('wheel', e => { e.preventDefault(); mapZoom = Math.min(Math.max(mapZoom + (e.deltaY * -0.001), 0.2), 5); drawMap(); });
+    canvas.addEventListener('wheel', e => {
+        e.preventDefault();
+        if (isAcademicCommunityMode()) {
+            const oldZoom = communityViewport.zoom;
+            const nextZoom = Math.min(Math.max(oldZoom + (e.deltaY * -0.001), 0.45), 2.8);
+            communityViewport.zoom = nextZoom;
+            drawMap();
+            return;
+        }
+        mapZoom = Math.min(Math.max(mapZoom + (e.deltaY * -0.001), 0.2), 5); drawMap();
+    });
 
     canvas.addEventListener('click', (event) => {
         if (isMoved) return;
+        if (isAcademicCommunityMode()) {
+            const rect = canvas.getBoundingClientRect();
+            mouseX = (event.clientX - rect.left) * (canvas.width / rect.width);
+            mouseY = (event.clientY - rect.top) * (canvas.height / rect.height);
+            const node = findCommunityNodeAt(mouseX, mouseY);
+            communitySelectedNodeId = node ? node.id : null;
+            renderCommunitySelectionInfo(node);
+            if (node && node.kind === 'poi') {
+                selectedPoiForCard = node.poi;
+                renderPoiDetailCard();
+            } else {
+                closePoiDetailCard();
+            }
+            drawMap();
+            return;
+        }
         if (currentViewMode === 'volume_only') return;
         const rect = canvas.getBoundingClientRect();
         mouseX = (event.clientX - rect.left) * (canvas.width / rect.width);

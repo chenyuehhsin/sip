@@ -1782,7 +1782,7 @@
         { keys: ['演講廳', 'Auditorium'], color: '#f97316' },
         { keys: ['電子計算中心', 'Computer Center'], color: '#94a3b8' },
         { keys: ['圖書館', 'Library'], color: '#fb923c' },
-        { keys: ['暫不分類', 'Uncategorized'], color: '#cbd5e1' }
+        { keys: ['暫不分類', 'Uncategorized'], color: '#94a3b8' }
     ];
 
     const DEPARTMENT_SLAB_COLORS = [
@@ -1819,9 +1819,9 @@
 
     function getDepartmentNodeColor(node) {
         const text = getPoiDepartmentText(node);
-        if (!text) return '#cbd5e1';
+        if (!text) return '#94a3b8';
         const match = DEPARTMENT_NODE_COLORS.find(item => item.keys.some(key => text.includes(key)));
-        return match ? match.color : '#cbd5e1';
+        return match ? match.color : '#94a3b8';
     }
 
     function getDepartmentSlabColorByText(text) {
@@ -2559,7 +2559,7 @@
             return true;
         }
         if (isCampusNode(node)) return false;
-        if (isDepartmentMode()) return isPoiInDepartmentAttributeScope(node);
+        if (isDepartmentMode()) return isRouteNode(node) || isPoiInDepartmentAttributeScope(node);
         if (isRouteNode(node)) return true;
         if (currentViewMode === 'vertical_only') return isVerticalNode(node);
         if (currentViewMode === 'point_select') return isPointSelectNode(node);
@@ -2569,7 +2569,7 @@
     function isEdgeDrawableForMode(edge, n1, n2) {
         const isCampusEdge = isCampusNode(n1) && isCampusNode(n2);
         if (isCampusMode()) return isCampusEdge && isEdgeOnRoute(edge);
-        if (isDepartmentMode()) return false;
+        if (isDepartmentMode()) return !isCampusEdge && isEdgeOnRoute(edge);
         return !isCampusNode(n1) && !isCampusNode(n2);
     }
 
@@ -3667,17 +3667,19 @@
         });
         ctx.setLineDash([]);
 
-        if (vMode !== 'vertical_only' && !campusMode && !isDepartmentMode()) {
+        if (vMode !== 'vertical_only' && !campusMode) {
             poisData.forEach(poi => {
                 if (isNodeVisible(poi)) {
                     let poiOnPath = currentPath.includes(poi.id) || altPath.includes(poi.id);
                     let isSelected = poi.id === tempStart || poi.id === tempEnd;
+                    if (isDepartmentMode() && !poiOnPath && !isSelected) return;
                     if (vMode === 'main_only' && !poiOnPath && !isSelected) return;
 
                     (connectionsData[poi.id] || []).forEach(tid => {
                         const tn = nodeMap[tid];
                         if (tn && isNodeVisible(tn)) {
                             let onPath = currentPath.includes(poi.id) && currentPath.includes(tid);
+                            if (isDepartmentMode() && !onPath) return;
                             if (vMode === 'point_select' && !onPath) return;
                             if (!isNavigating || onPath || (!onPath && vMode !== 'main_only')) {
                                 let p1 = getProjectedCoords(poi), p2 = getProjectedCoords(tn);

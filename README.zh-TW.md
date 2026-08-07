@@ -1,8 +1,10 @@
-# SIP 智慧校園導航系統
+# SIP: Spatial Intelligence Platform
 
-SIP 是一個以 SVG 圖資為基礎的校園室內外導航原型。專案會把樓層 SVG、校園 SVG、手動 edge、POI metadata CSV 轉成 runtime JSON，後端用 FastAPI 提供地圖資料與路線 API，前端用單頁 HTML/CSS/JavaScript Canvas 呈現互動式 2D / 2.5D 導航介面。
+SIP 是一個面向大型複合建築的空間智慧平台原型。它的核心動機是：當一般民眾第一次進入大型醫院、商場、機場、共構車站，或像台北車站這類複雜空間時，往往不容易快速掌握室內空間概念，也不容易判斷自己該往哪裡走。
 
-目前主要支援台科大校園與 RB、T1、T4、AU 等建築，包含室內跨樓層、跨棟連通、校園配置、科系屬性視圖、POI 搜尋與多種路線偏好。
+SIP 希望透過 2D / 2.5D 視圖、個人化搜尋、POI metadata 與路線偏好，協助使用者更快找到目的地。為了快速驗證可行性，第一版 demo 先以台科大 NTUST 校園作為實驗場域，包含 RB、T1、T4、AU、Stack 等建築；但 SIP 的設計目標並不侷限於學校，未來可延伸到不同類型的大型建築與室內外複合場域。
+
+專案會把樓層 SVG、校園 SVG、手動 edge、POI metadata CSV 轉成 runtime JSON，後端用 FastAPI 提供地圖資料與路線 API，前端用單頁 HTML/CSS/JavaScript Canvas 呈現互動式導航介面。
 
 ## 功能
 
@@ -21,7 +23,6 @@ SIP 是一個以 SVG 圖資為基礎的校園室內外導航原型。專案會�
 - 科系屬性模式依 `department` 顯示 POI 與樓板色系。
 - Hover POI 會顯示膠囊資訊，包含名稱、位置、department 等 metadata。
 - Developer Edge Editor 可用於維護 indoor/campus edge source。
-- Experimental Academic Community View 已保留程式碼，但預設從正式選單隱藏，只在 debug / beta 參數下顯示。
 
 ## 技術架構
 
@@ -180,8 +181,8 @@ id,name_zh,name_en,category,department,faculty_leads,occupants,aliases,descripti
 - `name_en`：英文顯示名稱。
 - `category`：分類，需符合 `data/metadata/dictionary.csv`。
 - `department`：科系或單位，科系屬性視圖會使用。
-- `faculty_leads`：實驗室主持人，搜尋與 Academic Community beta 會使用。
-- `occupants`：辦公室使用者，搜尋與 Academic Community beta 會使用。
+- `faculty_leads`：實驗室主持人，搜尋會使用。
+- `occupants`：辦公室使用者，搜尋會使用。
 - `aliases`：別名、舊房號、簡寫，搜尋會使用。
 - `description`：補充說明。
 - `public_access`：開放狀態，例如 `public`、`restricted`。
@@ -336,102 +337,52 @@ Pipeline 產物。不要手動修改。
 curl "http://127.0.0.1:8000/api/route?start=T4-512&end=RB-308-1&mode=shortest"
 ```
 
-## 前端維護重點
+## Future Work
 
-主要程式在 `frontend/index.html`。
+目前版本聚焦於完成一個可運作的多樓層、跨建築空間導航原型。未來可持續探索以下方向：
 
-重要狀態：
+### 1. AI-assisted Map-to-Graph
 
-- `currentViewMode`：目前視圖模式。
-- `currentDepartmentSubMode`：科系屬性子模式。
-- `currentRouteMode`：目前路線偏好。
-- `selectedSpaceIds`：起點/終點選取狀態。
-- `currentRoute`：目前導航路徑。
+降低從 2D 平面圖建立導航圖資時所需的人工成本。  
+可能的流程如下：
 
-搜尋來源：
+**Floor Plan -> AI / Rule-based Graph Proposal -> Validation -> Human Review -> Navigable Graph**
 
-- `poisData`
-- `nodesData`
+潛在任務包含節點放置、edge 產生、走廊與門口偵測，以及垂直連通關係推論。
 
-搜尋支援欄位：
+### 2. Event-aware and Task-based Navigation
 
-- `id`
-- `name_zh`
-- `name_en`
-- `name`
-- `aliases` / `alias`
-- `faculty_leads`
-- `occupants`
-- `department`
-- `category`
-- `building`
-- `floor_name`
+將平台從單純的點到點導航，延伸到能整合臨時活動、排程與任務資訊的導航服務。
 
-## Academic Community Beta
+潛在應用包含：
 
-Academic Community View 是實驗功能，目前不在正式視圖選單顯示。
+- 研討會與校園活動排程
+- 考場導航
+- 多站點路線規劃
+- 移動時間與行程衝突檢查
+- 以自然語言輸入偏好，產生個人化行程
 
-要顯示此功能，使用：
+### 3. Campus Space Allocation and Optimization
 
-```text
-http://127.0.0.1:8000?academic_beta=1
-```
+運用空間 metadata 支援校園尺度的空間規劃與教室分配。
 
-或：
+系統可依據以下條件推薦替代的課程與教室配置：
 
-```text
-http://127.0.0.1:8000?debug=1
-```
+- 教室容量
+- 所需設備與設施
+- 課程時間
+- 時段衝突
+- 空間效率與移動距離
 
-此功能只用前端從 `pois_enriched.json` 動態建立測試 graph，不會修改 routing graph、raw edge 或 POI source。
+### 4. Positioning and Accessibility
 
-## 常見問題
+整合 Wi-Fi-based 或 visual localization 等室內定位方式，降低使用者手動選擇起點的負擔。
 
-### 更新 `poi_master.csv` 後，為什麼網頁沒變？
+路線規劃也可進一步加入無障礙條件，例如：
 
-需要重新產生 `pois_enriched.json`：
+- 避開樓梯
+- 電梯優先
+- 無障礙入口與坡道
+- 經確認的無障礙路線
 
-```bash
-conda run --no-capture-output -n indoor python scripts/enrich_pois.py
-```
-
-如果後端已經啟動，還需要重啟後端或使用 `--reload`。
-
-### 更新 SVG 或 edge 後要跑什麼？
-
-跑完整 pipeline：
-
-```bash
-conda run --no-capture-output -n indoor python run_pipeline.py
-```
-
-### 要不要刪除 `data/generated/`？
-
-通常不用。Pipeline 會覆寫需要更新的 generated 檔案。
-
-### 飲水機要不要填入 `poi_master.csv`？
-
-建議填。Parser 可以自動把 `*-WF-*` 當 POI，但填進 CSV 才能讓名稱、分類、搜尋與顯示資訊更完整。
-
-### 樓梯和電梯要不要填入 `poi_master.csv`？
-
-通常不用。樓梯與電梯是 routing node，不是一般 POI。前端已經會在搜尋與 hover 顯示「樓梯」或「電梯」與位置。
-
-### Developer Edge Editor 匯入沒有反應怎麼辦？
-
-先確認你改的是 source edge：
-
-- `data/source/edges/indoor_edges.json`
-- `data/source/edges/campus_edges.json`
-
-再跑 `run_pipeline.py`。不要直接改 `data/generated/routing_nodes.json`，因為它會被 pipeline 覆寫。
-
-## 開發注意事項
-
-- 所有指令請在 repo 根目錄執行。
-- `data/source/` 和 `data/metadata/` 是主要維護來源。
-- `data/generated/` 是輸出結果，應由 pipeline 產生。
-- 修改前端後重新整理頁面即可。
-- 修改 backend 或 generated data 後，需重啟後端，或使用 `--reload`。
-- 不要把 Academic Community beta 的 edge 寫進 routing edge。
-- 不要用推論方式自動建立跨系、合作或語意關係。
+這些方向將 SIP 從單純的**空間建圖與導航**，延伸到更智慧的**空間規劃、管理與決策支援**。

@@ -138,7 +138,7 @@
     },
     "floor-Haoyang": {
       "display_name": "Haoyang",
-      "floors": null,
+      "floors": 7,
       "floor_height_m": 3.8,
       "height_m": null,
       "status": "footprint_only"

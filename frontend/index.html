@@ -183,19 +183,19 @@
         }
         .poi-detail-action:hover { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* 🌟 Item 2: 分群直列相機控制 (4 / 4 / 4 / 1) */
+        /* 🌟 Item 2: 分群直列相機控制 (4 / 4 / 4 / 2) */
         .camera-controls-wrapper {
-            position: absolute; top: 28px; right: 18px; z-index: 20;
-            display: flex; flex-direction: column; gap: 10px;
+            position: absolute; top: 12px; right: 18px; z-index: 20;
+            display: flex; flex-direction: column; gap: 8px;
         }
         .camera-control-group {
-            display: flex; flex-direction: column; gap: 6px;
-            background: rgba(255,255,255,0.86); padding: 7px; border-radius: 15px;
+            display: flex; flex-direction: column; gap: 5px;
+            background: rgba(255,255,255,0.86); padding: 6px; border-radius: 14px;
             box-shadow: var(--shadow-sm); border: 1px solid rgba(47,125,104,0.12);
             backdrop-filter: blur(14px);
         }
         .camera-controls-wrapper button {
-            width: 42px; height: 42px; padding: 0; background: rgba(255,255,255,0.95); border: 1px solid rgba(47,125,104,0.1);
+            width: 40px; height: 40px; padding: 0; background: rgba(255,255,255,0.95); border: 1px solid rgba(47,125,104,0.1);
             border-radius: 10px; font-size: 0.92rem; color: var(--text-main); display: flex; align-items: center; justify-content: center;
             transition: all 0.2s; cursor: pointer; font-weight: 800;
         }
@@ -549,7 +549,7 @@
             <button class="filter-btn" onclick="setBuildingFilter('AU')" data-i18n="filterAU">AU 視聽館</button>
         </div>
 
-        <!-- 🌟 Item 2: 分群直列 13 顆控制按鈕 (4 / 4 / 4 / 1) -->
+        <!-- 🌟 Item 2: 分群直列 14 顆控制按鈕 (4 / 4 / 4 / 2) -->
         <div class="camera-controls-wrapper">
             <div class="camera-control-group">
                 <button onclick="changeZoom(1.2)" title="放大" data-i18n-title="zoomIn">+</button>
@@ -571,6 +571,7 @@
             </div>
             <div class="camera-control-group">
                 <button onclick="resetCamera()" title="重置視角" style="font-size: 1.1rem;" data-i18n-title="resetCamera">⌂</button>
+                <button onclick="resetCameraOverview()" title="校園總覽視角" style="font-size: 1.0rem;" data-i18n-title="resetCameraOverview">⌂−</button>
             </div>
         </div>
 
@@ -791,6 +792,7 @@
             rotateCcw: "逆時針旋轉",
             rotateCw: "順時針旋轉",
             resetCamera: "重置視角",
+            resetCameraOverview: "校園總覽視角",
             minimapTitle: "2D 剖面空間關聯示意圖",
             angleHint: "Windows：Ctrl + 滑鼠拖曳；Mac：Option + 滑鼠拖曳，可自由變換角度。",
             tooltipId: "編號: ",
@@ -935,6 +937,7 @@
             rotateCcw: "Rotate counterclockwise",
             rotateCw: "Rotate clockwise",
             resetCamera: "Reset view",
+            resetCameraOverview: "Campus overview",
             minimapTitle: "2D section spatial relation diagram",
             angleHint: "Windows: Ctrl + drag; Mac: Option + drag to freely change the viewing angle.",
             tooltipId: "ID: ",
@@ -1074,6 +1077,9 @@
 
     const DEFAULT_3D_MAP_ZOOM = 0.62;
     const DEFAULT_2D_MAP_ZOOM = 0.74;
+    const OVERVIEW_3D_MAP_ZOOM = 0.26;
+    const OVERVIEW_2D_MAP_ZOOM = 0.30;
+    const OVERVIEW_3D_OFFSET_Y = 56;
     const DEFAULT_3D_OFFSET_Y = 20;
     let mapOffsetX = 0, mapOffsetY = DEFAULT_3D_OFFSET_Y, mapZoom = DEFAULT_3D_MAP_ZOOM, mapRotation = 0;
     let communityGraph = null;
@@ -1751,6 +1757,39 @@
             return;
         }
         mapZoom = is3DMode ? DEFAULT_3D_MAP_ZOOM : DEFAULT_2D_MAP_ZOOM; mapOffsetX = 0; mapOffsetY = is3DMode ? DEFAULT_3D_OFFSET_Y : 0; mapRotation = 0; drawMap();
+    }
+    function getCampusOverviewOffset(zoom) {
+        if (!campusFeaturesData.length) return { x: 0, y: is3DMode ? DEFAULT_3D_OFFSET_Y : 0 };
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        campusFeaturesData.forEach(feature => {
+            (feature.points || []).forEach(pt => {
+                const projected = getProjectedCoords({ x: pt[0], y: pt[1] }, 0, zoom, 0, 0);
+                minX = Math.min(minX, projected.x);
+                minY = Math.min(minY, projected.y);
+                maxX = Math.max(maxX, projected.x);
+                maxY = Math.max(maxY, projected.y);
+            });
+        });
+        if (![minX, minY, maxX, maxY].every(Number.isFinite)) return { x: 0, y: is3DMode ? DEFAULT_3D_OFFSET_Y : 0 };
+        return {
+            x: (canvas.width / 2) - ((minX + maxX) / 2),
+            y: (canvas.height / 2) - ((minY + maxY) / 2)
+        };
+    }
+    function resetCameraOverview() {
+        if (isAcademicCommunityMode()) {
+            communityViewport.zoom = 0.72;
+            communityViewport.offsetX = 0;
+            communityViewport.offsetY = 0;
+            drawMap();
+            return;
+        }
+        mapZoom = is3DMode ? OVERVIEW_3D_MAP_ZOOM : OVERVIEW_2D_MAP_ZOOM;
+        mapRotation = 0;
+        const overviewOffset = getCampusOverviewOffset(mapZoom);
+        mapOffsetX = overviewOffset.x;
+        mapOffsetY = overviewOffset.y + (is3DMode ? OVERVIEW_3D_OFFSET_Y : 0);
+        drawMap();
     }
 
     function setViewMode(mode) {

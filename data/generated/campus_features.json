@@ -1032,10 +1032,10 @@
       "name": "Haoyang",
       "massing": {
         "display_name": "Haoyang",
-        "floors": null,
+        "floors": 7,
         "floor_height_m": 3.8,
-        "height_m": 0.0,
-        "height_z": 0.0,
+        "height_m": 26.6,
+        "height_z": 2660.0,
         "status": "footprint_only"
       },
       "fill": "rgba(255, 255, 255, 0.34)",

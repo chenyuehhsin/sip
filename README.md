@@ -1,8 +1,10 @@
-# SIP: Smart Indoor and Campus Navigation
+# SIP: Spatial Intelligence Platform
 
-SIP is a prototype navigation system for complex indoor and campus environments. It converts SVG floor plans, campus maps, manually maintained edge files, and POI metadata CSV files into runtime JSON data. A FastAPI backend serves map data and routing APIs, while a single-page Canvas frontend provides interactive 2D / 2.5D visualization.
+SIP is a spatial navigation prototype for helping people understand and move through large, unfamiliar built environments. The long-term goal is to support places such as hospitals, shopping malls, airports, transit hubs, and mixed-use stations, where first-time visitors often have difficulty forming a clear mental model of indoor space.
 
-The current demo focuses on the NTUST campus and buildings such as RB, T1, T4, and AU. It supports indoor routing, multi-floor routing, cross-building connections, campus routing, POI search, department-based visualization, and several route preferences.
+The project uses 2D and 2.5D views, personalized search, POI metadata, and route preferences to help general visitors find destinations faster. To validate the feasibility quickly, the first demo uses the NTUST campus as an experimental site, including buildings such as RB, T1, T4, AU, and Stack. The platform is not intended to be limited to schools.
+
+SIP converts SVG floor plans, campus maps, manually maintained edge files, and POI metadata CSV files into runtime JSON data. A FastAPI backend serves map data and routing APIs, while a single-page Canvas frontend renders the interactive navigation interface.
 
 Traditional Chinese documentation is available in [README.zh-TW.md](README.zh-TW.md).
 
@@ -23,7 +25,6 @@ Traditional Chinese documentation is available in [README.zh-TW.md](README.zh-TW
 - Department-based node and floor coloring from POI `department` metadata.
 - Hover capsules for POIs, including location and department metadata.
 - Developer Edge Editor support for maintaining indoor and campus edge sources.
-- Experimental Academic Community View is kept in the codebase but hidden from the production view menu unless beta/debug mode is enabled.
 
 ## Tech Stack
 
@@ -183,8 +184,8 @@ Field meanings:
 - `name_en`: English display name.
 - `category`: category value, validated against `data/metadata/dictionary.csv`.
 - `department`: department or organizational unit. Department views use this field.
-- `faculty_leads`: laboratory faculty leads. Search and Academic Community beta use this field.
-- `occupants`: office occupants. Search and Academic Community beta use this field.
+- `faculty_leads`: laboratory faculty leads. Search uses this field.
+- `occupants`: office occupants. Search uses this field.
 - `aliases`: aliases, old room numbers, or shorthand values. Search uses this field.
 - `description`: optional detail text.
 - `public_access`: access status, such as `public` or `restricted`.
@@ -340,104 +341,52 @@ Example:
 curl "http://127.0.0.1:8000/api/route?start=T4-512&end=RB-308-1&mode=shortest"
 ```
 
-## Frontend Notes
+## Future Work
 
-The main frontend implementation is in `frontend/index.html`.
+The current version focuses on building a functional multi-floor and cross-building spatial navigation prototype. Future development may explore the following directions:
 
-Important state variables:
+### 1. AI-assisted Map-to-Graph
 
-- `currentViewMode`: active view mode.
-- `currentDepartmentSubMode`: active department sub-mode.
-- `currentRouteMode`: active route preference.
-- `selectedSpaceIds`: selected start and destination.
-- `currentRoute`: active navigation result.
+Reduce the manual effort required to construct navigation graphs from 2D floor plans.  
+A possible workflow is:
 
-Search sources:
+**Floor Plan -> AI / Rule-based Graph Proposal -> Validation -> Human Review -> Navigable Graph**
 
-- `poisData`
-- `nodesData`
+Potential tasks include node placement, edge generation, corridor and doorway detection, and vertical connection inference.
 
-Searchable fields:
+### 2. Event-aware and Task-based Navigation
 
-- `id`
-- `name_zh`
-- `name_en`
-- `name`
-- `aliases` / `alias`
-- `faculty_leads`
-- `occupants`
-- `department`
-- `category`
-- `building`
-- `floor_name`
+Extend the platform beyond point-to-point navigation by integrating temporary event and schedule information.
 
-## Academic Community Beta
+Potential applications include:
 
-Academic Community View is experimental and hidden from the production view menu by default.
+- Conference and campus event schedules
+- Examination venue navigation
+- Multi-stop route planning
+- Travel-time and schedule-conflict checking
+- Natural-language preference input for personalized itineraries
 
-Enable it with:
+### 3. Campus Space Allocation and Optimization
 
-```text
-http://127.0.0.1:8000?academic_beta=1
-```
+Use spatial metadata to support campus-wide space planning and classroom allocation.
 
-or:
+The system could recommend alternative course-classroom assignments based on:
 
-```text
-http://127.0.0.1:8000?debug=1
-```
+- Room capacity
+- Required facilities and equipment
+- Course schedules
+- Time-slot conflicts
+- Spatial efficiency and travel distance
 
-This feature dynamically builds a test community graph from `pois_enriched.json` in the frontend. It does not modify the routing graph, raw edges, or POI source data.
+### 4. Positioning and Accessibility
 
-## Troubleshooting
+Integrate indoor positioning methods such as Wi-Fi-based or visual localization to reduce reliance on manually selected starting locations.
 
-### The page does not reflect recent `poi_master.csv` changes
+Routing could also be extended with accessibility-aware constraints, including:
 
-Regenerate `pois_enriched.json`:
+- Stair avoidance
+- Elevator preference
+- Accessible entrances and ramps
+- Verified barrier-free routes
 
-```bash
-conda run --no-capture-output -n indoor python scripts/enrich_pois.py
-```
-
-Then restart the backend unless it is running with `--reload`.
-
-### SVG or edge changes do not appear
-
-Run the full pipeline:
-
-```bash
-conda run --no-capture-output -n indoor python run_pipeline.py
-```
-
-Then restart the backend and refresh the page.
-
-### Should `data/generated/` be deleted?
-
-Usually no. The pipeline overwrites generated outputs.
-
-### Should water fountains be added to `poi_master.csv`?
-
-Recommended. The parser can detect `*-WF-*` nodes as POIs, but CSV metadata makes names, categories, search, and display behavior more complete.
-
-### Should stairs and elevators be added to `poi_master.csv`?
-
-Usually no. Stairs and elevators are routing nodes. The frontend already displays them as readable stair/elevator locations in search and hover UI.
-
-### Developer Edge Editor import does not appear to work
-
-Confirm that the edited data is being written back to the source edge files:
-
-- `data/source/edges/indoor_edges.json`
-- `data/source/edges/campus_edges.json`
-
-Then run `run_pipeline.py`. Do not edit `data/generated/routing_nodes.json` directly because it is overwritten by the pipeline.
-
-## Development Notes
-
-- Run commands from the repository root.
-- Treat `data/source/` and `data/metadata/` as the maintained source of truth.
-- Treat `data/generated/` as build output.
-- Refresh the browser after frontend changes.
-- Restart the backend after backend or generated-data changes, unless using `--reload`.
-- Do not write Academic Community beta edges into the routing graph.
-- Do not infer cross-department, collaboration, or semantic relationships without explicit metadata.
+These directions aim to extend the platform from simply **mapping and navigating space** toward more intelligent **spatial planning, management, and decision support**.

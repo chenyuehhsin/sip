@@ -76,6 +76,8 @@
 
         .panel-header { display: flex; flex-direction: column; gap: 5px; padding-bottom: 4px; line-height: 1.35; }
         .panel-title-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .section-title-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+        .section-hint { color: var(--text-muted); font-size: 0.72rem; font-weight: 650; line-height: 1.35; }
         .app-eyebrow {
             color: var(--primary); font-size: 0.76rem; font-weight: 800;
             letter-spacing: 0.08em; text-transform: uppercase;
@@ -309,6 +311,9 @@
         .community-summary { font-size: 0.73rem; line-height: 1.42; color: var(--text-muted); }
 
         .select-group { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 8px; }
+        .elevation-controls { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(76px, 0.55fr); gap: 8px; }
+        #elevation-building-select { font-weight: 820; }
+        #elevation-select { font-weight: 830; text-align: center; }
         select, input.space-search {
             width: 100%; min-height: 36px; padding: 7px 10px; border: 1px solid rgba(47,125,104,0.13);
             border-radius: 11px; font-size: 0.84rem; background-color: #fbfdfc; color: var(--text-main); outline: none;
@@ -490,9 +495,14 @@
         </div>
 
         <div id="elevation-panel" class="panel-section" style="display: none;">
-            <div class="section-title" data-i18n="elevationSection">2D 剖面基準</div>
-            <select id="elevation-select">
-            </select>
+            <div class="section-title-row">
+                <div class="section-title" data-i18n="elevationSection">2D 剖面基準</div>
+                <span class="section-hint" data-i18n="elevationHint">請選擇大樓代號、樓層</span>
+            </div>
+            <div class="elevation-controls">
+                <select id="elevation-building-select"></select>
+                <select id="elevation-select"></select>
+            </div>
         </div>
 
         <div id="layer-toggle-panel" class="panel-section">
@@ -631,6 +641,7 @@
     const endSpaceInput = document.getElementById('end-space-input');
     const startSpaceMenu = document.getElementById('start-space-menu');
     const endSpaceMenu = document.getElementById('end-space-menu');
+    const elevationBuildingSelect = document.getElementById('elevation-building-select');
     const elevationSelect = document.getElementById('elevation-select');
     const toggle3DBtn = document.getElementById('toggle-3d-btn');
     const floorCheckboxesContainer = document.getElementById('floor-checkboxes');
@@ -742,11 +753,15 @@
             edgeStatusExportEmpty: "沒有可匯出的 Draft Edge。",
             edgeConfirmClear: "清除本次所有 Draft Edge？",
             elevationSection: "2D 剖面基準",
+            elevationHint: "請選擇大樓代號、樓層",
             layersSection: "3D 疊層",
             startSection: "起點",
             endSection: "終點",
             buildingPlaceholder: "大樓",
             floorPlaceholder: "樓層",
+            elevationBuildingAria: "2D 基準棟別",
+            elevationFloorAria: "2D 基準樓層",
+            noElevationFloors: "無可用樓層",
             spacePlaceholder: "空間",
             spaceSearchPlaceholder: "搜尋空間名稱或編號",
             spaceResultPoi: "空間",
@@ -882,11 +897,15 @@
             edgeStatusExportEmpty: "No draft edges to export.",
             edgeConfirmClear: "Clear all draft edges?",
             elevationSection: "2D Section Datum",
+            elevationHint: "Choose building code and floor",
             layersSection: "3D Layers",
             startSection: "Start",
             endSection: "End",
             buildingPlaceholder: "Building",
             floorPlaceholder: "Floor",
+            elevationBuildingAria: "2D datum building",
+            elevationFloorAria: "2D datum floor",
+            noElevationFloors: "No floors",
             spacePlaceholder: "Space",
             spaceSearchPlaceholder: "Search space name or ID",
             spaceResultPoi: "Space",
@@ -1005,6 +1024,9 @@
             title.textContent = `${title.dataset.bldg} ${t('buildingSuffix')}`;
         });
 
+        if (elevationBuildingSelect) elevationBuildingSelect.setAttribute('aria-label', t('elevationBuildingAria'));
+        if (elevationSelect) elevationSelect.setAttribute('aria-label', t('elevationFloorAria'));
+        populateElevationBuildingSelect();
         populateElevationSelect();
         rebuildSpaceSearchItems();
         refreshSelectedSpaceLabels();
@@ -1038,7 +1060,8 @@
     let elevatorNodeIds = new Set();
     let currentPath = [], altPath = [];
     let currentRouteDistance = null;
-    let currentElevation = 1000;
+    let currentElevation = 0;
+    let selectedElevationBuilding = 'RB';
     let is3DMode = true;
 
     let currentViewMode = 'all';
@@ -1131,8 +1154,31 @@
         "T4": {"B1": -360, "1": 0, "2": 360, "3": 720, "4": 1080, "5": 1440, "6": 1880, "7": 2160, "8": 2520}
     };
 
-    const ELEVATION_BUILDINGS = ["RB", "RB-STACK", "T1", "T4"];
-    const ELEVATION_BUILDING_LABELS = { "RB": "RB", "RB-STACK": "Stack", "T1": "T1", "T4": "T4" };
+    const ELEVATION_BUILDINGS = ["RB", "T1", "T4", "AU", "RB-STACK"];
+    const ELEVATION_BUILDING_LABELS = { "RB": "RB", "RB-STACK": "Stack", "T1": "T1", "T4": "T4", "AU": "AU" };
+    const ELEVATION_BUILDING_NAMES = {
+        zh: {
+            "RB": "RB 綜合研究大樓",
+            "T1": "T1 第一教學大樓",
+            "T4": "T4 第四教學大樓",
+            "AU": "AU 視聽館",
+            "RB-STACK": "Stack 書庫"
+        },
+        en: {
+            "RB": "RB Research Building",
+            "T1": "T1 First Teaching Building",
+            "T4": "T4 Fourth Teaching Building",
+            "AU": "AU Auditorium",
+            "RB-STACK": "Stack Book Stack"
+        }
+    };
+    const ELEVATION_BUILDING_COLORS = {
+        "RB": { background: "rgba(173, 216, 230, 0.42)", border: "rgba(80, 143, 168, 0.44)" },
+        "T1": { background: "rgba(255, 235, 153, 0.58)", border: "rgba(204, 163, 43, 0.42)" },
+        "T4": { background: "rgba(144, 238, 144, 0.44)", border: "rgba(73, 162, 73, 0.42)" },
+        "AU": { background: "rgba(251, 146, 60, 0.36)", border: "rgba(217, 119, 6, 0.38)" },
+        "RB-STACK": { background: "rgba(173, 216, 230, 0.28)", border: "rgba(80, 143, 168, 0.34)" }
+    };
 
     let BLDG_SHAPES = {
         "RB": [[230,600],[910,600],[910,900],[230,900]],
@@ -1170,23 +1216,84 @@
         return BUILDING_HEIGHTS[b] && BUILDING_HEIGHTS[b][f] !== undefined ? BUILDING_HEIGHTS[b][f] : 0;
     }
 
-    function populateElevationSelect() {
+    function getElevationBuildingKey(building) {
+        const key = String(building || '').toUpperCase();
+        if (key === 'GENERAL') return '';
+        if (ELEVATION_BUILDINGS.includes(key)) return key;
+        return '';
+    }
+
+    function getElevationBuildingName(building) {
+        return (ELEVATION_BUILDING_NAMES[currentLang] && ELEVATION_BUILDING_NAMES[currentLang][building])
+            || ELEVATION_BUILDING_LABELS[building]
+            || building;
+    }
+
+    function getElevationFloorEntries(building) {
+        return Object.entries(BUILDING_HEIGHTS[building] || {})
+            .map(([floor, height]) => ({ floor, height }))
+            .sort((a, b) => a.height - b.height);
+    }
+
+    function getNearestElevationFloor(building, height) {
+        const floors = getElevationFloorEntries(building);
+        if (!floors.length) return null;
+        return floors.reduce((nearest, floor) => {
+            return Math.abs(floor.height - height) < Math.abs(nearest.height - height) ? floor : nearest;
+        }, floors[0]);
+    }
+
+    function applyElevationBuildingSelectStyle() {
+        if (!elevationBuildingSelect) return;
+        const colors = ELEVATION_BUILDING_COLORS[selectedElevationBuilding] || {};
+        elevationBuildingSelect.style.backgroundColor = colors.background || '#fbfdfc';
+        elevationBuildingSelect.style.borderColor = colors.border || 'rgba(47,125,104,0.13)';
+    }
+
+    function populateElevationBuildingSelect() {
+        if (!elevationBuildingSelect) return;
+        const previousValue = selectedElevationBuilding;
+        elevationBuildingSelect.innerHTML = '';
+        ELEVATION_BUILDINGS.forEach(building => {
+            elevationBuildingSelect.add(new Option(getElevationBuildingName(building), building));
+        });
+        selectedElevationBuilding = getElevationBuildingKey(previousValue) || 'RB';
+        elevationBuildingSelect.value = selectedElevationBuilding;
+        applyElevationBuildingSelectStyle();
+    }
+
+    function populateElevationSelect(options = {}) {
         if (!elevationSelect) return;
+        const { alignToBuilding = false } = options;
+        const floors = getElevationFloorEntries(selectedElevationBuilding);
         const previousValue = elevationSelect.value || String(currentElevation);
-        const elevations = Array.from(new Set(ELEVATION_BUILDINGS.flatMap(b => Object.values(BUILDING_HEIGHTS[b] || {})))).sort((a, b) => b - a);
         elevationSelect.innerHTML = '';
 
-        elevations.forEach(height => {
-            const floors = ELEVATION_BUILDINGS.map(bldg => {
-                const floor = Object.entries(BUILDING_HEIGHTS[bldg] || {}).find(([, z]) => z === height);
-                const label = ELEVATION_BUILDING_LABELS[bldg] || bldg;
-                return `${label}(${floor ? formatFloorLabel(floor[0]) : t('noneFloor')})`;
-            });
-            const meters = (height / 100).toFixed(1);
-            elevationSelect.add(new Option(`${meters}m — ${floors.join(' / ')}`, String(height)));
+        floors.forEach(({ floor, height }) => {
+            const option = new Option(formatFloorLabel(floor), String(height));
+            option.dataset.floor = floor;
+            elevationSelect.add(option);
         });
 
-        elevationSelect.value = Array.from(elevationSelect.options).some(option => option.value === previousValue) ? previousValue : String(currentElevation);
+        if (!floors.length) {
+            const option = new Option(t('noElevationFloors'), '');
+            option.disabled = true;
+            elevationSelect.add(option);
+            elevationSelect.value = '';
+            return;
+        }
+
+        const hasCurrentHeight = floors.some(({ height }) => String(height) === String(currentElevation));
+        const shouldAlign = alignToBuilding || !hasCurrentHeight;
+        if (shouldAlign) {
+            const nearest = getNearestElevationFloor(selectedElevationBuilding, currentElevation);
+            currentElevation = nearest ? nearest.height : currentElevation;
+        }
+
+        const targetValue = shouldAlign ? String(currentElevation) : previousValue;
+        elevationSelect.value = Array.from(elevationSelect.options).some(option => option.value === targetValue)
+            ? targetValue
+            : String(currentElevation);
     }
 
     function normalizeSearchText(value) {
@@ -1702,7 +1809,15 @@
     function setBuildingFilter(bldg) {
         currentBuildingFilter = bldg;
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active'); drawMap();
+        event.target.classList.add('active');
+        const elevationBuilding = getElevationBuildingKey(bldg);
+        if (!is3DMode && elevationBuilding) {
+            selectedElevationBuilding = elevationBuilding;
+            if (elevationBuildingSelect) elevationBuildingSelect.value = selectedElevationBuilding;
+            applyElevationBuildingSelectStyle();
+            populateElevationSelect({ alignToBuilding: true });
+        }
+        drawMap();
     }
 
     function getRouteModeLabel(mode) {
@@ -3069,7 +3184,20 @@
         return closestNode;
     }
 
-    elevationSelect.addEventListener('change', (e) => { currentElevation = parseInt(e.target.value); drawMap(); });
+    elevationBuildingSelect.addEventListener('change', (e) => {
+        selectedElevationBuilding = getElevationBuildingKey(e.target.value) || selectedElevationBuilding;
+        applyElevationBuildingSelectStyle();
+        populateElevationSelect({ alignToBuilding: true });
+        drawMap();
+    });
+
+    elevationSelect.addEventListener('change', (e) => {
+        const nextElevation = parseInt(e.target.value, 10);
+        if (Number.isFinite(nextElevation)) {
+            currentElevation = nextElevation;
+            drawMap();
+        }
+    });
 
     toggle3DBtn.addEventListener('click', () => {
         is3DMode = !is3DMode;
@@ -3080,8 +3208,11 @@
         } else {
             updateToggle3DButtonLabel(); toggle3DBtn.style.backgroundColor = 'var(--primary)';
             document.getElementById('elevation-panel').style.display = 'block'; document.getElementById('layer-toggle-panel').style.display = 'none';
+            selectedElevationBuilding = getElevationBuildingKey(currentBuildingFilter) || selectedElevationBuilding || 'RB';
+            if (elevationBuildingSelect) elevationBuildingSelect.value = selectedElevationBuilding;
+            applyElevationBuildingSelectStyle();
             currentElevation = 0;
-            elevationSelect.value = String(currentElevation);
+            populateElevationSelect({ alignToBuilding: true });
             resetCamera();
         }
         drawMap();
@@ -3921,7 +4052,14 @@
                     document.querySelectorAll('#floor-checkboxes input').forEach(cb => cb.checked = active3DCheckboxes.has(cb.value));
                 } else {
                     const startNode = nodeMap[start];
-                    if (startNode) { currentElevation = startNode.z; elevationSelect.value = String(currentElevation); }
+                    if (startNode) {
+                        selectedElevationBuilding = getElevationBuildingKey(startNode.building) || selectedElevationBuilding;
+                        currentElevation = startNode.z;
+                        if (elevationBuildingSelect) elevationBuildingSelect.value = selectedElevationBuilding;
+                        applyElevationBuildingSelectStyle();
+                        populateElevationSelect();
+                        elevationSelect.value = String(currentElevation);
+                    }
                 }
                 updateRouteSummary();
                 drawMap();

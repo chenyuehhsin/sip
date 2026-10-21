@@ -1,12 +1,12 @@
 # SIP: Spatial Intelligence Platform
 
+[Live Demo](https://sip-eight-nu.vercel.app) · [Traditional Chinese](README.zh-TW.md)
+
 SIP is a spatial navigation prototype for helping people understand and move through large, unfamiliar built environments. The long-term goal is to support places such as hospitals, shopping malls, airports, transit hubs, and mixed-use stations, where first-time visitors often have difficulty forming a clear mental model of indoor space.
 
 The project uses 2D and 2.5D views, personalized search, POI metadata, and route preferences to help general visitors find destinations faster. To validate the feasibility quickly, the first demo uses the NTUST campus as an experimental site, including buildings such as RB, T1, T4, AU, and Stack. The platform is not intended to be limited to schools.
 
 SIP converts SVG floor plans, campus maps, manually maintained edge files, and POI metadata CSV files into runtime JSON data. A FastAPI backend serves map data and routing APIs, while a single-page Canvas frontend renders the interactive navigation interface.
-
-Traditional Chinese documentation is available in [README.zh-TW.md](README.zh-TW.md).
 
 ## Features
 
@@ -31,7 +31,14 @@ Traditional Chinese documentation is available in [README.zh-TW.md](README.zh-TW
 - Backend: FastAPI, Uvicorn, Python 3.12
 - Data pipeline: Python, BeautifulSoup, lxml
 - Frontend: single-file HTML/CSS/JavaScript with HTML5 Canvas
-- Environment: Conda
+- Deployment: Vercel Services, static frontend + FastAPI backend
+- Local development: Conda
+
+## Live Demo
+
+Try the [public live demo](https://sip-eight-nu.vercel.app) on Vercel: explore the NTUST campus in 2D/2.5D, search for destinations, and compare shortest, elevator-preferred, and rainy routes.
+
+The demo combines a static HTML/CSS/JavaScript + Canvas frontend with a FastAPI backend. `/api/data` and `/api/route` are served from the same deployment and domain. Generated runtime spatial data used by the demo is public; licensed/private source floor-plan SVGs remain excluded from Git and the public deployment.
 
 ## Quick Start
 
@@ -60,6 +67,29 @@ If `--reload` fails because file watching is unavailable in the current environm
 conda run --no-capture-output -n indoor python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
 ```
 
+## Deployment
+
+The live demo uses Vercel Services, configured in `vercel.json`:
+
+- `frontend/` is the static frontend service and serves `frontend/index.html` without a build step.
+- The repository root is the FastAPI backend service, with entrypoint `backend.main:app`.
+- `/api/*` routes to the backend with the original API paths unchanged; all other routes go to the frontend.
+- The backend loads runtime data from the repository-root `data/` directory using paths resolved from `__file__`.
+
+`requirements.txt` declares the serving dependencies, and `.python-version` selects Python 3.12. Deployment uses the existing generated runtime data; the spatial pipeline remains a separate local workflow.
+
+With Vercel CLI installed and Python 3.12 available, run from the repository root for local Vercel-compatible testing:
+
+```bash
+vercel dev -L
+```
+
+Deploy to production from the repository root:
+
+```bash
+vercel --prod
+```
+
 ## Public vs Private Data
 
 The public repository intentionally does not include the licensed indoor floor-plan SVG files named `A*_map.svg`. Those files contain building drawings that are only available for local academic research use.
@@ -69,13 +99,13 @@ Public data:
 - `data/source/public/svg/campus/L01_CampusLayout.svg`
 - source edge files
 - metadata CSV files
-- generated JSON files, for now
+- generated runtime JSON files used by the live demo; their spatial data is public through `/api/data`
 
 Private local data:
 
 - `data/source/private/svg/floors/A*_map.svg`
 
-The pipeline reads private floor SVGs from `data/source/private/svg/floors/` by default. This directory is ignored by Git. If your private files live elsewhere, set:
+The pipeline reads private floor SVGs from `data/source/private/svg/floors/` by default. This directory is ignored by Git and excluded from the public deployment by `.vercelignore`. Excluding the source drawings does not make the generated runtime spatial data private. If your private files live elsewhere, set:
 
 ```bash
 SIP_FLOOR_SVG_DIR=/path/to/private/floors conda run --no-capture-output -n indoor python run_pipeline.py
@@ -256,6 +286,10 @@ sip/
 |   `-- navigation_node_edge_spec.md
 |-- run_pipeline.py
 |-- environment.yml
+|-- requirements.txt
+|-- .python-version
+|-- vercel.json
+|-- .vercelignore
 |-- README.md
 `-- README.zh-TW.md
 ```

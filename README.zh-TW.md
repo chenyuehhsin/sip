@@ -1,5 +1,7 @@
 # SIP: Spatial Intelligence Platform
 
+[線上展示](https://sip-eight-nu.vercel.app) · [英文說明](README.md)
+
 SIP 是一個面向大型複合建築的空間智慧平台原型。它的核心動機是：當一般民眾第一次進入大型醫院、商場、機場、共構車站，或像台北車站這類複雜空間時，往往不容易快速掌握室內空間概念，也不容易判斷自己該往哪裡走。
 
 SIP 希望透過 2D / 2.5D 視圖、個人化搜尋、POI metadata 與路線偏好，協助使用者更快找到目的地。為了快速驗證可行性，第一版 demo 先以台科大 NTUST 校園作為實驗場域，包含 RB、T1、T4、AU、Stack 等建築；但 SIP 的設計目標並不侷限於學校，未來可延伸到不同類型的大型建築與室內外複合場域。
@@ -28,8 +30,15 @@ SIP 希望透過 2D / 2.5D 視圖、個人化搜尋、POI metadata 與路線偏�
 
 - Backend：FastAPI、Uvicorn、Python 3.12
 - Data pipeline：Python、BeautifulSoup、lxml
-- Frontend：單一 `frontend/index.html`，使用 Canvas 繪圖
-- Environment：Conda
+- Frontend：單一 `frontend/index.html`，使用 HTML/CSS/JavaScript 與 HTML5 Canvas 繪圖
+- 部署：Vercel Services，靜態前端 + FastAPI 後端
+- 本機開發：Conda
+
+## 線上展示
+
+試用部署於 Vercel 的[公開線上展示](https://sip-eight-nu.vercel.app)：以 2D / 2.5D 視圖探索台科大校園、搜尋目的地，並比較最短距離、電梯優先與雨天路徑。
+
+展示使用靜態 HTML/CSS/JavaScript + Canvas 前端與 FastAPI 後端，`/api/data` 和 `/api/route` 由同一個部署與網域提供。展示使用的 generated runtime 空間資料為公開資料；授權／私有的原始樓層 SVG 圖檔仍排除於 Git 與公開部署之外。
 
 ## 快速啟動
 
@@ -58,6 +67,29 @@ http://127.0.0.1:8000
 conda run --no-capture-output -n indoor python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
 ```
 
+## 部署
+
+線上展示使用 Vercel Services，由 `vercel.json` 設定：
+
+- `frontend/` 是靜態前端服務，不需建置步驟，提供 `frontend/index.html`。
+- 儲存庫根目錄是 FastAPI 後端服務，entrypoint 為 `backend.main:app`。
+- `/api/*` 導向後端並保留原始 API 路徑；其餘路徑導向前端。
+- 後端透過由 `__file__` 解析的路徑，讀取儲存庫根目錄 `data/` 下的 runtime 資料。
+
+`requirements.txt` 宣告提供服務所需的相依套件，`.python-version` 指定 Python 3.12。部署使用既有的 generated runtime 資料；空間資料 pipeline 維持為獨立的本機工作流程。
+
+安裝 Vercel CLI 並備妥 Python 3.12 後，在儲存庫根目錄執行本機 Vercel 相容測試：
+
+```bash
+vercel dev -L
+```
+
+在儲存庫根目錄執行正式部署：
+
+```bash
+vercel --prod
+```
+
 ## 公開與私有資料
 
 公開 repo 不包含 `A*_map.svg` 室內樓層 SVG。這些檔案包含向學校申請的建築圖，僅供本機學術研究使用。
@@ -67,13 +99,13 @@ conda run --no-capture-output -n indoor python -m uvicorn backend.main:app --hos
 - `data/source/public/svg/campus/L01_CampusLayout.svg`
 - source edge files
 - metadata CSV files
-- generated JSON files，目前暫時保留公開
+- 線上展示使用的 generated runtime JSON files；其中的空間資料透過 `/api/data` 公開提供
 
 本機私有資料：
 
 - `data/source/private/svg/floors/A*_map.svg`
 
-Pipeline 預設會從 `data/source/private/svg/floors/` 讀取室內樓層 SVG。這個資料夾已被 Git 忽略。若私有檔案放在其他位置，可以設定：
+Pipeline 預設會從 `data/source/private/svg/floors/` 讀取室內樓層 SVG。這個資料夾已被 Git 忽略，並由 `.vercelignore` 排除於公開部署之外。排除原始圖檔不代表 generated runtime 空間資料也是私有資料。若私有檔案放在其他位置，可以設定：
 
 ```bash
 SIP_FLOOR_SVG_DIR=/path/to/private/floors conda run --no-capture-output -n indoor python run_pipeline.py
@@ -218,7 +250,7 @@ Parser 主要讀取 SVG 裡的 `inkscape:label`。請優先維持 ID 穩定，�
 
 樓梯與電梯通常不需要填入 `poi_master.csv`。它們是 routing node，前端搜尋與 hover 會以「樓梯 / 電梯 + 位置」顯示，不直接要求 metadata。
 
-## Data Layout
+## 儲存庫結構
 
 ```text
 sip/
@@ -253,7 +285,12 @@ sip/
 |   `-- navigation_node_edge_spec.md
 |-- run_pipeline.py
 |-- environment.yml
-`-- README.md
+|-- requirements.txt
+|-- .python-version
+|-- vercel.json
+|-- .vercelignore
+|-- README.md
+`-- README.zh-TW.md
 ```
 
 ### `data/source/`

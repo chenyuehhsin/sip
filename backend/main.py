@@ -2,17 +2,19 @@ import csv
 import json
 import math
 import heapq
+from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 
 app = FastAPI(title="SIP Multi-floor Navigation Engine")
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 # RB-B104 (356, 673) 到 RB-B105 (299, 674) 校準為 500 cm。
 SCALE_FACTOR = 5.0 / math.sqrt((356 - 299)**2 + (673 - 674)**2)
 
 print("🚀 啟動 SIP 跨樓層雙向尋路引擎...")
 
-def load_campus_pois(path='data/metadata/poi_campus.csv'):
+def load_campus_pois(path=REPO_ROOT / 'data/metadata/poi_campus.csv'):
     try:
         with open(path, 'r', encoding='utf-8-sig', newline='') as f:
             reader = csv.DictReader(f)
@@ -31,18 +33,18 @@ def load_campus_pois(path='data/metadata/poi_campus.csv'):
         return []
 
 try:
-    with open('data/generated/routing_nodes.json', 'r', encoding='utf-8') as f:
+    with open(REPO_ROOT / 'data/generated/routing_nodes.json', 'r', encoding='utf-8') as f:
         routing_data = json.load(f)
-    with open('data/generated/pois_enriched.json', 'r', encoding='utf-8') as f:
+    with open(REPO_ROOT / 'data/generated/pois_enriched.json', 'r', encoding='utf-8') as f:
         pois_data = json.load(f)
-    with open('data/generated/slabs.json', 'r', encoding='utf-8') as f:
+    with open(REPO_ROOT / 'data/generated/slabs.json', 'r', encoding='utf-8') as f:
         slabs_data = json.load(f)
     try:
-        with open('data/generated/campus_features.json', 'r', encoding='utf-8') as f:
+        with open(REPO_ROOT / 'data/generated/campus_features.json', 'r', encoding='utf-8') as f:
             campus_features_data = json.load(f)
     except FileNotFoundError:
         campus_features_data = {"features": []}
-    with open('data/generated/final_connections.json', 'r', encoding='utf-8') as f:
+    with open(REPO_ROOT / 'data/generated/final_connections.json', 'r', encoding='utf-8') as f:
         connections_data = json.load(f)
     campus_pois_data = load_campus_pois()
 except FileNotFoundError as e:
@@ -226,4 +228,4 @@ def get_map_data():
 
 @app.get("/")
 def read_root():
-    return FileResponse("frontend/index.html")
+    return FileResponse(REPO_ROOT / "frontend/index.html")

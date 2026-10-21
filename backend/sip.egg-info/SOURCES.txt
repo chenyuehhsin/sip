@@ -1,0 +1,7 @@
+main.py
+pyproject.toml
+sip.egg-info/PKG-INFO
+sip.egg-info/SOURCES.txt
+sip.egg-info/dependency_links.txt
+sip.egg-info/requires.txt
+sip.egg-info/top_level.txt

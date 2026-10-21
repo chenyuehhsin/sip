@@ -16,3 +16,4 @@ __pycache__/
 # Private licensed floor-plan SVGs. Keep campus SVGs public, but do not publish
 # the A*_map.svg indoor floor plans.
 data/source/private/
+.vercel/
